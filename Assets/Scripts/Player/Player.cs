@@ -8,7 +8,7 @@ public class Player : SingletonMonobehaviour<Player>
     //Movement Parameters
     private float xInput;
     private float yInput;
-    private bool isCarying = false;
+    private bool isCarrying = false;
     private bool isIdle;
     private bool isLiftingToolDown;
     private bool isLiftingToolLeft;
@@ -28,10 +28,12 @@ public class Player : SingletonMonobehaviour<Player>
     private bool isPickingDown;
     private bool isPickingLeft;
     private bool isPickingRight;
-    private ToolEffect toolEffec = ToolEffect.none;
+    private ToolEffect toolEffect = ToolEffect.none;
 
     private Rigidbody2D rigidBody2D;
+#pragma warning disable 414
     private Direction playerDirection;
+#pragma warning restore 414
     private float movementSpeed;
 
     private bool _playerInputIsDisable = false;
@@ -60,7 +62,7 @@ public class Player : SingletonMonobehaviour<Player>
         PlayerWalkInput();
 
         //Send event to any listeners for player movement input  发送主角移动状态给EventHandle广播站  关闭了上下左右Idle
-        EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarying, toolEffec,
+        EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect,
             isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown,
             isLiftingToolRight, isLiftingToolLeft, isLiftingToolUp, isLiftingToolDown,
             isPickingRight, isPickingLeft, isPickingUp, isPickingDown,
@@ -98,7 +100,7 @@ public class Player : SingletonMonobehaviour<Player>
         isSwingingToolLeft = false;
         isSwingingToolUp = false;
         isSwingingToolDown = false;
-        toolEffec = ToolEffect.none;
+        toolEffect = ToolEffect.none;
     }
 
     /// <summary>

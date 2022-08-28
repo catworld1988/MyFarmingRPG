@@ -4,12 +4,18 @@ using UnityEngine;
 
 public static class Settings
 {
+    //Obscuring Item Fading - ObscuringItemFader 遮挡物体的淡入淡出
+    public const float fadeInSeconds = 0.25f;
+    public const float fadeOutSeconds = 0.35f;
+    public const float targetAlpha = 0.45f;
+
     //Player Movement
     public const float runningSpeed = 5.333f;
     public const float walkingSpeed = 2.666f;
 
     // Player Animation Parameters
 
+    #region Player Animation Parameters
     public static int xInput;
     public static int yInput;
     public static int isWalking;
@@ -31,6 +37,10 @@ public static class Settings
     public static int isPickingLeft;
     public static int isPickingUp;
     public static int isPickingDown;
+
+
+    #endregion
+
 
     //Shared Animation Parameters
     public static int idleUp;
