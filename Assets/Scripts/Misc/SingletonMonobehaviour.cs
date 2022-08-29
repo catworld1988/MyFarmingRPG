@@ -15,6 +15,7 @@ public abstract class SingletonMonobehaviour<T> : MonoBehaviour where T: MonoBeh
         }
     }
 
+    //虚方法可以重写
     protected virtual void Awake()
     {
         if (instance==null)
