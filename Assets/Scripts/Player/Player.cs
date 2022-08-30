@@ -28,6 +28,9 @@ public class Player : SingletonMonobehaviour<Player>
     private bool isPickingDown;
     private bool isPickingLeft;
     private bool isPickingRight;
+
+    private Camera mainCamera;
+
     private ToolEffect toolEffect = ToolEffect.none;
 
     private Rigidbody2D rigidBody2D;
@@ -49,6 +52,9 @@ public class Player : SingletonMonobehaviour<Player>
     {
         base.Awake();
         rigidBody2D = GetComponent<Rigidbody2D>();
+
+        //获取主相机的参数
+        mainCamera = Camera.main;
     }
 
     private void Update()
@@ -179,5 +185,14 @@ public class Player : SingletonMonobehaviour<Player>
     {
         Vector2 move = new Vector2(xInput * movementSpeed * Time.deltaTime, yInput * movementSpeed * Time.deltaTime);
         rigidBody2D.MovePosition(rigidBody2D.position + move);
+    }
+
+
+
+    public Vector3 GetPlayerViewportPosition()
+    {
+        //Vector3 viewport position for player ((0,0)viewport bottom left,(1,1)viewport top right
+        //Vector3播放器的视区位置((0，0)视区左下，(1，1)视区右上   世界坐标转换成视口坐标
+        return mainCamera.WorldToViewportPoint(transform.position);
     }
 }

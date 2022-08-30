@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum InventoryLocation //库存位置
+{
+    player,
+    chest, //箱子
+    count
+}
 public enum ToolEffect
 {
     none,

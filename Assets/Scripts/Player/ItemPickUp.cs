@@ -18,8 +18,15 @@ public class ItemPickUp : MonoBehaviour
             //碰撞体获取的物品ID  获得 物品信息
             ItemDetails itemDetails = InventoryManager.Instance.GetItemDetails(item.ItemCode);
 
-            //打印物品描述信息 到控制台
-            Debug.Log(itemDetails.itemDescription);
+            /*//打印物品描述信息 到控制台
+            Debug.Log(itemDetails.itemDescription);*/
+
+            //如果物品属性是可以拾取的
+            if (itemDetails.canBePickedUp==true)
+            {
+                //呼叫库存管理 将物品添加到库存中（库存位置，物品，对象）
+                InventoryManager.Instance.AddItem(InventoryLocation.player,item,collision.gameObject);
+            }
         }
     }
 }

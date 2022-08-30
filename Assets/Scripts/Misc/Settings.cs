@@ -11,14 +11,20 @@ public static class Settings
 
     //Player Movement
     //public const float runningSpeed = 5.333f;
-
     //TODO 测试使用 需要改回常量
     public const float runningSpeed = 13f;
     public const float walkingSpeed = 2.666f;
 
+
+    //Inventory
+    public static int playerInitialInventoryCapacity = 24; //初始库存容量
+    public static int playerMaximumInventoryCapacity = 48; //最大库存容量
+
+
     // Player Animation Parameters
 
     #region Player Animation Parameters
+
     public static int xInput;
     public static int yInput;
     public static int isWalking;
@@ -40,7 +46,6 @@ public static class Settings
     public static int isPickingLeft;
     public static int isPickingUp;
     public static int isPickingDown;
-
 
     #endregion
 
