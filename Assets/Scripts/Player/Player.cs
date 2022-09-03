@@ -61,21 +61,25 @@ public class Player : SingletonMonobehaviour<Player>
     {
         #region Player Input
 
-        ResetAnimationTriggers();
+        //如果玩家没有被禁止输入 防止拖动道具 角色移动
+        if (!PlayerInputIsDisable)
+        {
+            ResetAnimationTriggers();
 
-        PlayerMovementInput();
+            PlayerMovementInput();
 
-        PlayerWalkInput();
+            PlayerWalkInput();
 
-        //Send event to any listeners for player movement input  发送主角移动状态给EventHandle广播站  关闭了上下左右Idle
-        EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect,
-            isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown,
-            isLiftingToolRight, isLiftingToolLeft, isLiftingToolUp, isLiftingToolDown,
-            isPickingRight, isPickingLeft, isPickingUp, isPickingDown,
-            isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown,
-            false, false, false, false);
+            //Send event to any listeners for player movement input  发送主角移动状态给EventHandle广播站  关闭了上下左右Idle
+            EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect,
+                isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown,
+                isLiftingToolRight, isLiftingToolLeft, isLiftingToolUp, isLiftingToolDown,
+                isPickingRight, isPickingLeft, isPickingUp, isPickingDown,
+                isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown,
+                false, false, false, false);
+        }
 
-        #endregion
+        #endregion Player Input
     }
 
     private void FixedUpdate()
@@ -187,6 +191,40 @@ public class Player : SingletonMonobehaviour<Player>
         rigidBody2D.MovePosition(rigidBody2D.position + move);
     }
 
+    public void DisablePlayerInputAndResetMovement()
+    {
+        DisablePlayerInput();
+        ResetMovement();
+
+        //Send event to any listeners for player movement input  发送主角移动状态给EventHandle广播站  关闭了上下左右Idle
+        EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect,
+            isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown,
+            isLiftingToolRight, isLiftingToolLeft, isLiftingToolUp, isLiftingToolDown,
+            isPickingRight, isPickingLeft, isPickingUp, isPickingDown,
+            isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown,
+            false, false, false, false);
+    }
+
+    private void ResetMovement()
+    {
+        //Reset Movement
+        xInput = 0f;
+        yInput = 0f;
+        isRunning = false;
+        isWalking = false;
+        isIdle = true;
+    }
+
+    //禁止玩家输入
+    public void DisablePlayerInput()
+    {
+        PlayerInputIsDisable = true;
+    }
+    //允许玩家输入
+    public void EnablePlayerInput()
+    {
+        PlayerInputIsDisable = false;
+    }
 
 
     public Vector3 GetPlayerViewportPosition()

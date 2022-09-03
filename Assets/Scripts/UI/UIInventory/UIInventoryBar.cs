@@ -7,6 +7,8 @@ public class UIInventoryBar : MonoBehaviour
 {
     [SerializeField] private Sprite blank16x16sprite = null;
     [SerializeField] private UIInventorySlot[] inventorySlots = null;
+    public GameObject inventoryBarDraggedItem;
+    [HideInInspector] public GameObject inventoryTextBoxGameobject; //用来存储描述框体的实例
 
     private RectTransform rectTransform;
 

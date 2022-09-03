@@ -177,8 +177,41 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     }
 
     /// <summary>
-    /// 打印物品库存清单
+    /// Get the item type description for an item type returns the item type description as a string for a given ItemType
+    /// 获取项类型的项类型说明，将项类型说明作为给定 ItemType 的字符串返回
     /// </summary>
+    public string GetItemTypeDescription(ItemType itemType)
+    {
+        string itemTypeDescription;
+        switch (itemType)
+        {
+            case ItemType.Breaking_tool:
+                itemTypeDescription = Settings.BreakingTool;
+                break;
+            case ItemType.Chopping_tool:
+                itemTypeDescription = Settings.ChoppingTool;
+                break;
+            case ItemType.Hoeing_tool:
+                itemTypeDescription = Settings.HoeingTool;
+                break;
+            case ItemType.Reaping_tool:
+                itemTypeDescription = Settings.ReapingTool;
+                break;
+            case ItemType.Watering_tool:
+                itemTypeDescription = Settings.WateringTool;
+                break;
+            case ItemType.Collecting_tool:
+                itemTypeDescription = Settings.CollectingTool;
+                break;
+            default:
+                itemTypeDescription = itemType.ToString();
+                break;
+        }
+
+        return itemTypeDescription;
+    }
+
+    //打印物品库存清单
     // private void DebugPrintInventoryList(List<InventoryItem> inventoryList)
     // {
     //     foreach (InventoryItem inventoryItem in inventoryList)
@@ -190,4 +223,57 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     //
     //     Debug.Log("***************************************************************************");
     // }
+
+    public void RemoveItem(InventoryLocation inventoryLocation, int itemCode)
+    {
+        //在库存位置 创建物品列表
+        List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];
+        //查找物品所在  库存位置  检查是否已经包含在列表中
+        int itemPosition = FindItemInInventory(inventoryLocation, itemCode);
+
+        if (itemPosition != -1) //存在
+        {
+            RemoveItemAtPosition(inventoryList, itemCode, itemPosition);
+        }
+
+        //呼叫库存更新事件 进行广播
+        EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
+    }
+
+    private void RemoveItemAtPosition(List<InventoryItem> inventoryList, int itemCode, int position)
+    {
+        InventoryItem inventoryItem = new();
+        //丢掉物品 库存数量-1
+        int quantity = inventoryList[position].itemQuantity - 1;
+
+        if (quantity > 0) //库存>0 只需调整数值
+        {
+            inventoryItem.itemQuantity = quantity;
+            inventoryItem.itemCode = itemCode;
+            inventoryList[position] = inventoryItem;
+        }
+        else //数量<0 从物品列表索引处 删除物品
+        {
+            inventoryList.RemoveAt(position);
+        }
+    }
+
+    public void SwapInventoryItems(InventoryLocation inventoryLocation, int fromItem, int toItem)
+    {
+        //交换前的检测 防止列表溢出
+        if (fromItem < inventoryLists[(int)inventoryLocation].Count &&
+            toItem < inventoryLists[(int)inventoryLocation].Count && fromItem != toItem && fromItem >= 0 && toItem >= 0)
+        {
+            InventoryItem fromInventoryItem = inventoryLists[(int)inventoryLocation][fromItem];
+            InventoryItem toInventoryItem = inventoryLists[(int)inventoryLocation][toItem];
+
+            //交换物品
+            inventoryLists[(int)inventoryLocation][toItem] = fromInventoryItem;
+            inventoryLists[(int)inventoryLocation][fromItem] = toInventoryItem;
+
+            //更新 呼叫库存广播
+            EventHandler.CallInventoryUpdatedEvent(inventoryLocation,inventoryLists[(int)inventoryLocation]);
+
+        }
+    }
 }
