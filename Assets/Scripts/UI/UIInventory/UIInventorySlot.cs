@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler,IPointerClickHandler
 {
     //物品栏的实例参数
     public Image inventorySlotHighlight;
@@ -31,6 +31,9 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Canvas parentCanvas;
     [SerializeField] private GameObject inventoryTextBoxPrefab = null;
 
+    //是否被选中
+    [HideInInspector] public bool isSelected = false;
+
 
     private void Awake()
     {
@@ -43,13 +46,41 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
     }
 
+
+    private void SetSelectedItem()
+    {
+        //祛除当前高亮物体
+        inventoryBar.ClearHighlightOnInventorySlots();
+
+        //在物品栏上高亮选择的物体bool
+        isSelected = true;
+
+        //设置高亮物体
+        inventoryBar.SetHighlightedInventorySlots();
+
+        //在选择列表中设置 物体
+        InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player,itemDetails.itemCode);
+    }
+
+
+    private void ClearSelectedItem()
+    {
+        //清除物品高亮显示
+        inventoryBar.ClearHighlightOnInventorySlots();
+
+        isSelected = false;
+
+        //在库存中设置无物品选中
+        InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+    }
+
     /// <summary>
     /// 在鼠标当前位置 拖动物品（如果选择了）。呼叫 DropItem event.
     /// </summary>
     /// <param name="eventData"></param>
     private void DropSelectedItemAtMousePosition()
     {
-        if (itemDetails != null)
+        if (itemDetails != null && isSelected)
         {
             //鼠标的屏幕坐标转换成世界坐标
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
@@ -61,6 +92,13 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             //从玩家库存物品栏删除
             InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+
+            //如果没有物品 清除物品的选择
+            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player,item.ItemCode)==-1)
+            {
+                ClearSelectedItem();
+            }
+
         }
     }
 
@@ -81,6 +119,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             //Get image for dragged item 获得拖拽物体的图像
             Image draggedItemImage = draggedItem.GetComponentInChildren<Image>();
             draggedItemImage.sprite = InventorySlotImage.sprite;
+
+            SetSelectedItem();
         }
     }
 
@@ -117,6 +157,10 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             //防止交换的时候不要出现框体的BUG
             DestroyInventoryTextBox();
+
+            //取消高亮显示选择
+            ClearSelectedItem();
+
         }
         else
         {
@@ -129,6 +173,30 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //开启玩家输入
         Player.Instance.EnablePlayerInput();
+    }
+
+    /// <summary>
+    /// 鼠标指针点击执行
+    /// </summary>
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //检测到按键数据 检测是否是鼠标左键点击
+        if (eventData.button==PointerEventData.InputButton.Left)
+        {
+            //槽位是否选中状态
+            if (isSelected==true)
+            {
+                ClearSelectedItem();
+            }
+            else
+            {
+                if (itemQuantity>0)
+                {
+                    SetSelectedItem();
+                }
+            }
+        }
+
     }
 
     /// <summary>

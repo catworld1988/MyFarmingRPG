@@ -41,6 +41,28 @@ public class UIInventoryBar : MonoBehaviour
         SwitchInventoryBarPosition();
     }
 
+    /// <summary>
+    /// 清除所有高光 在物品栏
+    /// </summary>
+    public void ClearHighlightOnInventorySlots()
+    {
+        if (inventorySlots.Length > 0)
+        {
+            for (int i = 0; i < inventorySlots.Length; i++)
+            {
+                //关闭高光素材 设置bool值
+                if (inventorySlots[i].isSelected)
+                {
+                    inventorySlots[i].isSelected = false;
+                    inventorySlots[i].inventorySlotHighlight.color = new Color(0f, 0f, 0f,0f);
+                    //更新物品栏为没有选中状态
+                    InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+                }
+            }
+        }
+    }
+
+
     //库存更新
     private void InventoryUpdated(InventoryLocation inventoryLocation, List<InventoryItem> inventoryList)
     {
@@ -70,6 +92,9 @@ public class UIInventoryBar : MonoBehaviour
                             inventorySlots[i].textMeshProUGUI.text = inventoryList[i].itemQuantity.ToString();
                             inventorySlots[i].itemDetails = itemDetails;
                             inventorySlots[i].itemQuantity = inventoryList[i].itemQuantity;
+
+                            SetHighlightedInventorySlots(i);
+
                         }
                     }
                     else
@@ -93,9 +118,49 @@ public class UIInventoryBar : MonoBehaviour
                 inventorySlots[i].textMeshProUGUI.text = "";
                 inventorySlots[i].itemDetails = null;
                 inventorySlots[i].itemQuantity = 0;
+
+                SetHighlightedInventorySlots(i);
+
             }
         }
     }
+
+
+    /// <summary>
+    /// Set the selected highlight if set on all inventory item positions
+    /// 设置选中的高亮显示，如果设置在所有库存物品的位置
+    /// </summary>
+    public void SetHighlightedInventorySlots()
+    {
+        if (inventorySlots.Length>0)
+        {
+            for (int i = 0; i < inventorySlots.Length; i++)
+            {
+                SetHighlightedInventorySlots(i);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Set the selected highlight if set on an inventory item for a given slot item position
+    /// 设置选中的高亮显示，如果设置在一个给定的插槽项目位置的库存项目
+    /// </summary>
+    /// <param name="itemPosition"></param>
+    public void SetHighlightedInventorySlots(int itemPosition)
+    {
+        if (inventorySlots.Length>0 && inventorySlots[itemPosition].itemDetails !=null)
+        {
+            if (inventorySlots[itemPosition].isSelected)
+            {
+                inventorySlots[itemPosition].inventorySlotHighlight.color = new Color(1f, 1f, 1f, 1f); //alpha可见 最好用canvas组件控制 优化更好
+
+                //更新显示物品被选中
+                InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player,inventorySlots[itemPosition].itemDetails.itemCode);
+            }
+        }
+    }
+
+
 
     private void SwitchInventoryBarPosition()
     {

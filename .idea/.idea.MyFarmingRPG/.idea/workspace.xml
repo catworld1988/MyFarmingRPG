@@ -47,6 +47,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="2DnWgQEx8zYCanUSk4zMvH3oOhQ" />
   <component name="ProjectViewState">
     <option name="autoscrollToSource" value="true" />
@@ -61,7 +64,7 @@
     "WebServerToolWindowFactoryState": "false",
     "XThreadsFramesViewSplitterKey": "0.50173914",
     "rider.run.widget.enabled.cache": "false",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "settings.editor.selected.configurable": "preferences.customizations"
   }
 }]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
@@ -114,6 +117,7 @@
       <workItem from="1661831271889" duration="25058000" />
       <workItem from="1662171443145" duration="1193000" />
       <workItem from="1662172854084" duration="21211000" />
+      <workItem from="1662369781474" duration="5715000" />
     </task>
     <servers />
   </component>
