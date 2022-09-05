@@ -6,7 +6,7 @@ public enum InventoryLocation //库存位置
 {
     player,
     chest, //箱子
-    count
+    count //统计数量
 }
 public enum ToolEffect
 {

@@ -10,6 +10,8 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 {
     private Dictionary<int, ItemDetails> itemDetailsDictionary;
 
+    private int[] selectedInventoryItem; //被选择物体的库存的列表，数值是物体的编号
+
     public List<InventoryItem>[] inventoryLists;
 
     [HideInInspector] public int[] inventoryListCapacityInArray; //库存容量列表
@@ -28,6 +30,14 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 
         //创建 物品字典
         CreateItemDetailsDictionary();
+
+        // Initialise selected inventory item array 初始化选择列表
+        selectedInventoryItem = new int[(int)InventoryLocation.count];
+
+        for (int i = 0; i < selectedInventoryItem.Length; i++)
+        {
+            selectedInventoryItem[i] = -1; //初始为没有选中任何一个项目
+        }
     }
 
 
@@ -90,11 +100,11 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 
         if (itemPosition != -1)
         {
-            AddItemPosition(inventoryList, itemCode, itemPosition);
+            AddItemAtPosition(inventoryList, itemCode, itemPosition);
         }
         else
         {
-            AddItemPosition(inventoryList, itemCode);
+            AddItemAtPosition(inventoryList, itemCode);
         }
 
         //Send event that inventory has been updated   呼叫事件管理中心  发布库存更新事件广播
@@ -104,7 +114,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     /// <summary>
     /// 将包含itemCode 和数量 的物品结构体 添加到物品库存清单中末尾
     /// </summary>
-    private void AddItemPosition(List<InventoryItem> inventoryList, int itemCode)
+    private void AddItemAtPosition(List<InventoryItem> inventoryList, int itemCode)
     {
         InventoryItem inventoryItem = new InventoryItem();
 
@@ -118,17 +128,17 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     /// <summary>
     /// 增加同一物品的库存
     /// </summary>
-    private void AddItemPosition(List<InventoryItem> inventoryList, int itemCode, int Position)
+    private void AddItemAtPosition(List<InventoryItem> inventoryList, int itemCode, int position)
     {
         //创建一个新物品；
         InventoryItem inventoryItem = new InventoryItem();
 
-        int quantity = inventoryList[Position].itemQuantity + 1; //当前清单索引位置 的物品库存数量+1
+        int quantity = inventoryList[position].itemQuantity + 1; //当前清单索引位置 的物品库存数量+1
         inventoryItem.itemQuantity = quantity;
         inventoryItem.itemCode = itemCode;
-        inventoryList[Position] = inventoryItem; //刷新下物品
+        inventoryList[position] = inventoryItem; //刷新下物品
 
-        Debug.ClearDeveloperConsole();
+        //Debug.ClearDeveloperConsole();
         //DebugPrintInventoryList(inventoryList);
     }
 
@@ -140,7 +150,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     /// <param name="inventoryLocation"></param>
     /// <param name="itemCode"></param>
     /// <returns></returns>
-    private int FindItemInInventory(InventoryLocation inventoryLocation, int itemCode)
+    public int FindItemInInventory(InventoryLocation inventoryLocation, int itemCode)
     {
         //创建库存清单 并分配库存清单位置 玩家库存0 箱子库存1 道具库存2
         List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];
@@ -211,18 +221,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         return itemTypeDescription;
     }
 
-    //打印物品库存清单
-    // private void DebugPrintInventoryList(List<InventoryItem> inventoryList)
-    // {
-    //     foreach (InventoryItem inventoryItem in inventoryList)
-    //     {
-    //         Debug.Log("Item Description:" +
-    //                   InventoryManager.Instance.GetItemDetails(inventoryItem.itemCode).itemDescription +
-    //                   "    Item Quantity:" + inventoryItem.itemQuantity);
-    //     }
-    //
-    //     Debug.Log("***************************************************************************");
-    // }
+
 
     public void RemoveItem(InventoryLocation inventoryLocation, int itemCode)
     {
@@ -276,4 +275,36 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 
         }
     }
+
+    /// <summary>
+    /// 在选择列表 索引是库存位置 中设置物品的编号
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    /// <param name="itemCode"></param>
+    public void SetSelectedInventoryItem(InventoryLocation inventoryLocation, int itemCode)
+    {
+        selectedInventoryItem[(int)inventoryLocation] = itemCode;
+    }
+
+    /// <summary>
+    /// 在库存位置 清除选择项
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    public void ClearSelectedInventoryItem(InventoryLocation inventoryLocation)
+    {
+        selectedInventoryItem[(int)inventoryLocation] = -1;
+    }
+
+    //打印物品库存清单
+    // private void DebugPrintInventoryList(List<InventoryItem> inventoryList)
+    // {
+    //     foreach (InventoryItem inventoryItem in inventoryList)
+    //     {
+    //         Debug.Log("Item Description:" +
+    //                   InventoryManager.Instance.GetItemDetails(inventoryItem.itemCode).itemDescription +
+    //                   "    Item Quantity:" + inventoryItem.itemQuantity);
+    //     }
+    //
+    //     Debug.Log("***************************************************************************");
+    // }
 }

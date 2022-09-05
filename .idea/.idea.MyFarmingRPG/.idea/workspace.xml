@@ -7,7 +7,11 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileColors">
+    <fileColor scope="All" color="3a3c42" />
+  </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/e6/4eab557c/Attribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8605bf0aaedc477c82f1a46109a425f445000/86/95e8a539/IEventSystemHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8605bf0aaedc477c82f1a46109a425f445000/9c/ffedff26/IBeginDragHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c2a97e0383e8404c9fc0ae19d58f57f146a800/24/290f5fde/IntPtr.cs" root0="SKIP_HIGHLIGHTING" />
@@ -49,6 +53,7 @@
   </component>
   <component name="ProjectId" id="2DnWgQEx8zYCanUSk4zMvH3oOhQ" />
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -61,7 +66,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.50173914&quot;,
     &quot;rider.run.widget.enabled.cache&quot;: &quot;false&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.语言默认值&quot;
   }
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
@@ -114,6 +119,16 @@
       <workItem from="1661831271889" duration="25058000" />
       <workItem from="1662171443145" duration="1193000" />
       <workItem from="1662172854084" duration="22110000" />
+      <workItem from="1662211010173" duration="661000" />
+      <workItem from="1662255283470" duration="5546000" />
+      <workItem from="1662271727692" duration="236000" />
+      <workItem from="1662271984705" duration="1133000" />
+      <workItem from="1662273209275" duration="62000" />
+      <workItem from="1662273301163" duration="6550000" />
+      <workItem from="1662299627940" duration="1494000" />
+      <workItem from="1662301424051" duration="1567000" />
+      <workItem from="1662303106590" duration="284000" />
+      <workItem from="1662338266235" duration="613000" />
     </task>
     <servers />
   </component>
