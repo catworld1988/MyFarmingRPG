@@ -60,6 +60,18 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //在选择列表中设置 物体
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player,itemDetails.itemCode);
+
+        //如果选择的物品能carry 举起
+        if (itemDetails.canBeCarried== true)
+        {
+            //玩家动作变更 携带物品
+            Player.Instance.ShowCarriedItem(itemDetails.itemCode);
+        }
+        else
+        {
+            //否则切换回 常规状态
+            Player.Instance.ClearCarriedItem();
+        }
     }
 
 
@@ -72,6 +84,9 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //在库存中设置无物品选中
         InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+
+        //清除玩家 携带物品的状态
+        Player.Instance.ClearCarriedItem();
     }
 
     /// <summary>

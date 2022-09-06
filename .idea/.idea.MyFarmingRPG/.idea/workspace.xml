@@ -8,6 +8,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8349c390b2f34ce58a92d69ee7172c2d26c00/78/f082de37/AnimatorOverrideController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8349c390b2f34ce58a92d69ee7172c2d26c00/91/59105346/Animator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8605bf0aaedc477c82f1a46109a425f445000/86/95e8a539/IEventSystemHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8605bf0aaedc477c82f1a46109a425f445000/9c/ffedff26/IBeginDragHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c2a97e0383e8404c9fc0ae19d58f57f146a800/24/290f5fde/IntPtr.cs" root0="SKIP_HIGHLIGHTING" />
@@ -20,7 +22,10 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d87da959c26443e0baa9578975afed03157c00/e3/131e5208/DrivenRectTransformTracker.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d87da959c26443e0baa9578975afed03157c00/f1/50585216/Object.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f6ea3a9350d841e9bca643ef1118065226c00/13/9a6e00f4/Animator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Animation/AnimationOverrides.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Animation/CharacterAttribute.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Animation/MovementAnimationParameterControl.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Animation/SO_AnimationType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Events/EventHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Inventory/InventoryItem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Inventory/InventoryManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -64,12 +69,12 @@
     "WebServerToolWindowFactoryState": "false",
     "XThreadsFramesViewSplitterKey": "0.50173914",
     "rider.run.widget.enabled.cache": "false",
-    "settings.editor.selected.configurable": "preferences.customizations"
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#"
   }
 }]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
     <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="E:\UnityEditor\2021.3.8f1c1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="E:\UnityEditor\2021.3.9f1c1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath F:\GameDevelop\TestProject\MyFarmingRPG -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="F:\GameDevelop\TestProject\MyFarmingRPG" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -117,7 +122,10 @@
       <workItem from="1661831271889" duration="25058000" />
       <workItem from="1662171443145" duration="1193000" />
       <workItem from="1662172854084" duration="21211000" />
-      <workItem from="1662369781474" duration="5715000" />
+      <workItem from="1662369781474" duration="8696000" />
+      <workItem from="1662388965148" duration="971000" />
+      <workItem from="1662424165741" duration="1198000" />
+      <workItem from="1662447139629" duration="10741000" />
     </task>
     <servers />
   </component>

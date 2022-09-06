@@ -1,6 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+public enum AnimationName //动画名称
+{
+    idleDown,
+    idleUp,
+    idleRight,
+    idleLeft,
+    walkUp,
+    walkDown,
+    walkRight,
+    walkLeft,
+    runUp,
+    runDown,
+    runRight,
+    runLeft,
+    useToolUp,
+    useToolDown,
+    useToolRight,
+    useToolLeft,
+    swingToolUp,
+    swingToolDown,
+    swingToolRight,
+    swingToolLeft,
+    liftToolUp,
+    liftToolDown,
+    liftToolRight,
+    liftToolLeft,
+    holdToolUp,
+    holdToolDown,
+    holdToolRight,
+    holdToolLeft,
+    pickDown,
+    pickUp,
+    pickRight,
+    pickLeft,
+    count
+}
+
+public enum CharacterPartAnimator
+{
+    body,
+    arms,
+    hair,
+    tool,
+    hat,
+    count
+}
+
+public enum PartVariantColour
+{
+    none,
+    count
+}
+
+public enum PartVariantType
+{
+    none,
+    carry,
+    hoe,
+    pickaxe,
+    axe,
+    scythe,
+    wateringCan,
+    count
+}
 
 public enum InventoryLocation //库存位置
 {
@@ -8,6 +69,7 @@ public enum InventoryLocation //库存位置
     chest, //箱子
     count
 }
+
 public enum ToolEffect
 {
     none,

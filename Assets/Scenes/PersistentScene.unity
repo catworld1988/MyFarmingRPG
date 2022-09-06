@@ -548,9 +548,80 @@ Transform:
   - {fileID: 1007464850}
   - {fileID: 1182860931}
   - {fileID: 1661136162}
+  - {fileID: 906479045}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &906479044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 906479045}
+  - component: {fileID: 906479046}
+  m_Layer: 0
+  m_Name: CharacterCustomiser
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &906479045
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906479044}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 707435484}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &906479046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906479044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed0341e15c1d3fa45b3abf59d0d31dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 707435483}
+  soAnimationTypeArray:
+  - {fileID: 11400000, guid: 621a846810313ee4ab79dc0626dd7433, type: 2}
+  - {fileID: 11400000, guid: 2835c0ca9eedc5346a582ef862be17c9, type: 2}
+  - {fileID: 11400000, guid: de3bb5f4541036c41b89897b6869282b, type: 2}
+  - {fileID: 11400000, guid: 85996131f8f8ed2489fb936b38400808, type: 2}
+  - {fileID: 11400000, guid: 04abf549b06aaad4b9ead2c128f5af10, type: 2}
+  - {fileID: 11400000, guid: e625da53c56bf1b4a9bbb6a6c0da73a1, type: 2}
+  - {fileID: 11400000, guid: 7b4cd94f918991c4688a53112b5ea9f4, type: 2}
+  - {fileID: 11400000, guid: 8119651c37f77094cae25488b889867f, type: 2}
+  - {fileID: 11400000, guid: 6f2bcd9079e30f341b4c6dcb2c3e4ef7, type: 2}
+  - {fileID: 11400000, guid: 41f958d678f4fcb4b8420d2ec4cd2c6f, type: 2}
+  - {fileID: 11400000, guid: c74a6db1f62561847827bfafda4a1503, type: 2}
+  - {fileID: 11400000, guid: 67ab26d24f3a28f4e99a621454ef0b95, type: 2}
+  - {fileID: 11400000, guid: a2bedf1d8a3e2664aa75d564e957b4ba, type: 2}
+  - {fileID: 11400000, guid: a72b7c1755c080d4cb7aa9887d01e3ac, type: 2}
+  - {fileID: 11400000, guid: ea34577e9c9b0c24b85bc2d810ffa927, type: 2}
+  - {fileID: 11400000, guid: 16fb3b75356593347860639466c8efb2, type: 2}
+  - {fileID: 11400000, guid: 18a729f78ebac6141ac00d8b282fddbb, type: 2}
+  - {fileID: 11400000, guid: a453fb7011ce91046a8046e35e1b2b27, type: 2}
+  - {fileID: 11400000, guid: ef69d7a5143a6d54c977ea08c2d739a9, type: 2}
+  - {fileID: 11400000, guid: 4f25aab4174517c488880b74149114ef, type: 2}
+  - {fileID: 11400000, guid: b30d5a859ef10f749b338409627b5d2b, type: 2}
+  - {fileID: 11400000, guid: 10c0f0a41530cc744be5bc2133ab93fd, type: 2}
+  - {fileID: 11400000, guid: 6c8676baf041e0843a507c617e386d47, type: 2}
+  - {fileID: 11400000, guid: ce9b2163e00bc584992dd75045acbda6, type: 2}
 --- !u!1 &916035340
 GameObject:
   m_ObjectHideFlags: 0
@@ -886,7 +957,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1007464849}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1892,7 +1963,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7775424, y: 1}
+    m_SensorSize: {x: 1.7785467, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3217,6 +3288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0fbc2719e447984b969be3a60420dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedItemSpriteRenderer: {fileID: 1007464851}
 --- !u!50 &7168630879476228505
 Rigidbody2D:
   serializedVersion: 4

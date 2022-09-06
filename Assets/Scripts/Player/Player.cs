@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Player : SingletonMonobehaviour<Player>
 {
+    private AnimationOverrides animationOverrides;
+
     //Movement Parameters
     private float xInput;
     private float yInput;
@@ -37,6 +39,18 @@ public class Player : SingletonMonobehaviour<Player>
 #pragma warning disable 414
     private Direction playerDirection;
 #pragma warning restore 414
+
+    //角色动画属性 定制列表
+    private List<CharacterAttribute> characterAttributesCustomisationList;
+
+    //显示举过头顶的工具
+    [Tooltip("Should be populated in the prefab with the equipped item sprite renderer")] [SerializeField]
+    private SpriteRenderer equippedItemSpriteRenderer = null;
+
+    // 玩家手臂属性可以被替换
+    private CharacterAttribute armsCharacterAttributeAttribute;
+    private CharacterAttribute toolCharacterAttributeAttribute;
+
     private float movementSpeed;
 
     private bool _playerInputIsDisable = false;
@@ -52,6 +66,12 @@ public class Player : SingletonMonobehaviour<Player>
     {
         base.Awake();
         rigidBody2D = GetComponent<Rigidbody2D>();
+
+        animationOverrides = GetComponentInChildren<AnimationOverrides>();
+        //初始化 可以替换的角色属性
+        armsCharacterAttributeAttribute = new CharacterAttribute(CharacterPartAnimator.arms, PartVariantColour.none, PartVariantType.none);
+
+        characterAttributesCustomisationList = new List<CharacterAttribute>();
 
         //获取主相机的参数
         mainCamera = Camera.main;
@@ -220,10 +240,47 @@ public class Player : SingletonMonobehaviour<Player>
     {
         PlayerInputIsDisable = true;
     }
+
     //允许玩家输入
     public void EnablePlayerInput()
     {
         PlayerInputIsDisable = false;
+    }
+
+    public void ClearCarriedItem()
+    {
+        equippedItemSpriteRenderer.sprite = null;
+        equippedItemSpriteRenderer.color = new Color(1f, 1f, 1f, 0f);
+
+        //属性重置 手臂自定义属性 切换回常规动画
+        armsCharacterAttributeAttribute.partVariantType = PartVariantType.none;
+
+        characterAttributesCustomisationList.Clear();
+        characterAttributesCustomisationList.Add(armsCharacterAttributeAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);//覆盖对应的动画控制器
+
+        isCarrying = false;
+
+    }
+    public void ShowCarriedItem(int itemCode)
+    {
+        //获取物品参数
+        ItemDetails itemDetails = InventoryManager.Instance.GetItemDetails(itemCode);
+        if (itemDetails !=null)
+        {
+            //设置显示图片
+            equippedItemSpriteRenderer.sprite = itemDetails.itemSprite;
+            equippedItemSpriteRenderer.color = new Color(1f, 1f, 1f, 1f);
+
+            //属性变更 carry  手臂自定义属性
+            armsCharacterAttributeAttribute.partVariantType = PartVariantType.carry;
+
+            characterAttributesCustomisationList.Clear();
+            characterAttributesCustomisationList.Add(armsCharacterAttributeAttribute);
+            animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);  //覆盖对应的动画控制器
+
+            isCarrying = true;
+        }
     }
 
 
