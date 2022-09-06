@@ -70,6 +70,15 @@ public enum InventoryLocation //库存位置
     count
 }
 
+public enum Season
+{
+    Spring,
+    Summer,
+    Autumn,
+    Winter,
+    none,
+    count
+}
 public enum ToolEffect
 {
     none,

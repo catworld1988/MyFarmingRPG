@@ -64,6 +64,9 @@ public static class Settings
     public const string WateringTool = "Watering Can";
     public const string CollectingTool = "Basket";
 
+    //Time System 时间系统
+    public const float secondsPerGameSecond = 0.012f;   //0.7秒=1分钟 因为实际游戏中时间比现实中更快 效率更高
+
     //静态构造函数
     static Settings()
     {
