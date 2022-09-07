@@ -90,6 +90,8 @@ public class Player : SingletonMonobehaviour<Player>
 
             PlayerWalkInput();
 
+            PlayerTestInput();
+
             //Send event to any listeners for player movement input  发送主角移动状态给EventHandle广播站  关闭了上下左右Idle
             EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect,
                 isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown,
@@ -225,6 +227,25 @@ public class Player : SingletonMonobehaviour<Player>
             false, false, false, false);
     }
 
+    //TODO 删除
+    /// <summary>
+    /// Temp routine for test input
+    /// 测试输入的临时程序
+    /// </summary>
+    private void PlayerTestInput()
+    {
+        //触发进阶增加 时间
+        if (Input.GetKey(KeyCode.T))
+        {
+            TimeManager.Instance.TestAdvanceGameMinute();
+        }
+
+        //触发进阶增加 天数
+        if (Input.GetKey(KeyCode.G))
+        {
+            TimeManager.Instance.TestAdvanceGameGameDay();
+        }
+    }
     private void ResetMovement()
     {
         //Reset Movement

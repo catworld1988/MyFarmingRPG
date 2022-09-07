@@ -72,6 +72,12 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
                             gameSeason = (Season)gs;
 
                             gameYear++;
+
+                            if (gameYear>9999)
+                            {
+                                //UI只能处理4位数
+                                gameYear = 1;
+                            }
                             EventHandler.CallAdvanceGameYearEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
                         }
 
@@ -85,10 +91,9 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
                 EventHandler.CallAdvanceGameHourEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
             }
 
-            EventHandler.CallAdvanceGameHourEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
+            EventHandler.CallAdvanceGameMinuteEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
 
-            Debug.Log("gameYear: " + gameYear + "   gameSeason: " + gameSeason + "   gameDay: " + gameDay + "   gameHour: " + gameHour +
-                      "   gameMinute: " + gameMinute);
+            //Debug.Log("gameYear: " + gameYear + "   gameSeason: " + gameSeason + "   gameDay: " + gameDay + "   gameHour: " + gameHour +"   gameMinute: " + gameMinute);
         }
         //Call to advance game second event would go here if required
     }
@@ -121,11 +126,34 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
             case 6:
                 return "Sat";
 
-            case 7:
+            case 0:
                 return "Sun";
-                
+
             default:
                 return "";
+        }
+    }
+
+    //TODO 删除
+    /// <summary>
+    /// 进阶 1分钟
+    /// </summary>
+    public void TestAdvanceGameMinute()
+    {
+        for (int i = 0; i < 60; i++)
+        {
+            UpdateGameSecond();
+        }
+    }
+
+    /// <summary>
+    /// 进阶 1天
+    /// </summary>
+    public void TestAdvanceGameGameDay()
+    {
+        for (int i = 0; i < 86400; i++)
+        {
+            UpdateGameSecond();
         }
     }
 }
