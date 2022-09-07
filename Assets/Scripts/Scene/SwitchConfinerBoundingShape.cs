@@ -1,15 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
 public class SwitchConfinerBoundingShape : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    //订阅 场景加载后的通知 然后执行切换边界摄像机的碰撞范围
+    private void OnEnable()
     {
-        SwitchBoundingShape();
+        EventHandler.AfterSceneLoadEvent += SwitchBoundingShape;
     }
+
+    private void OnDisable()
+    {
+        EventHandler.AfterSceneLoadEvent -= SwitchBoundingShape;
+    }
+
 
     /// <summary>
     /// Switch the collider that cinemachine uses to define the edges of the screen

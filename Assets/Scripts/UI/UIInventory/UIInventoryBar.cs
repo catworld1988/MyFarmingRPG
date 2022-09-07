@@ -88,7 +88,7 @@ public class UIInventoryBar : MonoBehaviour
                         {
                             //add image and details to inventory item slot
                             //在物品槽位 添加图片和描述细节
-                            inventorySlots[i].InventorySlotImage.sprite = itemDetails.itemSprite;
+                            inventorySlots[i].inventorySlotImage.sprite = itemDetails.itemSprite;
                             inventorySlots[i].textMeshProUGUI.text = inventoryList[i].itemQuantity.ToString();
                             inventorySlots[i].itemDetails = itemDetails;
                             inventorySlots[i].itemQuantity = inventoryList[i].itemQuantity;
@@ -114,7 +114,7 @@ public class UIInventoryBar : MonoBehaviour
             //循环重置槽位为空的槽位 图片重置为空白图
             for (int i = 0; i < inventorySlots.Length; i++)
             {
-                inventorySlots[i].InventorySlotImage.sprite = blank16x16sprite;
+                inventorySlots[i].inventorySlotImage.sprite = blank16x16sprite;
                 inventorySlots[i].textMeshProUGUI.text = "";
                 inventorySlots[i].itemDetails = null;
                 inventorySlots[i].itemQuantity = 0;

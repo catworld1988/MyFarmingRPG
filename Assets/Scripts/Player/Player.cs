@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -230,7 +228,7 @@ public class Player : SingletonMonobehaviour<Player>
     //TODO 删除
     /// <summary>
     /// Temp routine for test input
-    /// 测试输入的临时程序
+    /// 测试!!!!! 输入的临时程序
     /// </summary>
     private void PlayerTestInput()
     {
@@ -241,11 +239,19 @@ public class Player : SingletonMonobehaviour<Player>
         }
 
         //触发进阶增加 天数
-        if (Input.GetKey(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             TimeManager.Instance.TestAdvanceGameGameDay();
         }
+
+        //触发 场景转换
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(),transform.position);
+        }
     }
+
+
     private void ResetMovement()
     {
         //Reset Movement

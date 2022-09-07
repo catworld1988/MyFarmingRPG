@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,7 +8,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 {
     //物品栏的实例参数
     public Image inventorySlotHighlight;
-    public Image InventorySlotImage;
+    public Image inventorySlotImage;
     public TextMeshProUGUI textMeshProUGUI;
 
     [HideInInspector] public ItemDetails itemDetails;
@@ -40,10 +39,21 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         parentCanvas = GetComponentInParent<Canvas>();
     }
 
+    private void OnEnable()
+    {
+        //订阅 场景已经加载的通知 然后执行加载后的方法（寻找父对象标签位置）
+        EventHandler.AfterSceneLoadEvent += SceneLoad;
+    }
+
+
+    private void OnDisable()
+    {
+        EventHandler.AfterSceneLoadEvent -= SceneLoad;
+    }
+
     private void Start()
     {
         mainCamera = Camera.main;
-        parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
     }
 
 
@@ -92,7 +102,6 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// <summary>
     /// 在鼠标当前位置 拖动物品（如果选择了）。呼叫 DropItem event.
     /// </summary>
-    /// <param name="eventData"></param>
     private void DropSelectedItemAtMousePosition()
     {
         if (itemDetails != null && isSelected)
@@ -133,7 +142,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             //Get image for dragged item 获得拖拽物体的图像
             Image draggedItemImage = draggedItem.GetComponentInChildren<Image>();
-            draggedItemImage.sprite = InventorySlotImage.sprite;
+            draggedItemImage.sprite = inventorySlotImage.sprite;
 
             SetSelectedItem();
         }
@@ -262,11 +271,17 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// <summary>
     /// 销毁文字描述实例框体
     /// </summary>
-    public void DestroyInventoryTextBox()
+    private void DestroyInventoryTextBox()
     {
         if (inventoryBar.inventoryTextBoxGameobject != null)
         {
             Destroy(inventoryBar.inventoryTextBoxGameobject);
         }
     }
+
+    private void SceneLoad()
+    {
+        parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
+    }
+
 }
