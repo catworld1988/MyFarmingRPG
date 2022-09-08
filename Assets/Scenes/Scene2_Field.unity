@@ -25242,7 +25242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4619783424132208004, guid: 84f674e9ec9341846b7109b76002c2e7, type: 3}
       propertyPath: scenePositionGoto.y
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4619783424132208005, guid: 84f674e9ec9341846b7109b76002c2e7, type: 3}
       propertyPath: m_Size.x

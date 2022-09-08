@@ -17,7 +17,7 @@ public class SceneTeleport : MonoBehaviour
 
         if (player!= null)
         {
-            //计算玩家 新的x位置 如果为真就返回分号前面的
+            //如果坐标是0，就计算玩家新的坐标位置 如果有设定的数值了，就用新的数值不获取
             float xPosition = Mathf.Approximately(scenePositionGoto.x, 0f) ? player.transform.position.x : scenePositionGoto.x;
 
             float yPosition = Mathf.Approximately(scenePositionGoto.y, 0f) ? player.transform.position.y : scenePositionGoto.y;
@@ -25,7 +25,7 @@ public class SceneTeleport : MonoBehaviour
             float zPosition = 0f;
 
 
-            //传送到新场景
+            //根据场景名 和玩家坐标 传送到新场景
             SceneControllerManager.Instance.FadeAndLoadScene(sceneNameGoto.ToString(),new Vector3(xPosition,yPosition,zPosition));
         }
     }
