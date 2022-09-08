@@ -1,5 +1,4 @@
 using UnityEngine;
-// ReSharper disable InconsistentNaming
 
 [ExecuteAlways] //编辑器中 编辑下运行 在游戏运行前已完成
 public class GenerateGUID : MonoBehaviour

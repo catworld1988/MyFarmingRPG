@@ -49,6 +49,11 @@ public class SceneControllerManager : SingletonMonobehaviour<SceneControllerMana
         EventHandler.CallBeforeSceneUnloadFadeOutEvent();
         //开始淡出到黑色
         yield return StartCoroutine(Fade(1f));
+
+        //##存储场景数据 ##
+        SaveLoadManager.Instance.StoreCurrentSceneDate();
+
+
         //设置玩家位置
         Player.Instance.gameObject.transform.position = spawnPosition;
 
@@ -62,6 +67,11 @@ public class SceneControllerManager : SingletonMonobehaviour<SceneControllerMana
 
         //呼叫 加载场景后 广播
         EventHandler.CallAfterSceneLoadEvent();
+
+
+        //##读取场景数据 ##
+        SaveLoadManager.Instance.RestoreCurrentSceneDate();
+
 
         //开始淡入 并 等待完成
         yield return StartCoroutine(Fade(0f));
@@ -99,6 +109,11 @@ public class SceneControllerManager : SingletonMonobehaviour<SceneControllerMana
 
         //如果有订阅者，通知它们
         EventHandler.CallAfterSceneLoadEvent();
+
+
+        //##读取场景数据 ##
+        SaveLoadManager.Instance.RestoreCurrentSceneDate();
+
 
         //Once the scene is finished loading,start fading in.
         //场景加载完成后，开始淡入。

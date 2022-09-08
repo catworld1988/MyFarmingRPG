@@ -33,7 +33,7 @@ public class Item : MonoBehaviour
     }
 
     /// <summary>
-    /// 添加判定+物品触碰旋转组件
+    /// 给能收获的物件 添加碰撞晃动组件
     /// </summary>
     /// <param name="itemCodeParam"></param>
     public void Init(int itemCodeParam)
@@ -47,7 +47,7 @@ public class Item : MonoBehaviour
             //确认是否是当前物体的小技巧
             spriteRenderer.sprite = itemDetails.itemSprite;
 
-            //If item type is reapable then add Nudgeable component 如果物品的类型是可以收获的 添加物品碰撞旋转组件
+            //If item type is reapable then add Nudgeable component 给能收获的物件 添加碰撞晃动组件
             if (itemDetails.itemType == ItemType.Reapable_scenary)
             {
                 gameObject.AddComponent<ItemNudge>();

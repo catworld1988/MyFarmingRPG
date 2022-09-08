@@ -11,7 +11,7 @@ public class SceneTeleport : MonoBehaviour
     [SerializeField] private Vector3 scenePositionGoto = new Vector3();
 
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)  //不用离开检测区 移动速度触发 可以快速检测切换场景
     {
         Player player = collision.GetComponent<Player>();
 
