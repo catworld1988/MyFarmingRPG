@@ -63,6 +63,15 @@ public enum PartVariantType
     count
 }
 
+public enum GridBoolProperty //地图格 判定信息
+{
+    diggable,
+    canDropItem,
+    canPlaceFurniture,
+    isPath, //寻路
+    isNPCObstacle //寻路-障碍
+}
+
 public enum InventoryLocation //库存位置
 {
     player,
