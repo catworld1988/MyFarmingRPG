@@ -9,6 +9,9 @@ public static class Settings
     public const float fadeOutSeconds = 0.35f;
     public const float targetAlpha = 0.45f;
 
+    //瓦片地图            单元格为 1个单位
+    public const float gridCellSize = 1f;
+
     //Player Movement
     //public const float runningSpeed = 5.333f;
     //TODO 测试使用 需要改回常量

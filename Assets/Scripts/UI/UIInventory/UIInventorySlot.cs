@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler,IPointerClickHandler
+public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler,
+    IPointerClickHandler
 {
     //物品栏的实例参数
     public Image inventorySlotHighlight;
@@ -69,10 +70,10 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         inventoryBar.SetHighlightedInventorySlots();
 
         //在选择列表中设置 物体
-        InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player,itemDetails.itemCode);
+        InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
 
         //如果选择的物品能carry 举起
-        if (itemDetails.canBeCarried== true)
+        if (itemDetails.canBeCarried == true)
         {
             //玩家动作变更 携带物品
             Player.Instance.ShowCarriedItem(itemDetails.itemCode);
@@ -109,20 +110,27 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             //鼠标的屏幕坐标转换成世界坐标
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
                 Input.mousePosition.y, -mainCamera.transform.position.z));
-            //在当前坐标,方向不变，父级目录下 创建物体预制体
-            GameObject itemGameObject = Instantiate(itemPrefab, worldPosition, quaternion.identity, parentItem);
-            Item item = itemGameObject.GetComponent<Item>();
-            item.ItemCode = itemDetails.itemCode;
 
-            //从玩家库存物品栏删除
-            InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+            //如果可以丢东西在这
+            Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
+            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
 
-            //如果没有物品 清除物品的选择
-            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player,item.ItemCode)==-1)
+            if (gridPropertyDetails !=null && gridPropertyDetails.canDropItem)
             {
-                ClearSelectedItem();
-            }
+                //在当前坐标,方向不变，父级目录下 创建物体预制体
+                GameObject itemGameObject = Instantiate(itemPrefab, new Vector3(worldPosition.x,worldPosition.y-Settings.gridCellSize/2f,worldPosition.z), quaternion.identity, parentItem);
+                Item item = itemGameObject.GetComponent<Item>();
+                item.ItemCode = itemDetails.itemCode;
 
+                //从玩家库存物品栏删除
+                InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+
+                //如果没有物品 清除物品的选择
+                if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1)
+                {
+                    ClearSelectedItem();
+                }
+            }
         }
     }
 
@@ -184,7 +192,6 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             //取消高亮显示选择
             ClearSelectedItem();
-
         }
         else
         {
@@ -205,22 +212,21 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnPointerClick(PointerEventData eventData)
     {
         //检测到按键数据 检测是否是鼠标左键点击
-        if (eventData.button==PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
             //槽位是否选中状态
-            if (isSelected==true)
+            if (isSelected == true)
             {
                 ClearSelectedItem();
             }
             else
             {
-                if (itemQuantity>0)
+                if (itemQuantity > 0)
                 {
                     SetSelectedItem();
                 }
             }
         }
-
     }
 
     /// <summary>
@@ -283,5 +289,4 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
     }
-
 }

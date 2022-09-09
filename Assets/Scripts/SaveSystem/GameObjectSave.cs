@@ -12,11 +12,11 @@ public class GameObjectSave
 
     public GameObjectSave()
     {
-        sceneDate = new Dictionary<string, SceneSave>();
+        sceneDate = new Dictionary<string, SceneSave>(); //string 标识 是场景名称
     }
 
     //对象保存字典  对象保存字典> 场景保存字典> 场景物品字典> 场景物品坐标
-    public GameObjectSave(Dictionary<string,SceneSave> sceneDate)
+    public GameObjectSave(Dictionary<string,SceneSave> sceneDate) //string 标识 是场景名称
     {
         this.sceneDate = sceneDate;
     }

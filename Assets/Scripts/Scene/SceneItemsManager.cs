@@ -143,8 +143,7 @@ public class SceneItemsManager : SingletonMonobehaviour<SceneItemsManager>, ISav
 
         //创建场景物品字典 添加物件列表
         SceneSave sceneSave = new SceneSave();
-        sceneSave.listSceneItemDictionary = new Dictionary<string, List<SceneItem>>();
-        sceneSave.listSceneItemDictionary.Add("sceneItemList", sceneItemList);
+        sceneSave.listSceneItem = sceneItemList;
 
         //将场景数据 添加到对象中
         GameObjectSave.sceneDate.Add(sceneName, sceneSave);
@@ -160,14 +159,13 @@ public class SceneItemsManager : SingletonMonobehaviour<SceneItemsManager>, ISav
         if (GameObjectSave.sceneDate.TryGetValue(sceneName, out SceneSave sceneSave))
         {
             //检测是否有物品数据 返回物品列表数据
-            if (sceneSave.listSceneItemDictionary != null &&
-                sceneSave.listSceneItemDictionary.TryGetValue("sceneItemList", out List<SceneItem> sceneItemList))
+            if (sceneSave.listSceneItem != null )
             {
                 //销毁场景中所有物品
                 DestorySceneItems();
 
                 //根据列表数据重建 实例化物品
-                InstantiateSceneItem(sceneItemList);
+                InstantiateSceneItem(sceneSave.listSceneItem);
             }
         }
     }
