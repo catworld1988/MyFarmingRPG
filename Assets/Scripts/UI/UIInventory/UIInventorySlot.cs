@@ -18,6 +18,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     //拖放物体的实例参数
     private Camera mainCamera;
     private Transform parentItem;
+    private GridCursor gridCursor;
     private GameObject draggedItem;
 
     [SerializeField] private UIInventoryBar inventoryBar = null;
@@ -55,6 +56,15 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private void Start()
     {
         mainCamera = Camera.main;
+        gridCursor = FindObjectOfType<GridCursor>();
+    }
+
+    private void ClearCursors()
+    {
+        gridCursor.DisableCursor();
+
+        //物品类型设置为 none
+        gridCursor.SelectedItemType = ItemType.none;
     }
 
 
@@ -68,6 +78,22 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //设置高亮物体
         inventoryBar.SetHighlightedInventorySlots();
+
+        //设置光标的可用半径
+        gridCursor.ItemUseGridRadius = itemDetails.itemUseGridRadius;
+        //光标的开关
+        if (itemDetails.itemUseGridRadius>0)
+        {
+            gridCursor.EnableCursor();
+        }
+        else
+        {
+            gridCursor.DisableCursor();
+        }
+        //传递光标选择的物体类型
+        gridCursor.SelectedItemType = itemDetails.itemType;
+
+
 
         //在选择列表中设置 物体
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
@@ -88,6 +114,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void ClearSelectedItem()
     {
+        ClearCursors();
+
         //清除物品高亮显示
         inventoryBar.ClearHighlightOnInventorySlots();
 
@@ -107,18 +135,21 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (itemDetails != null && isSelected)
         {
-            //鼠标的屏幕坐标转换成世界坐标
-            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
-                Input.mousePosition.y, -mainCamera.transform.position.z));
+
 
             //如果可以丢东西在这
-            Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
-            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
+            /*Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
+            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);*/
 
-            if (gridPropertyDetails !=null && gridPropertyDetails.canDropItem)
+            /*if (gridPropertyDetails !=null && gridPropertyDetails.canDropItem)*/
+            if (gridCursor.CursorPositionIsVaild)
             {
+                //鼠标的屏幕坐标转换成世界坐标
+                Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
                 //在当前坐标,方向不变，父级目录下 创建物体预制体
-                GameObject itemGameObject = Instantiate(itemPrefab, new Vector3(worldPosition.x,worldPosition.y-Settings.gridCellSize/2f,worldPosition.z), quaternion.identity, parentItem);
+                GameObject itemGameObject = Instantiate(itemPrefab, new Vector3(worldPosition.x,worldPosition.y-Settings.gridCellSize/2f,worldPosition.z),
+                    quaternion.identity, parentItem);
+
                 Item item = itemGameObject.GetComponent<Item>();
                 item.ItemCode = itemDetails.itemCode;
 

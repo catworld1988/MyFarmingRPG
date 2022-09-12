@@ -186,6 +186,42 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         }
     }
 
+
+
+    /// <summary>
+    /// Returns the itemDetails (from the So ItemList)for the currently selected item in the inventoryLocation,or null if an item isn't selected
+    /// 返回InventoryLocation中当前所选项目的itemDetail(来自销售订单项目列表)，如果未选择项目，则返回NULL
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    /// <returns></returns>
+    public ItemDetails GetselectedInventoryItemDetails(InventoryLocation inventoryLocation)
+    {
+        int itemCode = GetSelectInventoryItem(inventoryLocation);
+
+        if (itemCode == -1)
+        {
+            return null;
+        }
+        else
+        {
+            return GetItemDetails(itemCode);
+        }
+    }
+
+
+
+    /// <summary>
+    /// Get the selected item for inventoryLocation returns itemCode or-1 if nothing is selected
+    /// 获取库存的所选项目Location返回itemCode, (如果未选择任何内容)返回-1
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    /// <returns></returns>
+    private int GetSelectInventoryItem(InventoryLocation inventoryLocation)
+    {
+        return selectedInventoryItem[(int)inventoryLocation];
+    }
+
+
     /// <summary>
     /// Get the item type description for an item type returns the item type description as a string for a given ItemType
     /// 获取项类型的项类型说明，将项类型说明作为给定 ItemType 的字符串返回
@@ -298,8 +334,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
             inventoryLists[(int)inventoryLocation][fromItem] = toInventoryItem;
 
             //更新 呼叫库存广播
-            EventHandler.CallInventoryUpdatedEvent(inventoryLocation,inventoryLists[(int)inventoryLocation]);
-
+            EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
         }
     }
 }
