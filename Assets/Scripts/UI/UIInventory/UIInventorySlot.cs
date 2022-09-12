@@ -45,12 +45,19 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         //订阅 场景已经加载的通知 然后执行加载后的方法（寻找父对象标签位置）
         EventHandler.AfterSceneLoadEvent += SceneLoad;
+
+
+        //订阅 点击丢下物品的事件
+        EventHandler.DropSelectItemEvent += DropSelectedItemAtMousePosition;
     }
 
 
     private void OnDisable()
     {
         EventHandler.AfterSceneLoadEvent -= SceneLoad;
+
+        //取消订阅 点击丢下物品的事件
+        EventHandler.DropSelectItemEvent -= DropSelectedItemAtMousePosition;
     }
 
     private void Start()

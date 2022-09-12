@@ -12,6 +12,20 @@ public delegate void MovementDelegate(float inputX, float inputY, bool isWalking
 
 public static class EventHandler
 {
+    //点击地面 丢弃选择物品 的事件
+    public static event Action DropSelectItemEvent;
+
+    public static void CallDropSelectedItemEvent()
+    {
+        if (DropSelectItemEvent!=null)
+        {
+            DropSelectItemEvent();
+        }
+    }
+
+
+
+
     //物品库存更新事件
     public static Action<InventoryLocation, List<InventoryItem>> InventoryUpdatedEvent;
 

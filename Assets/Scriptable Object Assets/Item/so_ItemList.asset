@@ -57,7 +57,7 @@ MonoBehaviour:
     itemDescription: A Basic Watering Can
     itemSprite: {fileID: 21300136, guid: 853ac38383c680342ac7e688bf29b197, type: 3}
     itemLongDescription: humble watering can an essential tool for any budding farmer
-    itemUseGridRadius: 1
+    itemUseGridRadius: 0
     itemUseRadius: 0
     isStartingItem: 1
     canBePickedUp: 1
@@ -70,7 +70,7 @@ MonoBehaviour:
     itemSprite: {fileID: 21300052, guid: 853ac38383c680342ac7e688bf29b197, type: 3}
     itemLongDescription: A strong,sturdy basic hoe-great for breaking up the soil
       ready for planting
-    itemUseGridRadius: 1
+    itemUseGridRadius: 0
     itemUseRadius: 0
     isStartingItem: 1
     canBePickedUp: 1
@@ -82,7 +82,7 @@ MonoBehaviour:
     itemDescription: A Basic Axe
     itemSprite: {fileID: 21300010, guid: 853ac38383c680342ac7e688bf29b197, type: 3}
     itemLongDescription: A sharp,sturdy basic axe-great for chopping down trees
-    itemUseGridRadius: 1
+    itemUseGridRadius: 0
     itemUseRadius: 0
     isStartingItem: 1
     canBePickedUp: 1

@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player : SingletonMonobehaviour<Player>
 {
     private AnimationOverrides animationOverrides;
+    private GridCursor gridCursor;
 
     //Movement Parameters
     private float xInput;
@@ -55,10 +56,8 @@ public class Player : SingletonMonobehaviour<Player>
 
     //设置属性器 get私有
     public bool PlayerInputIsDisable
-    {
-        get => _playerInputIsDisable;
-        set => _playerInputIsDisable = value;
-    }
+    { get => _playerInputIsDisable;
+      set => _playerInputIsDisable = value; }
 
     protected override void Awake()
     {
@@ -75,6 +74,11 @@ public class Player : SingletonMonobehaviour<Player>
         mainCamera = Camera.main;
     }
 
+    private void Start()
+    {
+        gridCursor = FindObjectOfType<GridCursor>();
+    }
+
     private void Update()
     {
         #region Player Input
@@ -88,7 +92,11 @@ public class Player : SingletonMonobehaviour<Player>
 
             PlayerWalkInput();
 
+            PlayerClickInput();
+
             PlayerTestInput();
+
+
 
             //Send event to any listeners for player movement input  发送主角移动状态给EventHandle广播站  关闭了上下左右Idle
             EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect,
@@ -101,6 +109,7 @@ public class Player : SingletonMonobehaviour<Player>
 
         #endregion Player Input
     }
+
 
     private void FixedUpdate()
     {
@@ -202,6 +211,67 @@ public class Player : SingletonMonobehaviour<Player>
         }
     }
 
+    private void PlayerClickInput()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            if (gridCursor.CursorIsEnabled)
+            {
+                ProcessPlayerClickInput();
+            }
+        }
+    }
+
+    private void ProcessPlayerClickInput()
+    {
+        ResetMovement(); //停止移动
+
+        ItemDetails itemDetails = InventoryManager.Instance.GetselectedInventoryItemDetails(InventoryLocation.player);
+
+        if (itemDetails !=null)
+        {
+            switch (itemDetails.itemType)
+            {
+                case ItemType.Seed:
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        ProcessPlayerClickInputSeed(itemDetails);
+                    }
+                    break;
+                case ItemType.Commodity:
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        ProcessPlayerClickInputCommodity(itemDetails);
+                    }
+                    break;
+                case ItemType.none:
+                    break;
+                case ItemType.count:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
+
+    private void ProcessPlayerClickInputSeed(ItemDetails itemDetails)
+    {
+        if (itemDetails.canBeDropped&& gridCursor.CursorIsEnabled)
+        {
+            EventHandler.CallDropSelectedItemEvent();
+        }
+    }
+
+    private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)
+    {
+        if (itemDetails.canBeDropped&& gridCursor.CursorIsEnabled)
+        {
+            EventHandler.CallDropSelectedItemEvent();
+        }
+    }
+
     /// <summary>
     /// Player 的物理刚体移动
     /// </summary>
@@ -247,14 +317,14 @@ public class Player : SingletonMonobehaviour<Player>
         //触发 场景转换
         if (Input.GetKeyDown(KeyCode.L))
         {
-            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(),transform.position);
+            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(), transform.position);
         }
     }
 
 
     private void ResetMovement()
     {
-        //Reset Movement
+        //Reset Movement 重置移动
         xInput = 0f;
         yInput = 0f;
         isRunning = false;
@@ -284,16 +354,16 @@ public class Player : SingletonMonobehaviour<Player>
 
         characterAttributesCustomisationList.Clear();
         characterAttributesCustomisationList.Add(armsCharacterAttributeAttribute);
-        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);//覆盖对应的动画控制器
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList); //覆盖对应的动画控制器
 
         isCarrying = false;
-
     }
+
     public void ShowCarriedItem(int itemCode)
     {
         //获取物品参数
         ItemDetails itemDetails = InventoryManager.Instance.GetItemDetails(itemCode);
-        if (itemDetails !=null)
+        if (itemDetails != null)
         {
             //设置显示图片
             equippedItemSpriteRenderer.sprite = itemDetails.itemSprite;
@@ -304,7 +374,7 @@ public class Player : SingletonMonobehaviour<Player>
 
             characterAttributesCustomisationList.Clear();
             characterAttributesCustomisationList.Add(armsCharacterAttributeAttribute);
-            animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);  //覆盖对应的动画控制器
+            animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList); //覆盖对应的动画控制器
 
             isCarrying = true;
         }
