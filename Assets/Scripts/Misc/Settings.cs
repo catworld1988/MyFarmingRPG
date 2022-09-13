@@ -11,12 +11,15 @@ public static class Settings
 
     //瓦片地图            单元格为 1个单位
     public const float gridCellSize = 1f;
+    public static Vector2 cursorSize = Vector2.one;
 
     //Player Movement
     //public const float runningSpeed = 5.333f;
     //TODO 测试使用 需要改回常量
     public const float runningSpeed = 13f;
     public const float walkingSpeed = 2.666f;
+    public static float useToolAniamtionPause = 0.25f;
+    public static float afterUseToolAniamtionPause = 0.2f;
 
 
     //Inventory

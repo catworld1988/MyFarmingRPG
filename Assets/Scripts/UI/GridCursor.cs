@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -113,7 +112,7 @@ public class GridCursor : MonoBehaviour
 
         GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(cursorGridPosition.x, cursorGridPosition.y);
 
-        if (gridPropertyDetails !=null)
+        if (gridPropertyDetails != null)
         {
             //Determinecursor validity based on inventory item selected andgrid property details
             //确定基于所选库存项目和网格属性详细信息的检查器有效性
@@ -124,8 +123,8 @@ public class GridCursor : MonoBehaviour
                     {
                         SetCursorToInValid();
                         return;
-
                     }
+
                     break;
                 case ItemType.Commodity:
                     if (!IsCursorValidForCommodity(gridPropertyDetails))
@@ -133,7 +132,18 @@ public class GridCursor : MonoBehaviour
                         SetCursorToInValid();
                         return;
                     }
+
                     break;
+
+                case ItemType.Hoeing_tool:
+                    if (!IsCursorValidForTool(gridPropertyDetails, itemDetails))
+                    {
+                        SetCursorToInValid();
+                        return;
+                    }
+
+                    break;
+
                 case ItemType.none:
                     break;
                 case ItemType.count:
@@ -150,13 +160,12 @@ public class GridCursor : MonoBehaviour
     }
 
 
-
     private void SetCursorToInValid()
     {
         cursorImage.sprite = redCursorSprite;
-        CursorPositionIsVaild = false ;
-
+        CursorPositionIsVaild = false;
     }
+
     /// <summary>
     /// 绿色的光标（可使用）
     /// </summary>
@@ -164,8 +173,8 @@ public class GridCursor : MonoBehaviour
     {
         cursorImage.sprite = greenCursorSprite;
         CursorPositionIsVaild = true;
-
     }
+
     private bool IsCursorValidForCommodity(GridPropertyDetails gridPropertyDetails)
     {
         return gridPropertyDetails.canDropItem;
@@ -181,6 +190,64 @@ public class GridCursor : MonoBehaviour
     }
 
     /// <summary>
+    /// Sets thecursoras either valid or invalid for the tool for the target gridPropertyDetails.Returns true if valid or false if invalid
+    /// 为目标 gridPropertyDetails 的工具设置有效或无效的游标。如果有效返回 true，如果无效返回 false
+    /// </summary>
+    /// <param name="gridPropertyDetails"></param>
+    /// <param name="itemDetails"></param>
+    /// <returns></returns>
+    private bool IsCursorValidForTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
+    {
+        //切换工具
+        switch (itemDetails.itemType)
+        {
+            case ItemType.Hoeing_tool:
+                if (gridPropertyDetails.isDiggable == true && gridPropertyDetails.daysSinceDug == -1)
+                {
+                    #region Need to get any items at location so we can check if they are reapable 需要在现场获取任何物品，以便我们可以检查它们是否可获得
+
+                    //获得光标的世界坐标
+                    Vector3 cursorWorldPosition = new Vector3(GetWorldPositionForCursor().x + 0.5f, GetWorldPositionForCursor().y + 0.5f, 0f);
+
+                    //获得光标位置的物品列表
+                    List<Item> itemList = new List<Item>();
+
+                    HelperMethods.GetComponentsAtBoxLocation<Item>(out itemList, cursorWorldPosition, Settings.cursorSize, 0f);
+
+                    #endregion
+
+                    bool foundReapable = false;
+
+                    foreach (Item item in itemList)
+                    {
+                        if (InventoryManager.Instance.GetItemDetails(item.ItemCode).itemType == ItemType.Reapable_scenary)
+                        {
+                            foundReapable = true;
+                            break;
+                        }
+                    }
+
+                    if (foundReapable)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+
+            default:
+                return false;
+        }
+    }
+
+
+    /// <summary>
     /// DisableCursor is called in the UllnventorySlot.ClearCursors（）method when an inventoryslot item is no longer selected
     /// 当库存槽项目不再被选中时，在 UllnventorySlot.ClearCursor ()方法中调用 DisableCursor
     /// </summary>
@@ -188,7 +255,6 @@ public class GridCursor : MonoBehaviour
     {
         cursorImage.color = Color.clear;
         CursorIsEnabled = false;
-
     }
 
     /// <summary>
@@ -197,9 +263,8 @@ public class GridCursor : MonoBehaviour
     /// </summary>
     public void EnableCursor()
     {
-        cursorImage.color = new Color(1f,1f,1f,1f);
+        cursorImage.color = new Color(1f, 1f, 1f, 1f);
         CursorIsEnabled = true;
-
     }
 
     /// <summary>
@@ -210,13 +275,13 @@ public class GridCursor : MonoBehaviour
     {
         //获取鼠标的世界坐标位置
         Vector3 worldPosition =
-            mainCamera.ScreenToWorldPoint(new UnityEngine.Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
+            mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
 
         //转换为单元格的世界位置
         return grid.WorldToCell(worldPosition);
     }
 
-    private Vector3Int GetGridPositionForPlayer()
+    public Vector3Int GetGridPositionForPlayer()
     {
         return grid.WorldToCell(Player.Instance.transform.position);
     }
@@ -231,4 +296,8 @@ public class GridCursor : MonoBehaviour
         return RectTransformUtility.PixelAdjustPoint(gridScreenPosition, cursorRectTransform, canvas);
     }
 
+    public Vector3 GetWorldPositionForCursor()
+    {
+        return grid.CellToWorld(GetGridPositionForCursor());
+    }
 }

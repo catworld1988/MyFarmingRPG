@@ -27,7 +27,6 @@ public class MovementAnimationParameterControl : MonoBehaviour
     /// <summary>
     /// 订阅者 触发动画参数的函数
     /// </summary>
-
     #region 触发动画参数的函数
     private void SetAnimationParameters(float xInput, float yInput, bool isWalking, bool isRunning, bool isIdle,
         bool isCarrying,
@@ -47,13 +46,13 @@ public class MovementAnimationParameterControl : MonoBehaviour
         animator.SetInteger(Settings.toolEffect, (int)toolEffect);
 
         if (isUsingToolRight)
-            animator.SetTrigger(Settings.isPickingRight);
+            animator.SetTrigger(Settings.isUsingToolRight);
         if (isUsingToolLeft)
-            animator.SetTrigger(Settings.isPickingLeft);
+            animator.SetTrigger(Settings.isUsingToolLeft);
         if (isUsingToolUp)
-            animator.SetTrigger(Settings.isPickingUp);
+            animator.SetTrigger(Settings.isUsingToolUp);
         if (isUsingToolDown)
-            animator.SetTrigger(Settings.isPickingDown);
+            animator.SetTrigger(Settings.isUsingToolDown);
 
         if (isLiftingToolRight)
             animator.SetTrigger(Settings.isLiftingToolRight);

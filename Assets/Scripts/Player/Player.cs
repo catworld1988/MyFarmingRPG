@@ -1,10 +1,15 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : SingletonMonobehaviour<Player>
 {
+    private WaitForSeconds afterUseToolAnimationPause;
+
+
     private AnimationOverrides animationOverrides;
     private GridCursor gridCursor;
+    private Cursor cursor;
 
     //Movement Parameters
     private float xInput;
@@ -31,10 +36,13 @@ public class Player : SingletonMonobehaviour<Player>
     private bool isPickingRight;
 
     private Camera mainCamera;
+    private bool playerToolUseDisabled = false;
 
     private ToolEffect toolEffect = ToolEffect.none;
 
     private Rigidbody2D rigidBody2D;
+    private WaitForSeconds UseToolAnimationPause;
+
 #pragma warning disable 414
     private Direction playerDirection;
 #pragma warning restore 414
@@ -47,8 +55,8 @@ public class Player : SingletonMonobehaviour<Player>
     private SpriteRenderer equippedItemSpriteRenderer = null;
 
     // 玩家手臂属性可以被替换
-    private CharacterAttribute armsCharacterAttributeAttribute;
-    private CharacterAttribute toolCharacterAttributeAttribute;
+    private CharacterAttribute armsCharacterAttribute;
+    private CharacterAttribute toolCharacterAttribute;
 
     private float movementSpeed;
 
@@ -66,7 +74,8 @@ public class Player : SingletonMonobehaviour<Player>
 
         animationOverrides = GetComponentInChildren<AnimationOverrides>();
         //初始化 可以替换的角色属性
-        armsCharacterAttributeAttribute = new CharacterAttribute(CharacterPartAnimator.arms, PartVariantColour.none, PartVariantType.none);
+        armsCharacterAttribute = new CharacterAttribute(CharacterPartAnimator.arms, PartVariantColour.none, PartVariantType.none);
+        toolCharacterAttribute = new CharacterAttribute(CharacterPartAnimator.tool, PartVariantColour.none, PartVariantType.hoe);
 
         characterAttributesCustomisationList = new List<CharacterAttribute>();
 
@@ -77,6 +86,9 @@ public class Player : SingletonMonobehaviour<Player>
     private void Start()
     {
         gridCursor = FindObjectOfType<GridCursor>();
+
+        UseToolAnimationPause = new WaitForSeconds(Settings.useToolAniamtionPause);
+        afterUseToolAnimationPause = new WaitForSeconds(Settings.afterUseToolAniamtionPause);
     }
 
     private void Update()
@@ -86,6 +98,7 @@ public class Player : SingletonMonobehaviour<Player>
         //如果玩家没有被禁止输入 防止拖动道具 角色移动
         if (!PlayerInputIsDisable)
         {
+            //重置动画触发器
             ResetAnimationTriggers();
 
             PlayerMovementInput();
@@ -95,7 +108,6 @@ public class Player : SingletonMonobehaviour<Player>
             PlayerClickInput();
 
             PlayerTestInput();
-
 
 
             //Send event to any listeners for player movement input  发送主角移动状态给EventHandle广播站  关闭了上下左右Idle
@@ -211,24 +223,41 @@ public class Player : SingletonMonobehaviour<Player>
         }
     }
 
+
+    /// <summary>
+    /// 控制玩家是否输入
+    /// </summary>
     private void PlayerClickInput()
     {
-        if (Input.GetMouseButton(0))
+        if (!playerToolUseDisabled)
         {
-            if (gridCursor.CursorIsEnabled)
+            if (Input.GetMouseButton(0))
             {
-                ProcessPlayerClickInput();
+                if (gridCursor.CursorIsEnabled)
+                {
+                    //获取光标网格位置
+                    Vector3Int cursorGridPosition = gridCursor.GetGridPositionForCursor();
+
+                    //获取玩家网格位置
+                    Vector3Int playerGridPosition = gridCursor.GetGridPositionForPlayer();
+
+                    ProcessPlayerClickInput(cursorGridPosition, playerGridPosition);
+                }
             }
         }
     }
 
-    private void ProcessPlayerClickInput()
+    private void ProcessPlayerClickInput(Vector3Int cursorGridPosition, Vector3Int playerGridPosition)
     {
         ResetMovement(); //停止移动
 
+        Vector3Int playerDirection = GetPlayerClickDirection(cursorGridPosition, playerGridPosition); //获取玩家方向
+
+        GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(cursorGridPosition.x, cursorGridPosition.y);
+
         ItemDetails itemDetails = InventoryManager.Instance.GetselectedInventoryItemDetails(InventoryLocation.player);
 
-        if (itemDetails !=null)
+        if (itemDetails != null)
         {
             switch (itemDetails.itemType)
             {
@@ -237,12 +266,19 @@ public class Player : SingletonMonobehaviour<Player>
                     {
                         ProcessPlayerClickInputSeed(itemDetails);
                     }
+
                     break;
                 case ItemType.Commodity:
                     if (Input.GetMouseButtonDown(0))
                     {
                         ProcessPlayerClickInputCommodity(itemDetails);
                     }
+
+                    break;
+
+                //使用的物品的类型是挖地工具
+                case ItemType.Hoeing_tool:
+                    ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                     break;
                 case ItemType.none:
                     break;
@@ -255,10 +291,37 @@ public class Player : SingletonMonobehaviour<Player>
     }
 
 
+    private Vector3Int GetPlayerClickDirection(Vector3Int cursorGridPosition, Vector3Int playerGridPosition)
+    {
+        if (cursorGridPosition.x > playerGridPosition.x)
+        {
+            Debug.Log("点了右边");
+
+            return Vector3Int.right;
+        }
+
+        else if (cursorGridPosition.x < playerGridPosition.x)
+        {
+            Debug.Log("点了左边");
+            return Vector3Int.left;
+        }
+
+        else if (cursorGridPosition.y > playerGridPosition.y)
+        {
+            Debug.Log("点了上边");
+            return Vector3Int.up;
+        }
+        else
+        {
+            Debug.Log("点了下边");
+            return Vector3Int.down;
+        }
+    }
+
 
     private void ProcessPlayerClickInputSeed(ItemDetails itemDetails)
     {
-        if (itemDetails.canBeDropped&& gridCursor.CursorIsEnabled)
+        if (itemDetails.canBeDropped && gridCursor.CursorIsEnabled)
         {
             EventHandler.CallDropSelectedItemEvent();
         }
@@ -266,7 +329,7 @@ public class Player : SingletonMonobehaviour<Player>
 
     private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)
     {
-        if (itemDetails.canBeDropped&& gridCursor.CursorIsEnabled)
+        if (itemDetails.canBeDropped && gridCursor.CursorIsEnabled)
         {
             EventHandler.CallDropSelectedItemEvent();
         }
@@ -294,6 +357,80 @@ public class Player : SingletonMonobehaviour<Player>
             isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown,
             false, false, false, false);
     }
+
+    private void ProcessPlayerClickInputTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+        //切换工具类型
+        switch (itemDetails.itemType)
+        {
+            case ItemType.Hoeing_tool:
+                if (gridCursor.CursorPositionIsVaild)
+                {
+                    //在鼠标位置锄地
+                    HoeGroundAtCursor(gridPropertyDetails, playerDirection);
+                }
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void HoeGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
+    {
+        StartCoroutine(HoeGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
+    }
+
+
+
+
+    private IEnumerator HoeGroundAtCursorRoutine(Vector3Int playerDirection, GridPropertyDetails gridPropertyDetails)
+    {
+        PlayerInputIsDisable = true; //禁止玩家输入
+        playerToolUseDisabled = true; //禁止玩家使用工具
+
+        //设置锄地动画 覆盖动画状态
+        toolCharacterAttribute.partVariantType = PartVariantType.hoe;
+        characterAttributesCustomisationList.Clear();
+        characterAttributesCustomisationList.Add(toolCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);
+
+        if (playerDirection == Vector3Int.right)
+        {
+            isUsingToolRight = true;
+        }
+        else if (playerDirection == Vector3Int.left)
+        {
+            isUsingToolLeft = true;
+        }
+        else if (playerDirection == Vector3Int.up)
+        {
+            isUsingToolUp = true;
+        }
+        else if (playerDirection == Vector3Int.down)
+        {
+            isUsingToolDown = true;
+        }
+
+        //在使用工具动画 暂停
+        yield return UseToolAnimationPause;
+
+        //开始地块计时
+        if (gridPropertyDetails.daysSinceDug == -1)
+        {
+            gridPropertyDetails.daysSinceDug = 0; //未来功能
+        }
+
+        GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY, gridPropertyDetails);
+
+        //在动画后 暂停
+        yield return afterUseToolAnimationPause;
+
+        PlayerInputIsDisable = false;
+        playerToolUseDisabled = false;
+    }
+
 
     //TODO 删除
     /// <summary>
@@ -350,10 +487,10 @@ public class Player : SingletonMonobehaviour<Player>
         equippedItemSpriteRenderer.color = new Color(1f, 1f, 1f, 0f);
 
         //属性重置 手臂自定义属性 切换回常规动画
-        armsCharacterAttributeAttribute.partVariantType = PartVariantType.none;
+        armsCharacterAttribute.partVariantType = PartVariantType.none;
 
         characterAttributesCustomisationList.Clear();
-        characterAttributesCustomisationList.Add(armsCharacterAttributeAttribute);
+        characterAttributesCustomisationList.Add(armsCharacterAttribute);
         animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList); //覆盖对应的动画控制器
 
         isCarrying = false;
@@ -370,10 +507,10 @@ public class Player : SingletonMonobehaviour<Player>
             equippedItemSpriteRenderer.color = new Color(1f, 1f, 1f, 1f);
 
             //属性变更 carry  手臂自定义属性
-            armsCharacterAttributeAttribute.partVariantType = PartVariantType.carry;
+            armsCharacterAttribute.partVariantType = PartVariantType.carry;
 
             characterAttributesCustomisationList.Clear();
-            characterAttributesCustomisationList.Add(armsCharacterAttributeAttribute);
+            characterAttributesCustomisationList.Add(armsCharacterAttribute);
             animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList); //覆盖对应的动画控制器
 
             isCarrying = true;

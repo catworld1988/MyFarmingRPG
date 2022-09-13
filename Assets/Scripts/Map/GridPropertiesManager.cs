@@ -125,8 +125,18 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     /// Set the grid property details to gridPropertyDetails for the tile at (gridx,gridy)for the gridpropertyDictionary
     /// 将 gridPropertyDictionary 的网格属性详细信息设置为 gridPropertyDetails (gridx，gridy)
     /// </summary>
-    private void SetGridPropertyDetails(int gridX, int gridY, GridPropertyDetails gridPropertyDetails, Dictionary<string, GridPropertyDetails>
+    public void SetGridPropertyDetails(int gridX, int gridY, GridPropertyDetails gridPropertyDetails, Dictionary<string, GridPropertyDetails>
         gridPropertyDictionary)
+    {
+        string key = "x" + gridX + "y" + gridY;
+
+        gridPropertyDetails.gridX = gridX;
+        gridPropertyDetails.gridY = gridY;
+
+        gridPropertyDictionary[key] = gridPropertyDetails;
+
+    }
+    public void SetGridPropertyDetails(int gridX, int gridY, GridPropertyDetails gridPropertyDetails)
     {
         string key = "x" + gridX + "y" + gridY;
 
