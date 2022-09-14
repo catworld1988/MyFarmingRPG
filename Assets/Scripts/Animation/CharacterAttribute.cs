@@ -2,7 +2,7 @@
 [System.Serializable]
 
 //角色属性 结构体
-public struct CharacterAttribute
+public struct CharacterAttribute  //角色特性
 {
     public CharacterPartAnimator characterPart;
     public PartVariantColour partVariantColour;

@@ -56,8 +56,9 @@ MonoBehaviour:
     itemType: 2
     itemDescription: A Basic Watering Can
     itemSprite: {fileID: 21300136, guid: 853ac38383c680342ac7e688bf29b197, type: 3}
-    itemLongDescription: humble watering can an essential tool for any budding farmer
-    itemUseGridRadius: 0
+    itemLongDescription: The humble watering can an essential tool for any budding
+      farmer
+    itemUseGridRadius: 1
     itemUseRadius: 0
     isStartingItem: 1
     canBePickedUp: 1

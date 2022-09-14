@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class Player : SingletonMonobehaviour<Player>
 {
+    //喷壶动画的变量
+    private WaitForSeconds afterLiftToolAniamtionPause;
+
+    //锄地的变量
     private WaitForSeconds afterUseToolAnimationPause;
 
-
+    //动画覆盖的变量
     private AnimationOverrides animationOverrides;
+
+    //光标的变量
     private GridCursor gridCursor;
     private Cursor cursor;
 
@@ -35,6 +41,9 @@ public class Player : SingletonMonobehaviour<Player>
     private bool isPickingLeft;
     private bool isPickingRight;
 
+    //喷壶的变量
+    private WaitForSeconds liftToolAnimationPause;
+
     private Camera mainCamera;
     private bool playerToolUseDisabled = false;
 
@@ -60,12 +69,12 @@ public class Player : SingletonMonobehaviour<Player>
 
     private float movementSpeed;
 
-    private bool _playerInputIsDisable = false;
+    private bool _playerInputIsDisabled = false;
 
     //设置属性器 get私有
-    public bool PlayerInputIsDisable
-    { get => _playerInputIsDisable;
-      set => _playerInputIsDisable = value; }
+    public bool PlayerInputIsDisabled
+    { get => _playerInputIsDisabled;
+      set => _playerInputIsDisabled = value; }
 
     protected override void Awake()
     {
@@ -88,7 +97,9 @@ public class Player : SingletonMonobehaviour<Player>
         gridCursor = FindObjectOfType<GridCursor>();
 
         UseToolAnimationPause = new WaitForSeconds(Settings.useToolAniamtionPause);
+        liftToolAnimationPause = new WaitForSeconds(Settings.liftToolAniamtionPause);
         afterUseToolAnimationPause = new WaitForSeconds(Settings.afterUseToolAniamtionPause);
+        afterLiftToolAniamtionPause = new WaitForSeconds(Settings.afterLiftToolAniamtionPause);
     }
 
     private void Update()
@@ -96,7 +107,7 @@ public class Player : SingletonMonobehaviour<Player>
         #region Player Input
 
         //如果玩家没有被禁止输入 防止拖动道具 角色移动
-        if (!PlayerInputIsDisable)
+        if (!PlayerInputIsDisabled)
         {
             //重置动画触发器
             ResetAnimationTriggers();
@@ -276,8 +287,9 @@ public class Player : SingletonMonobehaviour<Player>
 
                     break;
 
-                //使用的物品的类型是挖地工具
-                case ItemType.Hoeing_tool:
+
+                case ItemType.Watering_tool:
+                case ItemType.Hoeing_tool: //使用的物品的类型是挖地工具
                     ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                     break;
                 case ItemType.none:
@@ -372,10 +384,20 @@ public class Player : SingletonMonobehaviour<Player>
 
                 break;
 
+            case ItemType.Watering_tool:
+                if (gridCursor.CursorPositionIsVaild)
+                {
+                    WaterGroundAtCursor(gridPropertyDetails, playerDirection);
+                }
+
+                break;
+
             default:
                 break;
         }
     }
+
+
 
     private void HoeGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
     {
@@ -383,11 +405,9 @@ public class Player : SingletonMonobehaviour<Player>
     }
 
 
-
-
     private IEnumerator HoeGroundAtCursorRoutine(Vector3Int playerDirection, GridPropertyDetails gridPropertyDetails)
     {
-        PlayerInputIsDisable = true; //禁止玩家输入
+        PlayerInputIsDisabled = true; //禁止玩家输入
         playerToolUseDisabled = true; //禁止玩家使用工具
 
         //设置锄地动画 覆盖动画状态
@@ -431,12 +451,70 @@ public class Player : SingletonMonobehaviour<Player>
         //在动画后 暂停
         yield return afterUseToolAnimationPause;
 
-        PlayerInputIsDisable = false;
+        PlayerInputIsDisabled = false;
         playerToolUseDisabled = false;
     }
 
 
-    //TODO 删除
+    private void WaterGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
+    {
+        //触发 动画
+        StartCoroutine(WaterGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
+    }
+
+    private IEnumerator WaterGroundAtCursorRoutine(Vector3Int playerDirection, GridPropertyDetails gridPropertyDetails)
+    {
+        PlayerInputIsDisabled = true;
+        playerToolUseDisabled = true;
+
+        //设置动画
+        toolCharacterAttribute.partVariantType = PartVariantType.wateringCan;  //不同部位的类型
+        characterAttributesCustomisationList.Clear();
+        characterAttributesCustomisationList.Add(toolCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);
+
+        //TODO 设置水壶显示水
+        toolEffect = ToolEffect.watering;
+
+        //根据玩家方向 设置工具方向
+        if (playerDirection == Vector3Int.right)
+        {
+            isLiftingToolRight = true;
+        }
+        else if (playerDirection == Vector3Int.left)
+        {
+            isLiftingToolLeft = true;
+        }
+        else if (playerDirection == Vector3Int.up)
+        {
+            isLiftingToolUp = true;
+        }
+        else if (playerDirection == Vector3Int.down)
+        {
+            isLiftingToolDown = true;
+        }
+
+        //工具动画前摇
+        yield return liftToolAnimationPause;
+
+        if (gridPropertyDetails.daysSinceWatered==-1)
+        {
+            gridPropertyDetails.daysSinceWatered = 0;
+        }
+
+        GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY, gridPropertyDetails);
+
+        //动画后摇
+        yield return afterLiftToolAniamtionPause;
+
+        playerToolUseDisabled = false;
+        PlayerInputIsDisabled = false;
+
+
+    }
+
+
+    ///TODO 删除
     /// <summary>
     /// Temp routine for test input
     /// 测试!!!!! 输入的临时程序
@@ -476,13 +554,13 @@ public class Player : SingletonMonobehaviour<Player>
     //禁止玩家输入
     public void DisablePlayerInput()
     {
-        PlayerInputIsDisable = true;
+        PlayerInputIsDisabled = true;
     }
 
     //允许玩家输入
     public void EnablePlayerInput()
     {
-        PlayerInputIsDisable = false;
+        PlayerInputIsDisabled = false;
     }
 
     public void ClearCarriedItem()
