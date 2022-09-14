@@ -502,7 +502,11 @@ public class Player : SingletonMonobehaviour<Player>
             gridPropertyDetails.daysSinceWatered = 0;
         }
 
+        //网格属性 设置为浇过水
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY, gridPropertyDetails);
+
+        //显示水的瓦片
+        GridPropertiesManager.Instance.DisplayWateredGround(gridPropertyDetails);
 
         //动画后摇
         yield return afterLiftToolAniamtionPause;

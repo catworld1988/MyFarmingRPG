@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -22,6 +23,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     //获得需要挖掘的地面瓷砖  放在一个数组
     [SerializeField] private Tile[] dugGround = null;
 
+    //被水浇过的地面
+    [SerializeField] private Tile[] wateredGround = null;
 
     private string _iSaveableUniqueID;
 
@@ -48,14 +51,20 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
     private void OnEnable()
     {
-        ISaveableRegister(); //注册 加入保存列表
+        ISaveableRegister(); //注册 加入保存数据列表
         EventHandler.AfterSceneLoadEvent += AfterSceneLoaded;
+
+        //游戏里经过一天
+        EventHandler.AdvanceGameDayEvent += AdvanceDay;
     }
 
     private void OnDisable()
     {
-        ISaveableDeregister();
+        ISaveableDeregister(); //注册 加入恢复数据列表
         EventHandler.AfterSceneLoadEvent -= AfterSceneLoaded;
+
+        //游戏里经过一天
+        EventHandler.AdvanceGameDayEvent -= AdvanceDay;
     }
 
 
@@ -80,24 +89,34 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     public void DisplayDugGround(GridPropertyDetails gridPropertyDetails)
     {
         //> -1 代表被挖了
-        if (gridPropertyDetails.daysSinceDug>-1)
+        if (gridPropertyDetails.daysSinceDug > -1)
         {
             ConnectDugGround(gridPropertyDetails);
         }
     }
 
+    //显示水地面
+    public void DisplayWateredGround(GridPropertyDetails gridPropertyDetails)
+    {
+        //> -1 代表有水
+        if (gridPropertyDetails.daysSinceWatered > -1)
+        {
+            //连接水地面
+            ConnectWateredGround(gridPropertyDetails);
+        }
+    }
+
     /// <summary>
-    /// 设置相邻的 4片瓦片地图块
+    /// 设置相邻的 4片瓦片地图块   连接 被挖地面
     /// </summary>
     /// <param name="gridPropertyDetails"></param>
     private void ConnectDugGround(GridPropertyDetails gridPropertyDetails)
     {
-
         //选择的基础瓦片
         Tile dugTile0 = SetDugTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY);
-        groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX,gridPropertyDetails.gridY,0),dugTile0);
+        groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0), dugTile0);
 
-        GridPropertyDetails adjacentGidGridPropertyDetails;  //相邻瓦片属性详情
+        GridPropertyDetails adjacentGidGridPropertyDetails; //相邻瓦片属性详情
 
         //-----------------------------Set 4 tiles if dug surrounding current tile up ,down， left ,right   now that this central tile has been dug
         //设置4个瓷砖.如果挖掘当前瓷砖 上，下，左，右。现在这个中心瓷砖已经挖好。
@@ -106,41 +125,91 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         //up的瓦片
         adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY + 1);
         //相邻存在瓦片并且被挖过
-        if (adjacentGidGridPropertyDetails!=null&& adjacentGidGridPropertyDetails.daysSinceDug>-1)
+        if (adjacentGidGridPropertyDetails != null && adjacentGidGridPropertyDetails.daysSinceDug > -1)
         {
-            Tile dugTile1=SetDugTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY+1);
-            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX,gridPropertyDetails.gridY+1,0),dugTile1);
-
+            Tile dugTile1 = SetDugTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY + 1);
+            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY + 1, 0), dugTile1);
         }
 
         //down的瓦片
         adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY - 1);
         //相邻存在瓦片并且被挖过
-        if (adjacentGidGridPropertyDetails!=null&& adjacentGidGridPropertyDetails.daysSinceDug>-1)
+        if (adjacentGidGridPropertyDetails != null && adjacentGidGridPropertyDetails.daysSinceDug > -1)
         {
-            Tile dugTile2=SetDugTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY-1);
-            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX,gridPropertyDetails.gridY-1,0),dugTile2);
-
+            Tile dugTile2 = SetDugTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY - 1);
+            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY - 1, 0), dugTile2);
         }
 
         //left的瓦片
-        adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX-1, gridPropertyDetails.gridY);
+        adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX - 1, gridPropertyDetails.gridY);
         //相邻存在瓦片并且被挖过
-        if (adjacentGidGridPropertyDetails!=null&& adjacentGidGridPropertyDetails.daysSinceDug>-1)
+        if (adjacentGidGridPropertyDetails != null && adjacentGidGridPropertyDetails.daysSinceDug > -1)
         {
-            Tile dugTile3=SetDugTile(gridPropertyDetails.gridX-1, gridPropertyDetails.gridY);
-            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX-1,gridPropertyDetails.gridY,0),dugTile3);
-
+            Tile dugTile3 = SetDugTile(gridPropertyDetails.gridX - 1, gridPropertyDetails.gridY);
+            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX - 1, gridPropertyDetails.gridY, 0), dugTile3);
         }
 
         //right的瓦片
-        adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX+1, gridPropertyDetails.gridY);
+        adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX + 1, gridPropertyDetails.gridY);
         //相邻存在瓦片并且被挖过
-        if (adjacentGidGridPropertyDetails!=null&& adjacentGidGridPropertyDetails.daysSinceDug>-1)
+        if (adjacentGidGridPropertyDetails != null && adjacentGidGridPropertyDetails.daysSinceDug > -1)
         {
-            Tile dugTile4=SetDugTile(gridPropertyDetails.gridX+1, gridPropertyDetails.gridY);
-            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX+1,gridPropertyDetails.gridY,0),dugTile4);
+            Tile dugTile4 = SetDugTile(gridPropertyDetails.gridX + 1, gridPropertyDetails.gridY);
+            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX + 1, gridPropertyDetails.gridY, 0), dugTile4);
+        }
+    }
 
+
+    /// <summary>
+    /// 设置相邻的 4片瓦片地图块  连接水地面
+    /// </summary>
+    /// <param name="gridPropertyDetails"></param>
+    private void ConnectWateredGround(GridPropertyDetails gridPropertyDetails)
+    {
+        //选择的基础瓦片
+        Tile wateredTile0 = SetWateredTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY);
+        groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0), wateredTile0);
+
+        GridPropertyDetails adjacentGidGridPropertyDetails; //相邻瓦片属性详情
+
+        //-----------------------------Set 4 tiles if dug surrounding current tile up ,down， left ,right   now that this central tile has been dug
+        //设置4个瓷砖.如果挖掘当前瓷砖 上，下，左，右。现在这个中心瓷砖已经挖好。
+
+
+        //up的瓦片
+        adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY + 1);
+        //相邻存在瓦片并且被挖过
+        if (adjacentGidGridPropertyDetails != null && adjacentGidGridPropertyDetails.daysSinceWatered > -1)
+        {
+            Tile wateredTile1 = SetWateredTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY + 1);
+            groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY + 1, 0), wateredTile1);
+        }
+
+        //down的瓦片
+        adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY - 1);
+        //相邻存在瓦片并且被挖过
+        if (adjacentGidGridPropertyDetails != null && adjacentGidGridPropertyDetails.daysSinceWatered > -1)
+        {
+            Tile wateredTile2 = SetWateredTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY - 1);
+            groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY - 1, 0), wateredTile2);
+        }
+
+        //left的瓦片
+        adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX - 1, gridPropertyDetails.gridY);
+        //相邻存在瓦片并且被挖过
+        if (adjacentGidGridPropertyDetails != null && adjacentGidGridPropertyDetails.daysSinceWatered > -1)
+        {
+            Tile wateredTile3 = SetWateredTile(gridPropertyDetails.gridX - 1, gridPropertyDetails.gridY);
+            groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.gridX - 1, gridPropertyDetails.gridY, 0), wateredTile3);
+        }
+
+        //right的瓦片
+        adjacentGidGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.gridX + 1, gridPropertyDetails.gridY);
+        //相邻存在瓦片并且被挖过
+        if (adjacentGidGridPropertyDetails != null && adjacentGidGridPropertyDetails.daysSinceWatered > -1)
+        {
+            Tile wateredTile4 = SetWateredTile(gridPropertyDetails.gridX + 1, gridPropertyDetails.gridY);
+            groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.gridX + 1, gridPropertyDetails.gridY, 0), wateredTile4);
         }
     }
 
@@ -149,81 +218,80 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     /// </summary>
     private Tile SetDugTile(int xGrid, int yGrid)
     {
-        bool upDug= IsGridSquareDug(xGrid,yGrid+1);
-        bool downDug= IsGridSquareDug(xGrid,yGrid-1);
-        bool leftDug= IsGridSquareDug(xGrid-1,yGrid);
-        bool rightDug= IsGridSquareDug(xGrid+1,yGrid);
+        bool upDug = IsGridSquareDug(xGrid, yGrid + 1);
+        bool downDug = IsGridSquareDug(xGrid, yGrid - 1);
+        bool leftDug = IsGridSquareDug(xGrid - 1, yGrid);
+        bool rightDug = IsGridSquareDug(xGrid + 1, yGrid);
 
 
         #region set appropriate tile based once whether surrounding tiles are dug or not
 
-        if (!upDug&& !downDug && !rightDug && !leftDug)
+        if (!upDug && !downDug && !rightDug && !leftDug)
         {
             return dugGround[0];
         }
-        else if (!upDug&& downDug && rightDug && !leftDug)
+        else if (!upDug && downDug && rightDug && !leftDug)
         {
             return dugGround[1];
         }
-        else if (!upDug&& downDug && rightDug && leftDug)
+        else if (!upDug && downDug && rightDug && leftDug)
         {
             return dugGround[2];
         }
-        else if (!upDug&& downDug && !rightDug && leftDug)
+        else if (!upDug && downDug && !rightDug && leftDug)
         {
             return dugGround[3];
         }
-        else if (!upDug&& downDug && !rightDug && !leftDug)
+        else if (!upDug && downDug && !rightDug && !leftDug)
         {
             return dugGround[4];
         }
-        else if (upDug&& downDug && rightDug && !leftDug)
+        else if (upDug && downDug && rightDug && !leftDug)
         {
             return dugGround[5];
         }
-        else if (upDug&& downDug && rightDug && leftDug)
+        else if (upDug && downDug && rightDug && leftDug)
         {
             return dugGround[6];
         }
-        else if (upDug&& downDug && !rightDug && leftDug)
+        else if (upDug && downDug && !rightDug && leftDug)
         {
             return dugGround[7];
         }
-        else if (upDug&& downDug && !rightDug && !leftDug)
+        else if (upDug && downDug && !rightDug && !leftDug)
         {
             return dugGround[8];
         }
-        else if (upDug&& !downDug && rightDug && !leftDug)
+        else if (upDug && !downDug && rightDug && !leftDug)
         {
             return dugGround[9];
         }
-        else if (upDug&& !downDug && rightDug && leftDug)
+        else if (upDug && !downDug && rightDug && leftDug)
         {
             return dugGround[10];
         }
-        else if (upDug&& !downDug && !rightDug && leftDug)
+        else if (upDug && !downDug && !rightDug && leftDug)
         {
             return dugGround[11];
         }
-        else if (upDug&& !downDug && !rightDug && !leftDug)
+        else if (upDug && !downDug && !rightDug && !leftDug)
         {
             return dugGround[12];
         }
-        else if (!upDug&& !downDug && rightDug && !leftDug)
+        else if (!upDug && !downDug && rightDug && !leftDug)
         {
             return dugGround[13];
         }
-        else if (!upDug&& !downDug && rightDug && leftDug)
+        else if (!upDug && !downDug && rightDug && leftDug)
         {
             return dugGround[14];
         }
-        else if (!upDug&& !downDug && !rightDug && leftDug)
+        else if (!upDug && !downDug && !rightDug && leftDug)
         {
             return dugGround[15];
         }
 
         return null;
-
 
         #endregion Set appropriate tile based on whether surrounding tiles are dug or not 根据周围的瓦片是否被挖出来设置适当的切片
     }
@@ -232,9 +300,9 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     ///判断地块是否被挖了
     private bool IsGridSquareDug(int xGrid, int yGrid)
     {
-        GridPropertyDetails gridPropertyDetails=GetGridPropertyDetails(xGrid, yGrid);
+        GridPropertyDetails gridPropertyDetails = GetGridPropertyDetails(xGrid, yGrid);
 
-        if (gridPropertyDetails==null)
+        if (gridPropertyDetails == null)
         {
             return false;
         }
@@ -246,10 +314,110 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         {
             return false;
         }
-
     }
 
-    /// <summary>
+
+
+     private Tile SetWateredTile(int xGrid, int yGrid)
+    {
+        bool upWatered = IsGridSquareWatered(xGrid, yGrid + 1);
+        bool downWatered = IsGridSquareWatered(xGrid, yGrid - 1);
+        bool leftWatered = IsGridSquareWatered(xGrid - 1, yGrid);
+        bool rightWatered = IsGridSquareWatered(xGrid + 1, yGrid);
+
+
+        #region set appropriate tile based once whether surrounding tiles are dug or not
+
+        if (!upWatered && !downWatered && !rightWatered && !leftWatered)
+        {
+            return wateredGround[0];
+        }
+        else if (!upWatered && downWatered && rightWatered && !leftWatered)
+        {
+            return wateredGround[1];
+        }
+        else if (!upWatered && downWatered && rightWatered && leftWatered)
+        {
+            return wateredGround[2];
+        }
+        else if (!upWatered && downWatered && !rightWatered && leftWatered)
+        {
+            return wateredGround[3];
+        }
+        else if (!upWatered && downWatered && !rightWatered && !leftWatered)
+        {
+            return wateredGround[4];
+        }
+        else if (upWatered && downWatered && rightWatered && !leftWatered)
+        {
+            return wateredGround[5];
+        }
+        else if (upWatered && downWatered && rightWatered && leftWatered)
+        {
+            return wateredGround[6];
+        }
+        else if (upWatered && downWatered && !rightWatered && leftWatered)
+        {
+            return wateredGround[7];
+        }
+        else if (upWatered && downWatered && !rightWatered && !leftWatered)
+        {
+            return wateredGround[8];
+        }
+        else if (upWatered && !downWatered && rightWatered && !leftWatered)
+        {
+            return wateredGround[9];
+        }
+        else if (upWatered && !downWatered && rightWatered && leftWatered)
+        {
+            return wateredGround[10];
+        }
+        else if (upWatered && !downWatered && !rightWatered && leftWatered)
+        {
+            return wateredGround[11];
+        }
+        else if (upWatered && !downWatered && !rightWatered && !leftWatered)
+        {
+            return wateredGround[12];
+        }
+        else if (!upWatered && !downWatered && rightWatered && !leftWatered)
+        {
+            return wateredGround[13];
+        }
+        else if (!upWatered && !downWatered && rightWatered && leftWatered)
+        {
+            return wateredGround[14];
+        }
+        else if (!upWatered && !downWatered && !rightWatered && leftWatered)
+        {
+            return wateredGround[15];
+        }
+
+        return null;
+
+        #endregion Set appropriate tile based on whether surrounding tiles are dug or not 根据周围的瓦片是否被挖出来设置适当的切片
+    }
+
+     private bool IsGridSquareWatered(int xGrid, int yGrid)
+     {
+         GridPropertyDetails gridPropertyDetails = GetGridPropertyDetails(xGrid, yGrid);
+
+         if (gridPropertyDetails == null)
+         {
+             return false;
+         }
+         else if (gridPropertyDetails.daysSinceWatered > -1)
+         {
+             return true;
+         }
+         else
+         {
+             return false;
+         }
+     }
+
+
+     /// <summary>
     /// 显示所地面的属性
     /// </summary>
     private void DisplayGridPropertyDetails()
@@ -257,11 +425,13 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         //循环所有的瓦片
         foreach (KeyValuePair<string, GridPropertyDetails> item in gridPropertyDictionary)
         {
-            GridPropertyDetails gridPropertyDetails= item.Value;
+            GridPropertyDetails gridPropertyDetails = item.Value;
+
             DisplayDugGround(gridPropertyDetails);
+
+            DisplayWateredGround(gridPropertyDetails);
         }
     }
-
 
 
     private void InitialiseGridProperties()
@@ -321,12 +491,13 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
             sceneSave.gridPropertyDetailsDictionary = gridPropertyDictionary;
 
             //将 匹配场景 的字典数据填充进去
-            if (so_GridProperties.sceneName.ToString()== SceneControllerManager.Instance.startingSceneName.ToString())
+            if (so_GridProperties.sceneName.ToString() == SceneControllerManager.Instance.startingSceneName.ToString())
             {
                 this.gridPropertyDictionary = gridPropertyDictionary;
             }
+
             //将场景数据 加入对象数据的场景数据字典里
-            GameObjectSave.sceneDate.Add(so_GridProperties.sceneName.ToString(),sceneSave);
+            GameObjectSave.sceneDate.Add(so_GridProperties.sceneName.ToString(), sceneSave);
         }
     }
 
@@ -343,8 +514,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         gridPropertyDetails.gridY = gridY;
 
         gridPropertyDictionary[key] = gridPropertyDetails;
-
     }
+
     public void SetGridPropertyDetails(int gridX, int gridY, GridPropertyDetails gridPropertyDetails)
     {
         string key = "x" + gridX + "y" + gridY;
@@ -353,7 +524,6 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         gridPropertyDetails.gridY = gridY;
 
         gridPropertyDictionary[key] = gridPropertyDetails;
-
     }
 
     private void AfterSceneLoaded()
@@ -361,8 +531,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         //加载后 获得网格
         grid = GameObject.FindObjectOfType<Grid>();
 
-        groundDecoration1= GameObject.FindGameObjectWithTag(Tags.GroundDecoration1).GetComponent<Tilemap>();
-        groundDecoration2= GameObject.FindGameObjectWithTag(Tags.GroundDecoration2).GetComponent<Tilemap>();
+        groundDecoration1 = GameObject.FindGameObjectWithTag(Tags.GroundDecoration1).GetComponent<Tilemap>();
+        groundDecoration2 = GameObject.FindGameObjectWithTag(Tags.GroundDecoration2).GetComponent<Tilemap>();
     }
 
 
@@ -431,12 +601,11 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         sceneSave.gridPropertyDetailsDictionary = gridPropertyDictionary;
 
         //更新到对象保存数据
-        GameObjectSave.sceneDate.Add(sceneName,sceneSave);
+        GameObjectSave.sceneDate.Add(sceneName, sceneSave);
     }
 
     public void ISaveableRestoreScene(string sceneName)
     {
-
         //尝试加载数据
         if (GameObjectSave.sceneDate.TryGetValue(sceneName, out SceneSave sceneSave))
         {
@@ -455,7 +624,48 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                 //显示地面被挖的属性
                 DisplayGridPropertyDetails();
             }
-
         }
+    }
+
+    private void AdvanceDay(int gameYear, Season gameSeason, int gameDay, string gameDayOfWeek, int gameHour, int gameMinute,
+        int gameSecond)
+    {
+        //清除过时的地面效果
+        ClearDisplayGroundDecorations();
+
+        //Loop through all scenes-by looping through all gridproperties in the array
+        foreach (SO_GridProperties so_GridProperties in so_gridPropertiesArray)
+        {
+            //Get gridpropertydetails dictionary for scene
+            if (GameObjectSave.sceneDate.TryGetValue(so_GridProperties.sceneName.ToString(),out SceneSave sceneSave))
+            {
+                if (sceneSave.gridPropertyDetailsDictionary != null)
+                {
+                    for (int i = sceneSave.gridPropertyDetailsDictionary.Count-1; i >= 0; i--)
+                    {
+                        KeyValuePair<string, GridPropertyDetails> item = sceneSave.gridPropertyDetailsDictionary.ElementAt(i);
+
+                        GridPropertyDetails gridPropertyDetails = item.Value;
+
+
+                        #region Update all grid properties to reflect the advance in the day  重置水地面
+
+                        //如果地面上有水 清除它
+                        if (gridPropertyDetails.daysSinceWatered>-1)
+                        {
+                            gridPropertyDetails.daysSinceWatered = -1;
+                        }
+
+                        //设置
+                        SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY,gridPropertyDetails,sceneSave.gridPropertyDetailsDictionary);
+
+                        #endregion Update all grid properties to reflect the advance in the day
+
+                    }
+                }
+            }
+        }
+        //显示改变前的
+        DisplayGridPropertyDetails();
     }
 }
