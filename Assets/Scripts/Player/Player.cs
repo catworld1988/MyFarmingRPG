@@ -422,7 +422,11 @@ public class Player : SingletonMonobehaviour<Player>
             gridPropertyDetails.daysSinceDug = 0; //未来功能
         }
 
+        //设置网格属性 被挖了
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY, gridPropertyDetails);
+
+        //显示被挖的瓦片
+        GridPropertiesManager.Instance.DisplayDugGround(gridPropertyDetails);
 
         //在动画后 暂停
         yield return afterUseToolAnimationPause;

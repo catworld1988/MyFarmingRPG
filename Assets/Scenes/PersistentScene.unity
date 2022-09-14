@@ -882,11 +882,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e05529018efac4ea318f1a3b2cb9f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 0}
   so_gridPropertiesArray:
   - {fileID: 11400000, guid: f03e662a363e1ef43a3db0c5a5590357, type: 2}
   - {fileID: 11400000, guid: fc4d8327ab558ab48b7bd90c7f711a18, type: 2}
   - {fileID: 11400000, guid: 2e950e3325547b84c9f590167ba8b869, type: 2}
+  dugGround:
+  - {fileID: 11400000, guid: e96e64f559928984c929c5d2a8908006, type: 2}
+  - {fileID: 11400000, guid: 64bcdd981bb98f345bca84f3083d08b5, type: 2}
+  - {fileID: 11400000, guid: 561560b2666d0fd4bbf7c1c622dfc1c3, type: 2}
+  - {fileID: 11400000, guid: ae883c8d1bde6e04b9f0ead7a591b99e, type: 2}
+  - {fileID: 11400000, guid: 280cb67c5c2928f499cfc0efa2545829, type: 2}
+  - {fileID: 11400000, guid: c3593bafcea7bb1489077dfcd3bb2961, type: 2}
+  - {fileID: 11400000, guid: 4016e3b640908d84e8a9d446745bafa7, type: 2}
+  - {fileID: 11400000, guid: 2f70532d4c77e7748932789769e8120c, type: 2}
+  - {fileID: 11400000, guid: 990d87171e38936429c0a0d24967cfd1, type: 2}
+  - {fileID: 11400000, guid: d72b1b640c86b2b4b880b0ed21998fae, type: 2}
+  - {fileID: 11400000, guid: 32be3110c3dc38844b4ca4a4f554ece1, type: 2}
+  - {fileID: 11400000, guid: 3c0c8d6cd067437448d2186d83908a45, type: 2}
+  - {fileID: 11400000, guid: 9c54a79fb71f31d4194a04cf2117c99d, type: 2}
+  - {fileID: 11400000, guid: c8f06e3a6503be34abcb253af6882789, type: 2}
+  - {fileID: 11400000, guid: 753746bf9ab5cc5458e1d974c3739a2e, type: 2}
+  - {fileID: 11400000, guid: e2d552f59e4f1684f9876de11c7b3fa9, type: 2}
 --- !u!114 &655744479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3168,7 +3184,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7776427, y: 1}
+    m_SensorSize: {x: 1.7788844, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
