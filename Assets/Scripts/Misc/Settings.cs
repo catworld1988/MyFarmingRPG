@@ -75,6 +75,12 @@ public static class Settings
     public const string WateringTool = "Watering Can";
     public const string CollectingTool = "Basket";
 
+    //Reaping 割草时候
+    public const int maxCollidersToTestPerReapSwing = 15;  //割草范围
+    public const int maxTargetComponentsToDestroyPerReapSwing = 2;  //割草数量
+
+
+
     //Time System 时间系统
     public const float secondsPerGameSecond = 0.012f;   //0.7秒=1分钟 因为实际游戏中时间比现实中更快 效率更高
 

@@ -84,6 +84,7 @@ public class Player : SingletonMonobehaviour<Player>
         animationOverrides = GetComponentInChildren<AnimationOverrides>();
         //初始化 可以替换的角色属性
         armsCharacterAttribute = new CharacterAttribute(CharacterPartAnimator.arms, PartVariantColour.none, PartVariantType.none);
+        //初始化 割草工具等
         toolCharacterAttribute = new CharacterAttribute(CharacterPartAnimator.tool, PartVariantColour.none, PartVariantType.hoe);
 
         characterAttributesCustomisationList = new List<CharacterAttribute>();
@@ -92,9 +93,26 @@ public class Player : SingletonMonobehaviour<Player>
         mainCamera = Camera.main;
     }
 
+    private void OnEnable()
+    {
+        //防止切换场景 任务继续乱走
+        EventHandler.BeforeSceneUnloadFadeOutEvent += DisablePlayerInputAndResetMovement;
+        EventHandler.AfterSceneLoadFadeInEvent += EnablePlayerInput;
+
+    }
+    private void OnDisable()
+    {
+        //防止切换场景 任务继续乱走
+        EventHandler.BeforeSceneUnloadFadeOutEvent -= DisablePlayerInputAndResetMovement;
+        EventHandler.AfterSceneLoadFadeInEvent -= EnablePlayerInput;
+
+    }
+
     private void Start()
     {
+        //找到一个叫xx的对象
         gridCursor = FindObjectOfType<GridCursor>();
+        cursor = FindObjectOfType<Cursor>();
 
         UseToolAnimationPause = new WaitForSeconds(Settings.useToolAniamtionPause);
         liftToolAnimationPause = new WaitForSeconds(Settings.liftToolAniamtionPause);
@@ -244,7 +262,7 @@ public class Player : SingletonMonobehaviour<Player>
         {
             if (Input.GetMouseButton(0))
             {
-                if (gridCursor.CursorIsEnabled)
+                if (gridCursor.CursorIsEnabled || cursor.CursorIsEnabled)
                 {
                     //获取光标网格位置
                     Vector3Int cursorGridPosition = gridCursor.GetGridPositionForCursor();
@@ -290,6 +308,7 @@ public class Player : SingletonMonobehaviour<Player>
 
                 case ItemType.Watering_tool:
                 case ItemType.Hoeing_tool: //使用的物品的类型是挖地工具
+                case ItemType.Reaping_tool:
                     ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                     break;
                 case ItemType.none:
@@ -391,12 +410,147 @@ public class Player : SingletonMonobehaviour<Player>
                 }
 
                 break;
+            case ItemType.Reaping_tool:
+                if (cursor.CursorPositionIsValid)
+                {
+                    playerDirection = GetPlayerDirection(cursor.GetWorldPositionForCursor(), GetPlayerCentrePosition());
+                    ReapInPlayerDirectionAtCursor(itemDetails, playerDirection);
+                }
+
+                break;
 
             default:
                 break;
         }
     }
 
+    private void ReapInPlayerDirectionAtCursor(ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+        StartCoroutine(ReapInPlayerDirectionAtCursorRoutine(itemDetails, playerDirection));
+    }
+
+    private IEnumerator ReapInPlayerDirectionAtCursorRoutine(ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+        PlayerInputIsDisabled = true;
+        playerToolUseDisabled= true;
+
+        //设置割草动画覆盖
+        toolCharacterAttribute.partVariantType = PartVariantType.scythe;
+        characterAttributesCustomisationList.Clear();
+        characterAttributesCustomisationList.Add(toolCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);
+
+        //在玩家方向割草
+        UseToolInPlayerDirection(itemDetails, playerDirection);
+
+        yield return UseToolAnimationPause;
+
+        PlayerInputIsDisabled = false;
+        playerToolUseDisabled= false;
+
+    }
+
+    private void UseToolInPlayerDirection(ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        if (Input.GetMouseButton(0))
+        {
+            switch (equippedItemDetails.itemType)
+            {
+                case ItemType.Reaping_tool:
+                    if (playerDirection == Vector3Int.right )
+                    {
+                        isSwingingToolRight =true;
+                    }
+                    else if (playerDirection == Vector3Int.left )
+                    {
+                        isSwingingToolLeft=true;
+                    }
+                    else if (playerDirection == Vector3Int.up )
+                    {
+                        isSwingingToolUp=true;
+                    }
+                    else if (playerDirection == Vector3Int.down )
+                    {
+                        isSwingingToolDown=true;
+                    }
+                    break;
+            }
+            //Define centre point of square which will be used for collision testing
+            //定义将用于碰撞测试的正方形中心点
+            Vector2 point =new Vector2(GetPlayerCentrePosition().x + (playerDirection.x * (equippedItemDetails.itemUseRadius/2f)),GetPlayerCentrePosition().y +
+                playerDirection.y *(equippedItemDetails.itemUseRadius/2f));
+
+            //Define size of the square which will be used for collision testing
+            //定义将用于碰撞测试的正方形的大小
+            Vector2 size = new Vector2(equippedItemDetails.itemUseRadius, equippedItemDetails.itemUseRadius);
+
+            //Get Item components with 2D collider located in the square at the centre point defined (2d colliders tested limited to maxCollidersToTestPerReapSwing)
+            //获得项目组件与2D对撞机位于广场上，在定义的中心点（2d对撞机测试仅限于最大碰撞器）
+            Item[] itemArray= HelperMethods.GetcomponentstBoxPositionNonAlloc<Item>(Settings.maxCollidersToTestPerReapSwing,point,size,0f);
+
+            int reapableItemCount = 0;
+
+
+            //Loop through all items retrieved
+            //循环遍历检索到的所有项目
+            for (int i = itemArray.Length - 1; i >=0; i--)
+            {
+                if (itemArray[i]!=null)
+                {
+                    //销毁被割的对象
+                    if (InventoryManager.Instance.GetItemDetails(itemArray[i].ItemCode).itemType == ItemType.Reapable_scenary)
+                    {
+                        //效果位置
+                        Vector3 effectPosition = new Vector3(itemArray[i].transform.position.x,
+                            itemArray[i].transform.position.y + Settings.gridCellSize / 2f, itemArray[i].transform.position.z);
+
+                        Destroy(itemArray[i].gameObject);
+
+                        reapableItemCount++;
+
+                        if (reapableItemCount>=Settings.maxCollidersToTestPerReapSwing)
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 获取玩家使用割草工具的方向
+    /// </summary>
+    private Vector3Int GetPlayerDirection(Vector3 cursorPosition, Vector3 playerPosition)
+    {
+        //检查是否在使用右边的工具
+        if (
+            cursorPosition.x > playerPosition.x
+            &&
+            cursorPosition.y < (playerPosition.y + cursor.ItemUseRadius / 2f)
+            &&
+            cursorPosition.y > (playerPosition.y - cursor.ItemUseRadius / 2f)
+            )
+        {
+            return Vector3Int.right;
+        }
+
+        else if (cursorPosition.x < playerPosition.x
+                 &&
+                 cursorPosition.y < (playerPosition.y + cursor.ItemUseRadius / 2f)
+                 &&
+                 cursorPosition.y > (playerPosition.y - cursor.ItemUseRadius / 2f)
+                )
+        {
+            return Vector3Int.left;
+        }
+        else if (cursorPosition.y>playerPosition.y)
+        {
+            return Vector3Int.up;
+        }
+        else
+        {
+            return Vector3Int.down;
+        }
+    }
 
 
     private void HoeGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
@@ -468,7 +622,7 @@ public class Player : SingletonMonobehaviour<Player>
         playerToolUseDisabled = true;
 
         //设置动画
-        toolCharacterAttribute.partVariantType = PartVariantType.wateringCan;  //不同部位的类型
+        toolCharacterAttribute.partVariantType = PartVariantType.wateringCan; //不同部位的类型
         characterAttributesCustomisationList.Clear();
         characterAttributesCustomisationList.Add(toolCharacterAttribute);
         animationOverrides.ApplyCharacterCustomisationParameters(characterAttributesCustomisationList);
@@ -497,7 +651,7 @@ public class Player : SingletonMonobehaviour<Player>
         //工具动画前摇
         yield return liftToolAnimationPause;
 
-        if (gridPropertyDetails.daysSinceWatered==-1)
+        if (gridPropertyDetails.daysSinceWatered == -1)
         {
             gridPropertyDetails.daysSinceWatered = 0;
         }
@@ -513,8 +667,6 @@ public class Player : SingletonMonobehaviour<Player>
 
         playerToolUseDisabled = false;
         PlayerInputIsDisabled = false;
-
-
     }
 
 
@@ -614,6 +766,6 @@ public class Player : SingletonMonobehaviour<Player>
     public Vector3 GetPlayerCentrePosition()
     {
         //3维坐标 玩家轴心在底部，需要在轴心+y偏移量 为了之后触发工具动画的正确在腰部
-        return new Vector3(transform.position.x,transform.position.y+Settings.playerCentreYOffset,transform.position.z);
+        return new Vector3(transform.position.x, transform.position.y + Settings.playerCentreYOffset, transform.position.z);
     }
 }
