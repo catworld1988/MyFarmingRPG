@@ -12,6 +12,9 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public Image inventorySlotImage;
     public TextMeshProUGUI textMeshProUGUI;
 
+    //引用光标
+    private Cursor cursor;
+
     [HideInInspector] public ItemDetails itemDetails;
     [HideInInspector] public int itemQuantity;
 
@@ -64,14 +67,19 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         mainCamera = Camera.main;
         gridCursor = FindObjectOfType<GridCursor>();
+
+        cursor = FindObjectOfType<Cursor>();
     }
 
     private void ClearCursors()
     {
+        //禁用网格光标 和游标
         gridCursor.DisableCursor();
+        cursor.DisableCursor();
 
-        //物品类型设置为 none
+        //网格光标 和游标 物品类型设置为 none
         gridCursor.SelectedItemType = ItemType.none;
+        cursor.SelectedItemType = ItemType.none;
     }
 
 
@@ -88,7 +96,9 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //设置光标的可用半径
         gridCursor.ItemUseGridRadius = itemDetails.itemUseGridRadius;
-        //光标的开关
+        cursor.ItemUseRadius = itemDetails.itemUseRadius;
+
+        //网格光标的开关
         if (itemDetails.itemUseGridRadius>0)
         {
             gridCursor.EnableCursor();
@@ -97,8 +107,24 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             gridCursor.DisableCursor();
         }
+
+        //游标的开关
+        if (itemDetails.itemUseRadius>0)
+        {
+            cursor.EnableCursor();
+        }
+        else
+        {
+            cursor.DisableCursor();
+        }
+
+
+
+
+
         //传递光标选择的物体类型
         gridCursor.SelectedItemType = itemDetails.itemType;
+        cursor.SelectedItemType = itemDetails.itemType;
 
 
 

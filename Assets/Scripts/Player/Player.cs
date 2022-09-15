@@ -610,4 +610,10 @@ public class Player : SingletonMonobehaviour<Player>
         //Vector3播放器的视区位置((0，0)视区左下，(1，1)视区右上   世界坐标转换成视口坐标
         return mainCamera.WorldToViewportPoint(transform.position);
     }
+
+    public Vector3 GetPlayerCentrePosition()
+    {
+        //3维坐标 玩家轴心在底部，需要在轴心+y偏移量 为了之后触发工具动画的正确在腰部
+        return new Vector3(transform.position.x,transform.position.y+Settings.playerCentreYOffset,transform.position.z);
+    }
 }

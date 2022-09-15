@@ -13,6 +13,9 @@ public static class Settings
     public const float gridCellSize = 1f;
     public static Vector2 cursorSize = Vector2.one;
 
+    //
+    public static float playerCentreYOffset =0.875f; //大概11个像素 一个单位高16个像素
+
     //Player Movement
     //public const float runningSpeed = 5.333f;
     //TODO 测试使用 需要改回常量

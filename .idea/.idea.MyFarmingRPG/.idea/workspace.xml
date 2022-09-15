@@ -8,11 +8,6 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3212ae53900d409d83482ff247f5fe9a157c00/54/7f130652/Vector3Int.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3212ae53900d409d83482ff247f5fe9a157c00/9b/9edff8fe/Cursor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3212ae53900d409d83482ff247f5fe9a157c00/d1/e952757a/SetupCoroutine.cs" root0="SKIP_HIGHLIGHTING" />
@@ -67,6 +62,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Scene/SwitchConfinerBoundingShape.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/TimeSystem/GameClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/TimeSystem/TimeManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Cursor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/GridCursor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/UIInventory/UIInventoryBar.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/UIInventory/UIInventorySlot.cs" root0="FORCE_HIGHLIGHTING" />
@@ -103,7 +99,7 @@
     "WebServerToolWindowFactoryState": "false",
     "XThreadsFramesViewSplitterKey": "0.50173914",
     "rider.run.widget.enabled.cache": "false",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.常规"
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.配色方案字体"
   }
 }]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
@@ -174,7 +170,8 @@
       <workItem from="1663030894731" duration="20829000" />
       <workItem from="1663060414453" duration="6498000" />
       <workItem from="1663076748882" duration="3713000" />
-      <workItem from="1663119779410" duration="14919000" />
+      <workItem from="1663119779410" duration="15303000" />
+      <workItem from="1663214560788" duration="13070000" />
     </task>
     <servers />
   </component>
