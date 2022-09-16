@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : SingletonMonobehaviour<Player>
 {
+    //测试对象池的变量
+    //public GameObject canyonOakTreePrefab;
+
+
     //喷壶动画的变量
     private WaitForSeconds afterLiftToolAniamtionPause;
 
@@ -670,30 +675,45 @@ public class Player : SingletonMonobehaviour<Player>
     }
 
 
-    ///TODO 删除
+    ///TODO 删除  测试脚本!!!!!
     /// <summary>
     /// Temp routine for test input
     /// 测试!!!!! 输入的临时程序
     /// </summary>
     private void PlayerTestInput()
     {
-        //触发进阶增加 时间
+        //测试  触发进阶增加 时间
         if (Input.GetKey(KeyCode.T))
         {
             TimeManager.Instance.TestAdvanceGameMinute();
         }
 
-        //触发进阶增加 天数
+        //测试  触发进阶增加 天数
         if (Input.GetKeyDown(KeyCode.G))
         {
             TimeManager.Instance.TestAdvanceGameGameDay();
         }
 
-        //触发 场景转换
+        //测试  触发 场景转换
         if (Input.GetKeyDown(KeyCode.L))
         {
             SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(), transform.position);
         }
+
+        //测试 对象池
+        /*if (Input.GetMouseButtonDown(1))
+        {
+            GameObject tree = PoolManager.Instance.ReuseObject(canyonOakTreePrefab,
+                mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z)),Quaternion.identity);
+
+            if (!tree.activeSelf)
+            {
+                tree.SetActive(true);
+            }
+        }*/
+
+
+
     }
 
 
