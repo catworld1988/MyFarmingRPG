@@ -331,25 +331,25 @@ public class Player : SingletonMonobehaviour<Player>
     {
         if (cursorGridPosition.x > playerGridPosition.x)
         {
-            Debug.Log("点了右边");
+            //Debug.Log("点了右边");
 
             return Vector3Int.right;
         }
 
         else if (cursorGridPosition.x < playerGridPosition.x)
         {
-            Debug.Log("点了左边");
+            //Debug.Log("点了左边");
             return Vector3Int.left;
         }
 
         else if (cursorGridPosition.y > playerGridPosition.y)
         {
-            Debug.Log("点了上边");
+            //Debug.Log("点了上边");
             return Vector3Int.up;
         }
         else
         {
-            Debug.Log("点了下边");
+            //Debug.Log("点了下边");
             return Vector3Int.down;
         }
     }
