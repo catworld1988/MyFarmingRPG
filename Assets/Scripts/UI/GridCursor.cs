@@ -15,7 +15,7 @@ public class GridCursor : MonoBehaviour
 
     private bool _cursorPosition = false;
 
-    public bool CursorPositionIsVaild
+    public bool CursorPositionIsValid
     { get => _cursorPosition;
       set => _cursorPosition = value; }
 
@@ -168,7 +168,7 @@ public class GridCursor : MonoBehaviour
     private void SetCursorToInValid()
     {
         cursorImage.sprite = redCursorSprite;
-        CursorPositionIsVaild = false;
+        CursorPositionIsValid = false;
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public class GridCursor : MonoBehaviour
     private void SetCursorToValid()
     {
         cursorImage.sprite = greenCursorSprite;
-        CursorPositionIsVaild = true;
+        CursorPositionIsValid = true;
     }
 
     private bool IsCursorValidForCommodity(GridPropertyDetails gridPropertyDetails)

@@ -52,6 +52,9 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //订阅 点击丢下物品的事件
         EventHandler.DropSelectItemEvent += DropSelectedItemAtMousePosition;
+
+        //移除选择的物品（作物）
+        EventHandler.RemoveSelectedItemFromInventoryEvent += RemoveSelectedItemFromInventory;
     }
 
 
@@ -61,7 +64,13 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //取消订阅 点击丢下物品的事件
         EventHandler.DropSelectItemEvent -= DropSelectedItemAtMousePosition;
+
+        //移除选择的物品（作物）
+        EventHandler.RemoveSelectedItemFromInventoryEvent -= RemoveSelectedItemFromInventory;
+
     }
+
+
 
     private void Start()
     {
@@ -175,7 +184,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);*/
 
             /*if (gridPropertyDetails !=null && gridPropertyDetails.canDropItem)*/
-            if (gridCursor.CursorPositionIsVaild)
+            if (gridCursor.CursorPositionIsValid)
             {
                 //鼠标的屏幕坐标转换成世界坐标
                 Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
@@ -194,6 +203,28 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 {
                     ClearSelectedItem();
                 }
+            }
+        }
+    }
+
+
+
+    /// <summary>
+    /// 在库存中减少选择的物体
+    /// </summary>
+    private void RemoveSelectedItemFromInventory()
+    {
+        if (itemDetails != null && isSelected)
+        {
+            int itemCode = itemDetails.itemCode;
+
+            //移除物品
+            InventoryManager.Instance.RemoveItem(InventoryLocation.player,itemCode);
+
+            //如果物品数量不够显示了 清除选框
+            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player,itemCode)== -1)
+            {
+                ClearSelectedItem();
             }
         }
     }

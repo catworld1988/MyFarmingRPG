@@ -1003,6 +1003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e05529018efac4ea318f1a3b2cb9f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  so_CropDetailsList: {fileID: 11400000, guid: 7f3f241492c06a04d84b2c01f914e8e4, type: 2}
   so_gridPropertiesArray:
   - {fileID: 11400000, guid: f03e662a363e1ef43a3db0c5a5590357, type: 2}
   - {fileID: 11400000, guid: fc4d8327ab558ab48b7bd90c7f711a18, type: 2}
@@ -3341,7 +3342,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7775, y: 1}
+    m_SensorSize: {x: 1.7783018, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

@@ -25,6 +25,22 @@ public static class EventHandler
     }
 
 
+
+
+    //从库存中删除选择的物品(作物种子)
+    public static event Action RemoveSelectedItemFromInventoryEvent;
+
+    public static void CallRemoveSelectedItemFromInventoryEvent()
+    {
+        if (RemoveSelectedItemFromInventoryEvent!=null)
+        {
+            RemoveSelectedItemFromInventoryEvent();
+        }
+    }
+
+
+
+
     //收获事件
     public static event Action<Vector3, HarvestActionEffect> HarvestActionEffectEvent;
 
@@ -80,7 +96,6 @@ public static class EventHandler
 
 
     //时间事件
-
     //进阶的   游戏时间 分钟
     public static event Action<int, Season, int, string, int, int, int> AdvanceGameMinuteEvent;
 

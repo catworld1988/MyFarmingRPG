@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +12,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 
     public List<InventoryItem>[] inventoryLists;
 
-    [HideInInspector] public int[] inventoryListCapacityInArray; //库存容量列表
+    [HideInInspector] public int[] inventoryListCapacityIntArray; //库存容量列表
 
 
     //调用物品的数据表
@@ -56,10 +54,10 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         }
 
         //initialise inventory list capacity array 初始化库存容量列表 指定每个库存列表可以容纳多少物品的整数
-        inventoryListCapacityInArray = new int[(int)InventoryLocation.count];
+        inventoryListCapacityIntArray = new int[(int)InventoryLocation.count];
 
         //initialise player inventory list capacity 初始化玩家库存容纳大小列表
-        inventoryListCapacityInArray[(int)InventoryLocation.player] = Settings.playerInitialInventoryCapacity;
+        inventoryListCapacityIntArray[(int)InventoryLocation.player] = Settings.playerInitialInventoryCapacity;
     }
 
 
@@ -67,7 +65,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     /// Populates the itemDetailsDictionary from the scriptable object items list
     /// 将itemList 里的物品信息 填充到物品字典中
     /// </summary>
-    public void CreateItemDetailsDictionary()
+    private void CreateItemDetailsDictionary()
     {
         itemDetailsDictionary = new Dictionary<int, ItemDetails>();
 
@@ -128,17 +126,17 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     /// <summary>
     /// 增加同一物品的库存
     /// </summary>
-    private void AddItemAtPosition(List<InventoryItem> inventoryList, int itemCode, int Position)
+    private void AddItemAtPosition(List<InventoryItem> inventoryList, int itemCode, int position)
     {
         //创建一个新物品；
         InventoryItem inventoryItem = new InventoryItem();
 
-        int quantity = inventoryList[Position].itemQuantity + 1; //当前清单索引位置 的物品库存数量+1
+        int quantity = inventoryList[position].itemQuantity + 1; //当前清单索引位置 的物品库存数量+1
         inventoryItem.itemQuantity = quantity;
         inventoryItem.itemCode = itemCode;
-        inventoryList[Position] = inventoryItem; //刷新下物品
+        inventoryList[position] = inventoryItem; //刷新下物品
 
-        Debug.ClearDeveloperConsole();
+        //Debug.ClearDeveloperConsole();
         //DebugPrintInventoryList(inventoryList);
     }
 
@@ -196,7 +194,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     /// <returns></returns>
     public ItemDetails GetselectedInventoryItemDetails(InventoryLocation inventoryLocation)
     {
-        int itemCode = GetSelectInventoryItem(inventoryLocation);
+        int itemCode = GetSelectedInventoryItem(inventoryLocation);
 
         if (itemCode == -1)
         {
@@ -216,7 +214,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     /// </summary>
     /// <param name="inventoryLocation"></param>
     /// <returns></returns>
-    private int GetSelectInventoryItem(InventoryLocation inventoryLocation)
+    private int GetSelectedInventoryItem(InventoryLocation inventoryLocation)
     {
         return selectedInventoryItem[(int)inventoryLocation];
     }
@@ -288,7 +286,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 
     private void RemoveItemAtPosition(List<InventoryItem> inventoryList, int itemCode, int position)
     {
-        InventoryItem inventoryItem = new();
+        InventoryItem inventoryItem = new InventoryItem();
         //丢掉物品 库存数量-1
         int quantity = inventoryList[position].itemQuantity - 1;
 

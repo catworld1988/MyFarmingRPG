@@ -34,11 +34,11 @@ public class CropDetails
     /// <summary>
     /// 如果工具的物品编码可以收获切割，就返回 true
     /// </summary>
-    /// <param name="toolTtemCode"></param>
+    /// <param name="toolItemCode"></param>
     /// <returns></returns>
-    public bool CanUseToolToHarvestCrop(int toolTtemCode)
+    public bool CanUseToolToHarvestCrop(int toolItemCode)
     {
-        if (RequiredHarvestActionForTool(toolTtemCode)== -1)
+        if (RequiredHarvestActionsForTool(toolItemCode)== -1)
         {
             return false;
         }
@@ -49,13 +49,13 @@ public class CropDetails
     }
 
     //重新装备 收获动作
-    private int RequiredHarvestActionForTool(int toolTtemCode)
+    private int RequiredHarvestActionsForTool(int toolItemCode)
     {
         //遍历查找 收获工具
         for (int i = 0; i < harvestToolItemCode.Length; i++)
         {
             //找到了收获工具
-            if (harvestToolItemCode[i]==toolTtemCode)
+            if (harvestToolItemCode[i]==toolItemCode)
             {
                 //从收获的动作 数组 返回动作
                 return requiredHarvestAction[i];
