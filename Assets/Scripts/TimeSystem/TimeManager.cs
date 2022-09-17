@@ -34,7 +34,8 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
         gameTick += Time.deltaTime;
         if (gameTick >= Settings.secondsPerGameSecond)
         {
-            gameTick -= Time.deltaTime;
+            //gameTick -= Time.deltaTime;
+            gameTick -= Settings.secondsPerGameSecond;
             UpdateGameSecond();
         }
     }

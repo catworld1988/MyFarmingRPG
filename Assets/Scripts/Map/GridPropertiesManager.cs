@@ -468,41 +468,45 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
             //获得作物的细节
             CropDetails cropDetails = so_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
 
-            //使用预制体
-            GameObject cropPrefab;
-
-            //在网格位置 实例化农作物预制体
-            int growthStages = cropDetails.growthDays.Length;
-
-            int currentGrowthStage = 0;  //当前生长步骤
-            int daysCounter = cropDetails.totalGrowthDays;  //总生长时间
-
-            //找出目前生长阶段
-            for (int i = growthStages-1; i >=0; i--)
+            if (cropDetails !=null)
             {
-                if (gridPropertyDetails.growthDays >= daysCounter)
+                //使用预制体
+                GameObject cropPrefab;
+
+                //在网格位置 实例化农作物预制体
+                int growthStages = cropDetails.growthDays.Length;
+
+                int currentGrowthStage = 0; //当前生长步骤
+                int daysCounter = cropDetails.totalGrowthDays; //总生长时间
+
+                //找出目前生长阶段
+                for (int i = growthStages - 1; i >= 0; i--)
                 {
-                    currentGrowthStage = i;
-                    break;
+                    if (gridPropertyDetails.growthDays >= daysCounter)
+                    {
+                        currentGrowthStage = i;
+                        break;
+                    }
+
+                    daysCounter = daysCounter - cropDetails.growthDays[i];
                 }
 
-                daysCounter = daysCounter - cropDetails.growthDays[i];
+                cropPrefab = cropDetails.growthPrefab[currentGrowthStage]; //农作物阶段预制体
+
+                Sprite growthSprite = cropDetails.GrowthSprites[currentGrowthStage]; //农作物阶段精灵图
+
+                Vector3 worldPosition =
+                    groundDecoration2.CellToWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0)); //网格的世界坐标
+
+                worldPosition = new Vector3(worldPosition.x + Settings.gridCellSize / 2, worldPosition.y, worldPosition.z); //网格的世界坐标修正
+
+                GameObject cropInstance = Instantiate(cropPrefab, worldPosition, Quaternion.identity); //实例化农作物
+
+                //填充实例化的精灵 父级 网格位置
+                cropInstance.GetComponentInChildren<SpriteRenderer>().sprite = growthSprite;
+                cropInstance.transform.SetParent(cropsParentTransform);
+                cropInstance.GetComponent<Crop>().cropGridPosition = new Vector2Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY);
             }
-
-            cropPrefab = cropDetails.growthPrefab[currentGrowthStage];  //农作物阶段预制体
-
-            Sprite growthSprite = cropDetails.GrowthSprites[currentGrowthStage];  //农作物阶段精灵图
-
-            Vector3 worldPosition = groundDecoration2.CellToWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0));  //网格的世界坐标
-
-            worldPosition = new Vector3(worldPosition.x + Settings.gridCellSize / 2, worldPosition.y, worldPosition.z);   //网格的世界坐标修正
-
-            GameObject cropInstance= Instantiate(cropPrefab,worldPosition,Quaternion.identity);   //实例化农作物
-
-            //填充实例化的精灵 父级 网格位置
-            cropInstance.GetComponentInChildren<SpriteRenderer>().sprite = growthSprite;
-            cropInstance.transform.SetParent(cropsParentTransform);
-            cropInstance.GetComponent<Crop>().cropGridPosition = new Vector2Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY);
         }
     }
 
@@ -723,8 +727,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     private void AdvanceDay(int gameYear, Season gameSeason, int gameDay, string gameDayOfWeek, int gameHour, int gameMinute,
         int gameSecond)
     {
-        //清除过时的地面效果
-        ClearDisplayGroundDecorations();
+        //清除过时的地面效果 和旧生长阶段的农作物
+        ClearDisplayGridPropertyDetails();
 
         //Loop through all scenes-by looping through all gridproperties in the array
         foreach (SO_GridProperties so_GridProperties in so_gridPropertiesArray)

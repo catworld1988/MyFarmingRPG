@@ -3151,7 +3151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccdfd348b78a6fa4fa134de4fed5ad3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryListCapacityInArray: 
+  inventoryListCapacityIntArray: 
   itemList: {fileID: 11400000, guid: 14689407774c1674e8c26ed7a287e911, type: 2}
 --- !u!4 &1562005482
 Transform:
@@ -3342,7 +3342,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7783018, y: 1}
+    m_SensorSize: {x: 1.7781065, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
