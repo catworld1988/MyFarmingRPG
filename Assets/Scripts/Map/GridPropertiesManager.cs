@@ -9,8 +9,8 @@ using UnityEngine.Tilemaps;
 public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManager>, ISaveable
 {
     //作物的变量
-    private Transform cropsParentTransform;   //作物的父级
-    [SerializeField] public SO_CropDetailsList so_CropDetailsList = null;       //作物的数据
+    private Transform cropsParentTransform; //作物的父级
+    [SerializeField] public SO_CropDetailsList so_CropDetailsList = null; //作物的数据
 
     //储存网格的变量
     private Tilemap groundDecoration1;
@@ -88,7 +88,6 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     ///清除显示多有种植的农作物
     private void ClearDisplayAllPlantedCrops()
     {
-
         Crop[] cropArray;
         cropArray = FindObjectsOfType<Crop>();
 
@@ -96,8 +95,6 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         {
             Destroy(crop.gameObject);
         }
-
-
     }
 
     /// <summary>
@@ -463,12 +460,12 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
     public void DisplayPlantedCrop(GridPropertyDetails gridPropertyDetails)
     {
-        if (gridPropertyDetails.seedItemCode >-1) //未种植
+        if (gridPropertyDetails.seedItemCode > -1) //未种植
         {
             //获得作物的细节
             CropDetails cropDetails = so_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
 
-            if (cropDetails !=null)
+            if (cropDetails != null)
             {
                 //使用预制体
                 GameObject cropPrefab;
@@ -509,7 +506,6 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
             }
         }
     }
-
 
 
     /// <summary>
@@ -622,7 +618,7 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
 
         //防风草的父级
-        if (GameObject.FindGameObjectWithTag(Tags.CropsParentTransform) != null)  //有的场景是室内 没有父级对象
+        if (GameObject.FindGameObjectWithTag(Tags.CropsParentTransform) != null) //有的场景是室内 没有父级对象
         {
             cropsParentTransform = GameObject.FindGameObjectWithTag(Tags.CropsParentTransform).transform;
         }
@@ -657,6 +653,43 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
             return gridPropertyDetails;
         }
     }
+
+    /// <summary>
+    /// Returns the Crop object at the gridx,gridY position or null if no crop was found
+    /// 返回 gridx 处的 Crop 对象，如果没有找到任何作物，返回 gridY 位置或 null
+    /// </summary>
+    public Crop GetCropObjectAtGridLocation(GridPropertyDetails gridPropertyDetails)
+    {
+        //获取网格上的碰撞物数组
+        Vector3 worldPosition = grid.GetCellCenterWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0));
+        Collider2D[] collider2DArray = Physics2D.OverlapPointAll(worldPosition);
+
+        //没有农作物返回null
+        Crop crop = null;
+        //遍历碰撞物的crop组件 填充
+        for (int i = 0; i < collider2DArray.Length; i++)
+        {
+            crop = collider2DArray[i].gameObject.GetComponentInParent<Crop>();
+            if (crop != null && crop.cropGridPosition == new Vector2Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY))
+                break;
+            crop = collider2DArray[i].gameObject.GetComponentInChildren<Crop>();
+            if (crop != null && crop.cropGridPosition == new Vector2Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY))
+                break;
+        }
+
+        //返回农作物
+        return crop;
+    }
+
+
+    /// <summary>
+    /// 返回提供的 SeeItemCode 的作物详细信息
+    /// </summary>
+    public CropDetails GetCropDetails(int seedItemCode)
+    {
+        return so_CropDetailsList.GetCropDetails(seedItemCode);
+    }
+
 
     /// <summary>
     /// Get the grid property details for the tile at (gridx,gridY).If no grid property details exist null is returned
@@ -748,7 +781,7 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                         #region Update all grid properties to reflect the advance in the day  重置水地面
 
                         //每天更新作物的天数 +1
-                        if (gridPropertyDetails.growthDays >-1)
+                        if (gridPropertyDetails.growthDays > -1)
                         {
                             gridPropertyDetails.growthDays += 1;
                         }

@@ -49,7 +49,7 @@ public class CropDetails
     }
 
     //重新装备 收获动作
-    private int RequiredHarvestActionsForTool(int toolItemCode)
+    public int RequiredHarvestActionsForTool(int toolItemCode)
     {
         //遍历查找 收获工具
         for (int i = 0; i < harvestToolItemCode.Length; i++)

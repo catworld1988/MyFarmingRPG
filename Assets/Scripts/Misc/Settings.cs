@@ -23,8 +23,10 @@ public static class Settings
     public const float walkingSpeed = 2.666f;
     public static float useToolAniamtionPause = 0.25f;
     public static float liftToolAniamtionPause= 0.4f;
+    public static float pickAniamtionPause= 1f;
     public static float afterUseToolAniamtionPause = 0.2f;
     public static float afterLiftToolAniamtionPause = 0.4f;
+    public static float afterPickAniamtionPause= 0.2f;
 
 
     //Inventory

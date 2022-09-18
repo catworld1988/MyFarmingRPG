@@ -8,6 +8,8 @@ public class Player : SingletonMonobehaviour<Player>
     //测试对象池的变量
     //public GameObject canyonOakTreePrefab;
 
+    //捡农作物的变量
+    private WaitForSeconds afterPickAniamtionPause;
 
     //喷壶动画的变量
     private WaitForSeconds afterLiftToolAniamtionPause;
@@ -48,6 +50,8 @@ public class Player : SingletonMonobehaviour<Player>
 
     //喷壶的变量
     private WaitForSeconds liftToolAnimationPause;
+    //捡农作物的
+    private WaitForSeconds pickAniamtionPause;
 
     private Camera mainCamera;
     private bool playerToolUseDisabled = false;
@@ -119,10 +123,14 @@ public class Player : SingletonMonobehaviour<Player>
         gridCursor = FindObjectOfType<GridCursor>();
         cursor = FindObjectOfType<Cursor>();
 
+        //等待的初始化 为了减少重复创建的开销
         useToolAnimationPause = new WaitForSeconds(Settings.useToolAniamtionPause);
         liftToolAnimationPause = new WaitForSeconds(Settings.liftToolAniamtionPause);
+        pickAniamtionPause = new WaitForSeconds(Settings.pickAniamtionPause);
         afterUseToolAnimationPause = new WaitForSeconds(Settings.afterUseToolAniamtionPause);
         afterLiftToolAniamtionPause = new WaitForSeconds(Settings.afterLiftToolAniamtionPause);
+        afterPickAniamtionPause = new WaitForSeconds(Settings.afterPickAniamtionPause);
+
     }
 
     private void Update()
@@ -314,6 +322,7 @@ public class Player : SingletonMonobehaviour<Player>
                 case ItemType.Watering_tool:
                 case ItemType.Hoeing_tool: //使用的物品的类型是挖地工具
                 case ItemType.Reaping_tool:
+                case ItemType.Collecting_tool:
                     ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                     break;
                 case ItemType.none:
@@ -435,6 +444,16 @@ public class Player : SingletonMonobehaviour<Player>
                 }
 
                 break;
+
+
+            case ItemType.Collecting_tool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    CollectInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
+                }
+                break;
+
+
             case ItemType.Reaping_tool:
                 if (cursor.CursorPositionIsValid)
                 {
@@ -448,6 +467,31 @@ public class Player : SingletonMonobehaviour<Player>
                 break;
         }
     }
+
+    private void CollectInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+        StartCoroutine(CollectInPlayerDirectionAtCursorRoutine(gridPropertyDetails,itemDetails, playerDirection));
+
+    }
+
+    private IEnumerator CollectInPlayerDirectionAtCursorRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemItemDetails, Vector3Int playerDirection)
+    {
+        PlayerInputIsDisabled = true;
+        playerToolUseDisabled= true;
+
+        ProcessCropWithEquippedItemInPlayerDirection(playerDirection, equippedItemItemDetails, gridPropertyDetails);
+
+
+        yield return pickAniamtionPause;
+
+        yield return afterPickAniamtionPause;
+
+        PlayerInputIsDisabled = false;
+        playerToolUseDisabled= false;
+
+    }
+
+
 
     private void ReapInPlayerDirectionAtCursor(ItemDetails itemDetails, Vector3Int playerDirection)
     {
@@ -696,6 +740,57 @@ public class Player : SingletonMonobehaviour<Player>
         playerToolUseDisabled = false;
         PlayerInputIsDisabled = false;
     }
+
+
+    /// <summary>
+    /// Method processes crop with equipped item in player direction
+    /// 一种在玩家方向处理装备物品的裁剪方法
+    /// </summary>
+    private void ProcessCropWithEquippedItemInPlayerDirection(Vector3Int playerDirection, ItemDetails equippedItemItemDetails, GridPropertyDetails gridPropertyDetails)
+    {
+        switch (equippedItemItemDetails.itemType)
+        {
+            case ItemType.Collecting_tool:
+
+                if (playerDirection == Vector3Int.right)
+                {
+                    isPickingRight = true;
+                }
+                else if (playerDirection == Vector3Int.left)
+                {
+                    isPickingLeft = true;
+                }
+                else if (playerDirection == Vector3Int.up)
+                {
+                    isPickingUp = true;
+                }
+                else if (playerDirection == Vector3Int.down)
+                {
+                    isPickingDown = true;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        //从网格位置获得 农作物对象
+        Crop crop = GridPropertiesManager.Instance.GetCropObjectAtGridLocation(gridPropertyDetails);
+
+        //为作物执行流程工具操作
+        if (crop!=null)
+        {
+            switch (equippedItemItemDetails.itemType)
+            {
+                case ItemType.Collecting_tool:
+                    crop.ProcessToolAction(equippedItemItemDetails);
+                    break;
+            }
+        }
+    }
+
+
+
 
 
     ///TODO 删除  测试脚本!!!!!

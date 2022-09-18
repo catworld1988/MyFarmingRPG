@@ -110,6 +110,33 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     }
 
     /// <summary>
+    /// Add an item to the inventory list for the inventoryLocation 添加物品到库存列表
+    /// AddItem 的重载
+    /// </summary>
+    public void AddItem(InventoryLocation inventoryLocation, int itemCode) //玩家库存0 箱子库存1 道具2
+    {
+
+        List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];
+
+        //Check if inventory already contains the item 检查库存是否包换该物品
+        int itemPosition = FindItemInInventory(inventoryLocation, itemCode);
+
+        if (itemPosition != -1)
+        {
+            AddItemAtPosition(inventoryList, itemCode, itemPosition);
+        }
+        else
+        {
+            AddItemAtPosition(inventoryList, itemCode);
+        }
+
+        //Send event that inventory has been updated   呼叫事件管理中心  发布库存更新事件广播
+        EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
+    }
+
+
+
+    /// <summary>
     /// 将包含itemCode 和数量 的物品结构体 添加到物品库存清单中末尾
     /// </summary>
     private void AddItemAtPosition(List<InventoryItem> inventoryList, int itemCode)
