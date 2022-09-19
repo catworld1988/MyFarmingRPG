@@ -783,7 +783,7 @@ public class Player : SingletonMonobehaviour<Player>
             switch (equippedItemItemDetails.itemType)
             {
                 case ItemType.Collecting_tool:
-                    crop.ProcessToolAction(equippedItemItemDetails);
+                    crop.ProcessToolAction(equippedItemItemDetails,isPickingRight,isPickingLeft,isPickingDown,isPickingUp);
                     break;
             }
         }

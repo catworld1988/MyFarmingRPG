@@ -11,7 +11,7 @@ public class CropDetails
     public GameObject[] growthPrefab;  //每一阶段生长的预制体
     public Sprite[] GrowthSprites;  //每个阶段的生长精灵图
     public Season[] Seasons;  //播种生长季节
-    public Sprite HarvestedSprite;  //收获的精灵图
+    public Sprite harvestedSprite;  //收获的精灵图
     [ItemCodeDescription] public int harvestedTransformItemCode;  //如果该项在收获时转换为另一项，则将填充该项代码
     public bool hideCropBeforeHarvestedAnimation;  //收获动画结束前不能切割
     public bool disableCropCollidersBeforeHarvestedAnimation;  //收获动画前 关闭碰撞
