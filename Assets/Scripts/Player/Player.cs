@@ -320,6 +320,7 @@ public class Player : SingletonMonobehaviour<Player>
 
 
                 case ItemType.Watering_tool:
+                case ItemType.Chopping_tool:
                 case ItemType.Hoeing_tool: //使用的物品的类型是挖地工具
                 case ItemType.Reaping_tool:
                 case ItemType.Collecting_tool:
@@ -449,6 +450,15 @@ public class Player : SingletonMonobehaviour<Player>
 
                 break;
 
+            case ItemType.Chopping_tool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    ChopInplayerDirection(gridPropertyDetails,itemDetails, playerDirection);
+                }
+
+                break;
+
+
 
             case ItemType.Collecting_tool:
                 if (gridCursor.CursorPositionIsValid)
@@ -470,6 +480,32 @@ public class Player : SingletonMonobehaviour<Player>
             default:
                 break;
         }
+    }
+
+    private void ChopInplayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        //触发动画
+        StartCoroutine(ChopInplayerDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
+    }
+
+    private IEnumerator ChopInplayerDirectionRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        PlayerInputIsDisabled = true;
+        playerToolUseDisabled= true;
+
+        //设置割草动画覆盖
+        toolCharacterAttribute.partVariantType = PartVariantType.axe;
+        characterAttributeCustomisationList.Clear();
+        characterAttributeCustomisationList.Add(toolCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);
+
+        //在玩家方向割草
+        ProcessCropWithEquippedItemInPlayerDirection(playerDirection,equippedItemDetails,gridPropertyDetails);
+
+        yield return useToolAnimationPause;
+
+        PlayerInputIsDisabled = false;
+        playerToolUseDisabled= false;
     }
 
     private void CollectInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails, Vector3Int playerDirection)
@@ -754,6 +790,27 @@ public class Player : SingletonMonobehaviour<Player>
     {
         switch (equippedItemItemDetails.itemType)
         {
+            case ItemType.Chopping_tool:
+
+                if (playerDirection == Vector3Int.right)
+                {
+                    isUsingToolRight = true;
+                }
+                else if (playerDirection == Vector3Int.left)
+                {
+                    isUsingToolLeft = true;
+                }
+                else if (playerDirection == Vector3Int.up)
+                {
+                    isUsingToolUp = true;
+                }
+                else if (playerDirection == Vector3Int.down)
+                {
+                    isUsingToolDown = true;
+                }
+                break;
+
+
             case ItemType.Collecting_tool:
 
                 if (playerDirection == Vector3Int.right)
@@ -786,6 +843,10 @@ public class Player : SingletonMonobehaviour<Player>
         {
             switch (equippedItemItemDetails.itemType)
             {
+                case ItemType.Chopping_tool:
+                    crop.ProcessToolAction(equippedItemItemDetails,isUsingToolRight,isUsingToolLeft,isUsingToolDown,isUsingToolUp);
+                    break;
+
                 case ItemType.Collecting_tool:
                     crop.ProcessToolAction(equippedItemItemDetails,isPickingRight,isPickingLeft,isPickingDown,isPickingUp);
                     break;

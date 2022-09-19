@@ -189,7 +189,7 @@
       <workItem from="1663423549622" duration="294000" />
       <workItem from="1663493634527" duration="13132000" />
       <workItem from="1663557194461" duration="8415000" />
-      <workItem from="1663569474957" duration="5112000" />
+      <workItem from="1663569474957" duration="6585000" />
     </task>
     <servers />
   </component>
@@ -203,16 +203,16 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/Crop/Crop.cs</url>
-          <line>85</line>
-          <properties documentPath="F:\GameDevelop\TestProject\MyFarmingRPG\Assets\Scripts\Crop\Crop.cs" initialLine="85" containingFunctionPresentation="method 'HarvestCrop'">
+          <line>68</line>
+          <properties documentPath="F:\GameDevelop\TestProject\MyFarmingRPG\Assets\Scripts\Crop\Crop.cs" initialLine="68" containingFunctionPresentation="method 'HarvestCrop'">
             <startOffsets>
-              <option value="2705" />
+              <option value="2162" />
             </startOffsets>
             <endOffsets>
-              <option value="2740" />
+              <option value="2218" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="6" />
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

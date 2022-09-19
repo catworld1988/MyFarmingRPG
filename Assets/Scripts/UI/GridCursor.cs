@@ -260,6 +260,8 @@ public class GridCursor : MonoBehaviour
 
 
             case ItemType.Collecting_tool:
+            case ItemType.Chopping_tool:
+
                 //如果种子已经种下了
                 if (gridPropertyDetails.seedItemCode != -1)
                 {

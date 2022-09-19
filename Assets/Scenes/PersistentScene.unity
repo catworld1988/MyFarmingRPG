@@ -1403,6 +1403,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10c0f0a41530cc744be5bc2133ab93fd, type: 2}
   - {fileID: 11400000, guid: 6c8676baf041e0843a507c617e386d47, type: 2}
   - {fileID: 11400000, guid: ce9b2163e00bc584992dd75045acbda6, type: 2}
+  - {fileID: 11400000, guid: 6370767494112b3428250277d919befd, type: 2}
+  - {fileID: 11400000, guid: 2debf3f516f267945876e45aa08d0a3c, type: 2}
+  - {fileID: 11400000, guid: 22ba25240ff77694b94677042f148e1f, type: 2}
+  - {fileID: 11400000, guid: 40108c93c4048814990472271d724dd7, type: 2}
+  - {fileID: 11400000, guid: bc30e71907429874fa3c0e770aa92040, type: 2}
+  - {fileID: 11400000, guid: a7a276f71c7b9704395591688d89f264, type: 2}
+  - {fileID: 11400000, guid: 4d028d05b6bab424385866b64d3863f3, type: 2}
+  - {fileID: 11400000, guid: b08ca39429bea6e4fbd6c72dbbda11ae, type: 2}
+  - {fileID: 11400000, guid: cee2e68888575e54cbf5bc80350dc22b, type: 2}
+  - {fileID: 11400000, guid: 5ade6dd52b0ba4946801d87b523e07a6, type: 2}
+  - {fileID: 11400000, guid: 80c2ea7e2c30f324b811670e72a2a3ff, type: 2}
+  - {fileID: 11400000, guid: 2ecd05f6947969344a0f59f69c69f59f, type: 2}
+  - {fileID: 11400000, guid: 0eee92dbc38181441a83d128765de3b5, type: 2}
+  - {fileID: 11400000, guid: 09f68426400f49d4fa973b4d77678c56, type: 2}
+  - {fileID: 11400000, guid: 3048a8ecab3dc5148aa3694245b347c5, type: 2}
+  - {fileID: 11400000, guid: 282b6d28dfc06874d85ab87967e31f96, type: 2}
 --- !u!1 &916035340
 GameObject:
   m_ObjectHideFlags: 0
@@ -2334,6 +2350,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22428984, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
@@ -3343,7 +3363,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7779369, y: 1}
+    m_SensorSize: {x: 1.7780126, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
