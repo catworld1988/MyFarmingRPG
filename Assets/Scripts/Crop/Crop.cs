@@ -10,6 +10,10 @@ public class Crop : MonoBehaviour
 {
     private int harvestActionCount = 0;
 
+    //[Tooltip("This should be populated from child transform gameobject showing harvest effect spam point")]
+    [Tooltip("T这应该从显示收获效果的子游戏对象填充")]
+    [SerializeField] private Transform harvestActionEffectTransform = null;
+
     [Tooltip("This should be populated from child gameobject")]
     [SerializeField] private SpriteRenderer cropHarvesteSpriteRenderer = null;
 
@@ -47,6 +51,13 @@ public class Crop : MonoBehaviour
                 animator.SetTrigger("usetoolleft");
             }
         }
+
+        //在农作物上触发工具粒子特效
+        if (cropDetails.isHarvestActionEffect)
+        {
+            EventHandler.CallHarvestActionEffectEvent(harvestActionEffectTransform.position,cropDetails.harvestActionEffect);
+        }
+
 
         //如果没有收获的动作  这个工具不能收获该农作物
         int requiredHarvestActions = cropDetails.RequiredHarvestActionsForTool(equippedItemDetails.itemCode);
