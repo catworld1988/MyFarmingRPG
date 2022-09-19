@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+/// <summary>
+/// player挂的TriggerObscuringItemFaber脚本 触发挂载该脚本的物体实现遮挡渐隐
+/// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
 public class ObscuringItemFader : MonoBehaviour
 {

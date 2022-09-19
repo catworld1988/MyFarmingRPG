@@ -268,7 +268,7 @@ public class GridCursor : MonoBehaviour
                     //检查到作物
                     if (cropDetails != null)
                     {   //作物成熟了
-                        if (gridPropertyDetails.growthDays >= cropDetails.totalGrowthDays)
+                        if (gridPropertyDetails.growthDays >= cropDetails.growthDays[cropDetails.growthDays.Length-1])
                         {
                             //检测是能收获的工具
                             if (cropDetails.CanUseToolToHarvestCrop(itemDetails.itemCode))

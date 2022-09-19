@@ -474,18 +474,17 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                 int growthStages = cropDetails.growthDays.Length;
 
                 int currentGrowthStage = 0; //当前生长步骤
-                int daysCounter = cropDetails.totalGrowthDays; //总生长时间
+                //int daysCounter = cropDetails.totalGrowthDays; //总生长时间
 
                 //找出目前生长阶段
                 for (int i = growthStages - 1; i >= 0; i--)
                 {
-                    if (gridPropertyDetails.growthDays >= daysCounter)
+                    if (gridPropertyDetails.growthDays >= cropDetails.growthDays[i])
                     {
                         currentGrowthStage = i;
                         break;
                     }
-
-                    daysCounter = daysCounter - cropDetails.growthDays[i];
+                    //daysCounter = daysCounter - cropDetails.growthDays[i];
                 }
 
                 cropPrefab = cropDetails.growthPrefab[currentGrowthStage]; //农作物阶段预制体

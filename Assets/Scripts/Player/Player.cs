@@ -381,15 +381,19 @@ public class Player : SingletonMonobehaviour<Player>
 
     private void PlantSeedAtCursor(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
     {
-        //更新网格属性上的 种子
-        gridPropertyDetails.seedItemCode = itemDetails.itemCode;
-        gridPropertyDetails.growthDays = 0;
+        //检测网格管理器是否 包含农作物的数据 防止出错
+        if (GridPropertiesManager.Instance.GetCropDetails(itemDetails.itemCode)!=null)
+        {
+            //更新网格属性上的 种子
+            gridPropertyDetails.seedItemCode = itemDetails.itemCode;
+            gridPropertyDetails.growthDays = 0;
 
-        //显示种植的作物
-        GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
+            //显示种植的作物
+            GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
 
-        //从库存中移除 选择的物体
-        EventHandler.CallRemoveSelectedItemFromInventoryEvent();
+            //从库存中移除 选择的物体
+            EventHandler.CallRemoveSelectedItemFromInventoryEvent();
+        }
     }
 
     private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)

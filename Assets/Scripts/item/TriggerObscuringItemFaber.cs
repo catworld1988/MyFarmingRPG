@@ -1,5 +1,9 @@
 using UnityEngine;
 
+
+/// <summary>
+/// 挂该脚本 碰撞物体  触发身上的渐隐脚本
+/// </summary>
 public class TriggerObscuringItemFaber : MonoBehaviour
 {
     public void OnTriggerEnter2D(Collider2D collision)

@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cropDetails:
   - seedItemCode: 10006
-    growthDays: 0000000001000000010000000100000002000000
-    totalGrowthDays: 5
+    growthDays: 0000000001000000020000000300000005000000
     growthPrefab:
     - {fileID: 6076706820650362122, guid: e728453afce654c4fa464687f723ae85, type: 3}
     - {fileID: 6076706820650362122, guid: e728453afce654c4fa464687f723ae85, type: 3}
@@ -42,4 +41,33 @@ MonoBehaviour:
     cropProducedItemCode: 17270000
     cropProducedMinQuantity: 01000000
     cropProducedMaxQuantity: 01000000
+    daysToRegrow: 0
+  - seedItemCode: 10000
+    growthDays: 00000000050000000a0000000f00000014000000
+    growthPrefab:
+    - {fileID: 6076706820650362122, guid: e728453afce654c4fa464687f723ae85, type: 3}
+    - {fileID: 6076706820650362122, guid: e728453afce654c4fa464687f723ae85, type: 3}
+    - {fileID: 6076706820650362122, guid: e728453afce654c4fa464687f723ae85, type: 3}
+    - {fileID: 6076706820650362122, guid: e728453afce654c4fa464687f723ae85, type: 3}
+    - {fileID: 3951319553349212803, guid: fe3f6d1bcefd2ea4c984946a1799553d, type: 3}
+    GrowthSprites:
+    - {fileID: 5940278866164146339, guid: d241c496741a12d4290e12ba81dd6724, type: 3}
+    - {fileID: -1611693019923910846, guid: d241c496741a12d4290e12ba81dd6724, type: 3}
+    - {fileID: 1388107105281676754, guid: d241c496741a12d4290e12ba81dd6724, type: 3}
+    - {fileID: 6019493940114240039, guid: d241c496741a12d4290e12ba81dd6724, type: 3}
+    - {fileID: 21300000, guid: 89c46045b5f23d840b62099f6f1f6344, type: 3}
+    Seasons: 0000000001000000
+    harvestedSprite: {fileID: 0}
+    harvestedTransformItemCode: 10010
+    hideCropBeforeHarvestedAnimation: 0
+    disableCropCollidersBeforeHarvestedAnimation: 0
+    isHarvestedAniamtion: 1
+    isHarvestActionEffect: 1
+    spawnCropProducedAtPlayerPosition: 0
+    HarvestActionEffect: 0
+    harvestToolItemCode: 15270000
+    requiredHarvestAction: 07000000
+    cropProducedItemCode: 1827000010270000
+    cropProducedMinQuantity: 0200000001000000
+    cropProducedMaxQuantity: 0500000002000000
     daysToRegrow: 0
