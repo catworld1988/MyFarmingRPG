@@ -15,7 +15,7 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     //储存网格的变量
     private Tilemap groundDecoration1;
     private Tilemap groundDecoration2;
-
+    private bool isFirstTimeSceneLoaded = true;
     private Grid grid;
 
     //创建网格属性细节字典
@@ -573,6 +573,11 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                 this.gridPropertyDictionary = gridPropertyDictionary;
             }
 
+            //添加bool字典 并设置第一次加载游戏
+            sceneSave.boolDictionary = new Dictionary<string, bool>();
+            sceneSave.boolDictionary.Add("isFirstTimeSceneLoaded",true);
+
+
             //将场景数据 加入对象数据的场景数据字典里
             GameObjectSave.sceneDate.Add(so_GridProperties.sceneName.ToString(), sceneSave);
         }
@@ -729,6 +734,11 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         //填充新的网格属性字典
         sceneSave.gridPropertyDetailsDictionary = gridPropertyDictionary;
 
+        //创建添加   第一次进入场景的 bool 到字典
+        sceneSave.boolDictionary = new Dictionary<string, bool>();
+        sceneSave.boolDictionary.Add("isFirstTimeSceneLoaded",isFirstTimeSceneLoaded);
+
+
         //更新到对象保存数据
         GameObjectSave.sceneDate.Add(sceneName, sceneSave);
     }
@@ -744,6 +754,17 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                 gridPropertyDictionary = sceneSave.gridPropertyDetailsDictionary; //导出数据
             }
 
+
+            //获取字典的bool 如果存在就创建
+            if (sceneSave.boolDictionary !=null && sceneSave.boolDictionary.TryGetValue("isFirstTimeSceneLoaded",out bool storedFirstTimeSceneLoaded))
+            {
+                isFirstTimeSceneLoaded = storedFirstTimeSceneLoaded;
+            }
+            //第一次进入场景 实例化农作物
+            if (isFirstTimeSceneLoaded)
+                EventHandler.CallInstanteCropPrefabsEvent();
+
+
             //加载地图上面的属性格子 如果网格 属性存在
             if (gridPropertyDictionary.Count > 0)
             {
@@ -753,6 +774,13 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                 //显示地面被挖的属性
                 DisplayGridPropertyDetails();
             }
+
+            //不是第一次加载了 关闭 更新下bool
+            if (isFirstTimeSceneLoaded== true)
+            {
+                isFirstTimeSceneLoaded = false;
+            }
+
         }
     }
 

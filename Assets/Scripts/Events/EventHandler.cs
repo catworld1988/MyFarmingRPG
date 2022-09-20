@@ -41,7 +41,7 @@ public static class EventHandler
 
 
 
-    //收获事件
+    //收获行为效果事件
     public static event Action<Vector3, HarvestActionEffect> HarvestActionEffectEvent;
 
     public static void CallHarvestActionEffectEvent(Vector3 effectPosition, HarvestActionEffect harvestActionEffect)
@@ -51,6 +51,8 @@ public static class EventHandler
             HarvestActionEffectEvent(effectPosition, harvestActionEffect);
         }
     }
+
+
 
 
 
@@ -66,6 +68,20 @@ public static class EventHandler
             InventoryUpdatedEvent(inventoryLocation, inventoryList);
         }
     }
+
+
+    //实例化 农作物预制体
+    public static event Action InstantiateCropPrefabsEvent;
+
+    public static void CallInstanteCropPrefabsEvent()
+    {
+        if (InstantiateCropPrefabsEvent!= null)
+        {
+            InstantiateCropPrefabsEvent();
+        }
+    }
+
+
 
 
     // Movement Event 移动事件委托
