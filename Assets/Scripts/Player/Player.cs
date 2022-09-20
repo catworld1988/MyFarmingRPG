@@ -320,6 +320,7 @@ public class Player : SingletonMonobehaviour<Player>
 
 
                 case ItemType.Watering_tool:
+                case ItemType.Breaking_tool:
                 case ItemType.Chopping_tool:
                 case ItemType.Hoeing_tool: //使用的物品的类型是挖地工具
                 case ItemType.Reaping_tool:
@@ -467,6 +468,13 @@ public class Player : SingletonMonobehaviour<Player>
                 }
                 break;
 
+            case ItemType.Breaking_tool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    BreakInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
+                }
+                break;
+
 
             case ItemType.Reaping_tool:
                 if (cursor.CursorPositionIsValid)
@@ -480,6 +488,35 @@ public class Player : SingletonMonobehaviour<Player>
             default:
                 break;
         }
+    }
+
+    private void BreakInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        //触发动画
+        StartCoroutine(BreakInplayerDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
+    }
+
+    private IEnumerator BreakInplayerDirectionRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        PlayerInputIsDisabled = true;
+        playerToolUseDisabled= true;
+
+        //设置割草动画覆盖
+        toolCharacterAttribute.partVariantType = PartVariantType.pickaxe;
+        characterAttributeCustomisationList.Clear();
+        characterAttributeCustomisationList.Add(toolCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);
+
+        //在玩家方向使用 工具
+        ProcessCropWithEquippedItemInPlayerDirection( playerDirection,equippedItemDetails,gridPropertyDetails);
+
+        yield return useToolAnimationPause;
+
+        yield return afterPickAniamtionPause;
+
+        PlayerInputIsDisabled = false;
+        playerToolUseDisabled= false;
+
     }
 
     private void ChopInplayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
@@ -790,6 +827,7 @@ public class Player : SingletonMonobehaviour<Player>
     {
         switch (equippedItemItemDetails.itemType)
         {
+            case ItemType.Breaking_tool:
             case ItemType.Chopping_tool:
 
                 if (playerDirection == Vector3Int.right)
@@ -844,6 +882,7 @@ public class Player : SingletonMonobehaviour<Player>
             switch (equippedItemItemDetails.itemType)
             {
                 case ItemType.Chopping_tool:
+                case ItemType.Breaking_tool:
                     crop.ProcessToolAction(equippedItemItemDetails,isUsingToolRight,isUsingToolLeft,isUsingToolDown,isUsingToolUp);
                     break;
 

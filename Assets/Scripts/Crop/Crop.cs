@@ -110,6 +110,17 @@ public class Crop : MonoBehaviour
             GetComponentInChildren<SpriteRenderer>().enabled = false;
         }
 
+        //在收获农作物的时候关闭 碰撞体
+        if (cropDetails.disableCropCollidersBeforeHarvestedAnimation)
+        {
+            //收获的产物出现关闭碰撞 不然撞到玩家
+            Collider2D[] collider2Ds = GetComponentsInChildren<Collider2D>();
+            foreach (Collider2D collider2D in collider2Ds)
+            {
+                collider2D.enabled = false;
+            }
+        }
+
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX,gridPropertyDetails.gridY,gridPropertyDetails);
 
         if (cropDetails.isHarvestedAniamtion && animator!=null)

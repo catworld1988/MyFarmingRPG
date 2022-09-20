@@ -1422,6 +1422,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 09f68426400f49d4fa973b4d77678c56, type: 2}
   - {fileID: 11400000, guid: 3048a8ecab3dc5148aa3694245b347c5, type: 2}
   - {fileID: 11400000, guid: 282b6d28dfc06874d85ab87967e31f96, type: 2}
+  - {fileID: 11400000, guid: 9301dc112a961634181a07d089ece829, type: 2}
+  - {fileID: 11400000, guid: 261cd8458e6043d4dbb324cd2d7467b9, type: 2}
+  - {fileID: 11400000, guid: 17fcfdd83517e584e93bc303ba9c466c, type: 2}
+  - {fileID: 11400000, guid: 9841dd756450e774390f3a06919768f9, type: 2}
 --- !u!1 &916035340
 GameObject:
   m_ObjectHideFlags: 0
@@ -3366,7 +3370,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7767653, y: 1}
+    m_SensorSize: {x: 1.7764298, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
