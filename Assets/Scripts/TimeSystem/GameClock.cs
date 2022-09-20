@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+
+/// <summary>
+/// 将时间管理器中的数据传入UI上的时钟
+/// </summary>
 public class GameClock : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timeText = null;
@@ -23,13 +27,6 @@ public class GameClock : MonoBehaviour
     /// <summary>
     /// gameManager 传入广播中的数据
     /// </summary>
-    /// <param name="gameYear"></param>
-    /// <param name="gameSeason"></param>
-    /// <param name="gameDay"></param>
-    /// <param name="gameDayOfWeek"></param>
-    /// <param name="gameHour"></param>
-    /// <param name="gameMinute"></param>
-    /// <param name="gameSecond"></param>
     private void UpdateGameTime(int gameYear, Season gameSeason, int gameDay, string gameDayOfWeek, int gameHour, int gameMinute,
         int gameSecond)
     {

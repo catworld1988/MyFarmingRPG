@@ -12,22 +12,25 @@ public class PoolManager : SingletonMonobehaviour<PoolManager>
 {
     //声明一个对象池
     private Dictionary<int, Queue<GameObject>> poolDictionary = new Dictionary<int, Queue<GameObject>>();
-
     //放入池中的 对象数组
     [SerializeField] private Pool[] pool = null;
-    [SerializeField] private Transform objectPoolTransform = null;    //池中对象的变换属性
+    //池中对象的变换属性
+    [SerializeField] private Transform objectPoolTransform = null;
 
 
     [System.Serializable]
     //池对象的结构体属性
     public struct Pool
     {
-        public int poolSize; //创建的数量
+        //池中对象的数量
+        public int poolSize;
+        //池对象预制体
         public GameObject prefab;
     }
 
     private void Start()
     {
+        //创建 所有的 池中对象组
         for (int i = 0; i < pool.Length; i++)
         {
             CreatePool(pool[i].prefab, pool[i].poolSize);
@@ -35,16 +38,17 @@ public class PoolManager : SingletonMonobehaviour<PoolManager>
     }
 
     /// <summary>
-    /// 创建对象池
+    /// 创建对象池 一个对象组
     /// </summary>
-    /// <param name="prefab"></param>
-    /// <param name="poolSize"></param>
     private void CreatePool(GameObject prefab, int poolSize)
     {
-        int poolKey = prefab.GetInstanceID();   //预制件实例ID 作为字典的键值
-        string prefabName = prefab.name;  //获取预支体的名字
+        //预制件实例ID 作为字典的键值
+        int poolKey = prefab.GetInstanceID();
+        //获取预支体的名字
+        string prefabName = prefab.name;
 
-        GameObject parentGameObject = new GameObject(prefabName + "Anchor");   //创建父级对象管理子物体
+        //创建父级对象管理子物体
+        GameObject parentGameObject = new GameObject(prefabName + "Anchor");
 
         parentGameObject.transform.SetParent(objectPoolTransform);
 
@@ -59,21 +63,19 @@ public class PoolManager : SingletonMonobehaviour<PoolManager>
 
                 newObject.SetActive(false);
 
-                poolDictionary[poolKey].Enqueue(newObject); //在队列最后一位 入队
+                //在队列最后一位 入队
+                poolDictionary[poolKey].Enqueue(newObject);
             }
         }
     }
 
     /// <summary>
-    /// 恢复 对象池中对象
+    /// 重复使用 对象池中对象
     /// </summary>
-    /// <param name="prefab"></param>
-    /// <param name="position"></param>
-    /// <param name="rotation"></param>
-    /// <returns></returns>
     public GameObject ReuseObject(GameObject prefab, Vector3 position, Quaternion rotation)
     {
-        int poolKey = prefab.GetInstanceID();  //获取预制件的实例ID
+        //获取预制件的实例ID
+        int poolKey = prefab.GetInstanceID();
 
         if (poolDictionary.ContainsKey(poolKey))
         {
@@ -95,6 +97,9 @@ public class PoolManager : SingletonMonobehaviour<PoolManager>
     }
 
 
+    /// <summary>
+    /// 从池中取出对象
+    /// </summary>
     private GameObject GetObjectFromPool(int poolKey)
     {
         //从队列的开头 移除并返回对象
