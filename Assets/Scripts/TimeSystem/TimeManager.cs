@@ -153,8 +153,8 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
     public void TestAdvanceGameGameDay()
     {
         for (int i = 0; i < 86400; i++)
-        {
-            UpdateGameSecond();
-        }
+         {
+             UpdateGameSecond();
+         }
     }
 }

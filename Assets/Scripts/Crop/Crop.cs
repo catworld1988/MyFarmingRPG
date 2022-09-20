@@ -139,7 +139,35 @@ public class Crop : MonoBehaviour
         //收获农作物的产物
         SpawnHarvestedItems(cropDetails);
 
+        //如果有需要转变的农作物副产树根啥的
+        if (cropDetails.harvestedTransformItemCode>0)
+        {
+            CreatHavrestedTransformCrop(cropDetails, gridPropertyDetails);
+        }
+
+
         Destroy(gameObject);
+
+    }
+
+    /// <summary>
+    /// 创建收获后的农作物变体
+    /// </summary>
+    /// <param name="cropDetails"></param>
+    /// <param name="gridPropertyDetails"></param>
+    private void CreatHavrestedTransformCrop(CropDetails cropDetails, GridPropertyDetails gridPropertyDetails)
+    {
+        //设置网格属性
+        gridPropertyDetails.seedItemCode = cropDetails.harvestedTransformItemCode;
+        gridPropertyDetails.growthDays = 0;
+        gridPropertyDetails.daysSinceLastHarvest = -1;
+        gridPropertyDetails.daysSinceWatered = -1;
+
+        //更新网格新设置
+        GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX,gridPropertyDetails.gridY,gridPropertyDetails);
+
+        //显示种植的农作物 树桩
+        GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
 
     }
 

@@ -872,7 +872,7 @@ public class Player : SingletonMonobehaviour<Player>
         }
 
         //测试  触发进阶增加 天数
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKey(KeyCode.G))
         {
             TimeManager.Instance.TestAdvanceGameGameDay();
         }

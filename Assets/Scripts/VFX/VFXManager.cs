@@ -7,6 +7,7 @@ public class VFXManager : SingletonMonobehaviour<VFXManager>
     private WaitForSeconds twoSeconds;
     [SerializeField] private GameObject deciduousLeavesFallingPrefab = null;
     [SerializeField] private GameObject reapingPrefab = null;
+    [SerializeField] private GameObject ChoppingTreeTrunkPrefab = null;
 
     protected override void Awake()
     {
@@ -37,9 +38,17 @@ public class VFXManager : SingletonMonobehaviour<VFXManager>
         switch (harvestActionEffect)
         {
             case HarvestActionEffect.deciduousLeavesFalling:
-                GameObject deciduousLeavesFalling = PoolManager.Instance.ReuseObject(deciduousLeavesFallingPrefab, effectPosition, Quaternion.identity);
+                GameObject deciduousLeavesFalling =
+                    PoolManager.Instance.ReuseObject(deciduousLeavesFallingPrefab, effectPosition, Quaternion.identity);
                 deciduousLeavesFalling.SetActive(true);
                 StartCoroutine(DisableHarvestActionEffect(deciduousLeavesFalling, twoSeconds));
+                break;
+
+
+            case HarvestActionEffect.choppingTreeTrunk:
+                GameObject ChoppingTreeTrunk = PoolManager.Instance.ReuseObject(ChoppingTreeTrunkPrefab, effectPosition, Quaternion.identity);
+                ChoppingTreeTrunk.SetActive(true);
+                StartCoroutine(DisableHarvestActionEffect(ChoppingTreeTrunk, twoSeconds));
                 break;
 
 
@@ -57,5 +66,4 @@ public class VFXManager : SingletonMonobehaviour<VFXManager>
                 break;
         }
     }
-
 }

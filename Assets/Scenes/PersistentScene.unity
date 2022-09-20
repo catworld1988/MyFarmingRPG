@@ -367,6 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deciduousLeavesFallingPrefab: {fileID: 2364728012109693864, guid: 7c0502e683309d04b8c7ac78024b0aa9, type: 3}
   reapingPrefab: {fileID: 4437228509770005710, guid: 8670cb31d15aa8d459aef6c1cbc38dd4, type: 3}
+  ChoppingTreeTrunkPrefab: {fileID: 3277051319436261829, guid: 8a95ea71453648249a545e69eed939bc, type: 3}
 --- !u!4 &486420240
 Transform:
   m_ObjectHideFlags: 0
@@ -3364,7 +3365,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7780126, y: 1}
+    m_SensorSize: {x: 1.7770535, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4243,6 +4244,8 @@ MonoBehaviour:
     prefab: {fileID: 4437228509770005710, guid: 8670cb31d15aa8d459aef6c1cbc38dd4, type: 3}
   - poolSize: 5
     prefab: {fileID: 2364728012109693864, guid: 7c0502e683309d04b8c7ac78024b0aa9, type: 3}
+  - poolSize: 5
+    prefab: {fileID: 3277051319436261829, guid: 8a95ea71453648249a545e69eed939bc, type: 3}
   objectPoolTransform: {fileID: 1882270303}
 --- !u!4 &1882270303
 Transform:
