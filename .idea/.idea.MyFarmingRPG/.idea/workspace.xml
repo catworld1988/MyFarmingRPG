@@ -10,10 +10,6 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3212ae53900d409d83482ff247f5fe9a157c00/17/a06ff031/PropertyAttribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3212ae53900d409d83482ff247f5fe9a157c00/54/7f130652/Vector3Int.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3212ae53900d409d83482ff247f5fe9a157c00/9b/9edff8fe/Cursor.cs" root0="SKIP_HIGHLIGHTING" />
@@ -50,7 +46,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Crop/CropInstantiator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Crop/SO_CropDetailsList.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Events/EventHandler.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://F:/GameDevelop/TestProject/MyFarmingRPG/Assets/Scripts/Events/EventHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/HelperClasses/HelperMethods.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Inventory/InventoryItem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Inventory/InventoryManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -116,7 +111,7 @@
     "WebServerToolWindowFactoryState": "false",
     "XThreadsFramesViewSplitterKey": "0.50173914",
     "rider.run.widget.enabled.cache": "false",
-    "settings.editor.selected.configurable": "WinFormsDesignerOptionsPage"
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.常规"
   }
 }]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
@@ -200,7 +195,9 @@
       <workItem from="1663557194461" duration="8415000" />
       <workItem from="1663569474957" duration="8387000" />
       <workItem from="1663641878892" duration="5371000" />
-      <workItem from="1663649811572" duration="15522000" />
+      <workItem from="1663649811572" duration="15824000" />
+      <workItem from="1663726109309" duration="599000" />
+      <workItem from="1663755224362" duration="8512000" />
     </task>
     <servers />
   </component>
