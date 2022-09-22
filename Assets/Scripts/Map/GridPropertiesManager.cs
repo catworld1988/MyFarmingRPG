@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 
@@ -715,6 +715,26 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
     {
         SaveLoadManager.Instance.iSaveableObjectList.Remove(this);
     }
+
+    public void ISaveableLoad(GameSave gameSave)
+    {
+        //提取存储的数据
+        if (gameSave.gameObjectData.TryGetValue(ISaveableUniqueID,out GameObjectSave gameObjectSave))
+        {
+            GameObjectSave = gameObjectSave;
+            //恢复当前场景数据
+            ISaveableRestoreScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    public GameObjectSave ISaveableSave()
+    {
+        //保存当前场景数据
+        ISaveableStoreScene(SceneManager.GetActiveScene().name);
+
+        return GameObjectSave;
+    }
+
 
     public GridPropertyDetails gridPropertyDetails(int gridX, int gridY)
     {

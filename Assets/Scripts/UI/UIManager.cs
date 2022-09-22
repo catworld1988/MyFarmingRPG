@@ -67,7 +67,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
 
 
-    private void DisablePauseMenu()
+    public void DisablePauseMenu()
     {
         //销毁任何当前拖拽的物品
         pauseMenuInventoryManagement.DestroyCurrentlyDraggedItems();

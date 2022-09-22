@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(GenerateGUID))]
 public class SceneItemsManager : SingletonMonobehaviour<SceneItemsManager>, ISaveable
@@ -114,6 +115,24 @@ public class SceneItemsManager : SingletonMonobehaviour<SceneItemsManager>, ISav
     {
         //注销 在 接口类型列表
         SaveLoadManager.Instance.iSaveableObjectList.Remove(this);
+    }
+
+    public GameObjectSave ISaveableSave()
+    {
+        ISaveableRestoreScene(SceneManager.GetActiveScene().name);
+
+        return GameObjectSave;
+    }
+
+    public void ISaveableLoad(GameSave gameSave)
+    {
+        if (gameSave.gameObjectData.TryGetValue(ISaveableUniqueID,out GameObjectSave gameObjectSave))
+        {
+            GameObjectSave = gameObjectSave;
+
+            ISaveableRestoreScene(SceneManager.GetActiveScene().name);
+        }
+
     }
 
     /// <summary>

@@ -12,6 +12,8 @@
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0c9183c83c1543a1bfb64f3734ed0991816200/1a/f81be641/EditorUtility.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3212ae53900d409d83482ff247f5fe9a157c00/17/a06ff031/PropertyAttribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3212ae53900d409d83482ff247f5fe9a157c00/54/7f130652/Vector3Int.cs" root0="SKIP_HIGHLIGHTING" />
@@ -64,6 +66,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player/Player.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player/PlayerAnimationTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SaveSystem/GameObjectSave.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SaveSystem/GameSave.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SaveSystem/GenerateGUID.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SaveSystem/ISaveable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SaveSystem/SaveLoadManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -204,7 +207,7 @@
       <workItem from="1663649811572" duration="15824000" />
       <workItem from="1663726109309" duration="599000" />
       <workItem from="1663755224362" duration="9913000" />
-      <workItem from="1663813682307" duration="11339000" />
+      <workItem from="1663813682307" duration="17566000" />
     </task>
     <servers />
   </component>
