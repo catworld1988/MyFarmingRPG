@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -7,6 +5,11 @@ using UnityEngine.Tilemaps;
 [ExecuteAlways] //编辑器下运行
 public class TilemapGridProperties : MonoBehaviour
 {
+
+#if UNITY_EDITOR
+    //只在编辑器下编译，防止打包出错
+
+
     private Tilemap tilemap;
     [SerializeField] private SO_GridProperties gridProperties = null;
     [SerializeField] private GridBoolProperty gridBoolProperty=GridBoolProperty.diggable;
@@ -38,6 +41,7 @@ public class TilemapGridProperties : MonoBehaviour
             {
                 //This is required to ensure that the updated gridproperties gameobject gets saved when the game is saved otherwise they are not saved.
                 //这是为了确保更新的网格属性游戏对象在游戏被保存时被保存，否则它们不会被保存。
+                //TODO 构建打包时将出错
                 EditorUtility.SetDirty(gridProperties);
             }
         }
@@ -83,4 +87,5 @@ public class TilemapGridProperties : MonoBehaviour
             Debug.Log("DiSABLE PROPERTY TILEMAPS");
         }
     }
+#endif
 }

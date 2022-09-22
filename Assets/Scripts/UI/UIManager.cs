@@ -128,4 +128,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
         HightlightBUttonForSelectedTab();
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
