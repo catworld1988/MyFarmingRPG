@@ -192,4 +192,24 @@ public class UIInventoryBar : MonoBehaviour
             IsInventoryBarPositionBottom = false;
         }
     }
+
+    public void DestroyCurrentlyDraggedItem()
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (inventorySlots[i].draggedItem !=null)
+            {
+                Destroy(inventorySlots[i].draggedItem);
+            }
+        }
+    }
+
+    public void ClearCurrentlySelectedItem()
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            inventorySlots[i].ClearSelectedItem();
+        }
+
+    }
 }

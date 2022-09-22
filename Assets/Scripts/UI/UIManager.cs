@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class UIManager : SingletonMonobehaviour<UIManager>
 {
     private bool _pauseMenuOn = false;
+    [SerializeField] private UIInventoryBar uiInventoryBar = null;
+    [SerializeField] private PauseMenuInventoryManagement pauseMenuInventoryManagement = null;
     [SerializeField] private GameObject pauseMenu = null;
     [SerializeField] private GameObject[] menuTabs = null;
     [SerializeField] private Button[] menuButtons = null;
@@ -43,6 +45,12 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
     private void EnablePauseMenu()
     {
+        //销毁当前拖拽的物品
+        uiInventoryBar.DestroyCurrentlyDraggedItem();
+
+        //取消选中当前的物品
+        uiInventoryBar.ClearCurrentlySelectedItem();
+
         PauseMenuOn = true;
         Player.Instance.PlayerInputIsDisabled = true;
         //时间缩放 0暂停
@@ -61,6 +69,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
     private void DisablePauseMenu()
     {
+        //销毁任何当前拖拽的物品
+        pauseMenuInventoryManagement.DestroyCurrentlyDraggedItems();
+
         PauseMenuOn = false;
         Player.Instance.PlayerInputIsDisabled = false;
         Time.timeScale = 1;

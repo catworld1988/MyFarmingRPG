@@ -22,7 +22,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Camera mainCamera;
     private Transform parentItem;
     private GridCursor gridCursor;
-    private GameObject draggedItem;
+    public GameObject draggedItem;
 
     [SerializeField] private UIInventoryBar inventoryBar = null;
 
@@ -154,7 +154,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
 
 
-    private void ClearSelectedItem()
+    public void ClearSelectedItem()
     {
         ClearCursors();
 
