@@ -69,9 +69,11 @@ public class SaveLoadManager : SingletonMonobehaviour<SaveLoadManager>
         }
 
         BinaryFormatter bf = new BinaryFormatter();
+
         FileStream file = File.Open(Application.persistentDataPath + "/WildHopeCreek.dat", FileMode.Create);
 
         bf.Serialize(file,gameSave);
+
         file.Close();
 
         UIManager.Instance.DisablePauseMenu();

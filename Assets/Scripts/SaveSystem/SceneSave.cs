@@ -5,8 +5,10 @@ using System.Collections.Generic;
 
 public class SceneSave
 {
-    //string key is an identifier name we choose for this list
-    //string key 是我们为这个列表选择的标识符名称
+    //string key is an identifier name we choose for this list 。string key 是我们为这个列表选择的标识符名称
+
+    //存时间系统的数据
+    public Dictionary<string, int> intDictionary;
     //第一次加载场景判定
     public Dictionary<string, bool> boolDictionary;
     //存方向的字典
@@ -18,5 +20,6 @@ public class SceneSave
     public List<SceneItem> listSceneItem;
     public Dictionary<string, GridPropertyDetails> gridPropertyDetailsDictionary;
     public List<InventoryItem>[] listInvItemArray;
+
 
 }
