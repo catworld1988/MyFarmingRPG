@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Player : SingletonMonobehaviour<Player>
+public class Player : SingletonMonobehaviour<Player>, ISaveable
 {
     //测试对象池的变量
     //public GameObject canyonOakTreePrefab;
@@ -50,6 +51,7 @@ public class Player : SingletonMonobehaviour<Player>
 
     //喷壶的变量
     private WaitForSeconds liftToolAnimationPause;
+
     //捡农作物的
     private WaitForSeconds pickAniamtionPause;
 
@@ -61,9 +63,9 @@ public class Player : SingletonMonobehaviour<Player>
     private Rigidbody2D rigidBody2D;
     private WaitForSeconds useToolAnimationPause;
 
-#pragma warning disable 414
+    //玩家方向
     private Direction playerDirection;
-#pragma warning restore 414
+
 
     //角色动画属性 定制列表
     private List<CharacterAttribute> characterAttributeCustomisationList;
@@ -78,12 +80,26 @@ public class Player : SingletonMonobehaviour<Player>
 
     private float movementSpeed;
 
+    //设置属性器 get私有
     private bool _playerInputIsDisabled = false;
 
-    //设置属性器 get私有
     public bool PlayerInputIsDisabled
     { get => _playerInputIsDisabled;
       set => _playerInputIsDisabled = value; }
+
+
+    private string _iSaveableUniqueID;
+
+    public string ISaveableUniqueID
+    { get => _iSaveableUniqueID;
+      set => _iSaveableUniqueID = value; }
+
+
+    private GameObjectSave _gameObjectSave;
+
+    public GameObjectSave GameObjectSave
+    { get => _gameObjectSave;
+      set => _gameObjectSave = value; }
 
     protected override void Awake()
     {
@@ -97,6 +113,10 @@ public class Player : SingletonMonobehaviour<Player>
         toolCharacterAttribute = new CharacterAttribute(CharacterPartAnimator.tool, PartVariantColour.none, PartVariantType.hoe);
 
         characterAttributeCustomisationList = new List<CharacterAttribute>();
+        //获得唯一标识符 便于存储数据
+        ISaveableUniqueID = GetComponent<GenerateGUID>().GUID;
+
+        GameObjectSave = new GameObjectSave();
 
         //获取主相机的参数
         mainCamera = Camera.main;
@@ -104,17 +124,20 @@ public class Player : SingletonMonobehaviour<Player>
 
     private void OnEnable()
     {
+        ISaveableRegister();
+
         //防止切换场景 任务继续乱走
         EventHandler.BeforeSceneUnloadFadeOutEvent += DisablePlayerInputAndResetMovement;
         EventHandler.AfterSceneLoadFadeInEvent += EnablePlayerInput;
-
     }
+
     private void OnDisable()
     {
+        ISaveableDeregister();
+
         //防止切换场景 任务继续乱走
         EventHandler.BeforeSceneUnloadFadeOutEvent -= DisablePlayerInputAndResetMovement;
         EventHandler.AfterSceneLoadFadeInEvent -= EnablePlayerInput;
-
     }
 
     private void Start()
@@ -130,7 +153,6 @@ public class Player : SingletonMonobehaviour<Player>
         afterUseToolAnimationPause = new WaitForSeconds(Settings.afterUseToolAniamtionPause);
         afterLiftToolAniamtionPause = new WaitForSeconds(Settings.afterLiftToolAniamtionPause);
         afterPickAniamtionPause = new WaitForSeconds(Settings.afterPickAniamtionPause);
-
     }
 
     private void Update()
@@ -368,9 +390,8 @@ public class Player : SingletonMonobehaviour<Player>
 
     private void ProcessPlayerClickInputSeed(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
     {
-
         //检查物品可以丢下 鼠标位置 地面挖过了 没有被种过
-        if (itemDetails.canBeDropped&& gridCursor.CursorPositionIsValid && gridPropertyDetails.daysSinceDug> -1 && gridPropertyDetails.seedItemCode == -1)
+        if (itemDetails.canBeDropped && gridCursor.CursorPositionIsValid && gridPropertyDetails.daysSinceDug > -1 && gridPropertyDetails.seedItemCode == -1)
         {
             PlantSeedAtCursor(gridPropertyDetails, itemDetails);
         }
@@ -384,7 +405,7 @@ public class Player : SingletonMonobehaviour<Player>
     private void PlantSeedAtCursor(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
     {
         //检测网格管理器是否 包含农作物的数据 防止出错
-        if (GridPropertiesManager.Instance.GetCropDetails(itemDetails.itemCode)!=null)
+        if (GridPropertiesManager.Instance.GetCropDetails(itemDetails.itemCode) != null)
         {
             //更新网格属性上的 种子
             gridPropertyDetails.seedItemCode = itemDetails.itemCode;
@@ -454,11 +475,10 @@ public class Player : SingletonMonobehaviour<Player>
             case ItemType.Chopping_tool:
                 if (gridCursor.CursorPositionIsValid)
                 {
-                    ChopInplayerDirection(gridPropertyDetails,itemDetails, playerDirection);
+                    ChopInplayerDirection(gridPropertyDetails, itemDetails, playerDirection);
                 }
 
                 break;
-
 
 
             case ItemType.Collecting_tool:
@@ -466,6 +486,7 @@ public class Player : SingletonMonobehaviour<Player>
                 {
                     CollectInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
                 }
+
                 break;
 
             case ItemType.Breaking_tool:
@@ -473,6 +494,7 @@ public class Player : SingletonMonobehaviour<Player>
                 {
                     BreakInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
                 }
+
                 break;
 
 
@@ -499,7 +521,7 @@ public class Player : SingletonMonobehaviour<Player>
     private IEnumerator BreakInplayerDirectionRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
     {
         PlayerInputIsDisabled = true;
-        playerToolUseDisabled= true;
+        playerToolUseDisabled = true;
 
         //设置割草动画覆盖
         toolCharacterAttribute.partVariantType = PartVariantType.pickaxe;
@@ -508,15 +530,14 @@ public class Player : SingletonMonobehaviour<Player>
         animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);
 
         //在玩家方向使用 工具
-        ProcessCropWithEquippedItemInPlayerDirection( playerDirection,equippedItemDetails,gridPropertyDetails);
+        ProcessCropWithEquippedItemInPlayerDirection(playerDirection, equippedItemDetails, gridPropertyDetails);
 
         yield return useToolAnimationPause;
 
         yield return afterPickAniamtionPause;
 
         PlayerInputIsDisabled = false;
-        playerToolUseDisabled= false;
-
+        playerToolUseDisabled = false;
     }
 
     private void ChopInplayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
@@ -528,7 +549,7 @@ public class Player : SingletonMonobehaviour<Player>
     private IEnumerator ChopInplayerDirectionRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
     {
         PlayerInputIsDisabled = true;
-        playerToolUseDisabled= true;
+        playerToolUseDisabled = true;
 
         //设置割草动画覆盖
         toolCharacterAttribute.partVariantType = PartVariantType.axe;
@@ -537,24 +558,24 @@ public class Player : SingletonMonobehaviour<Player>
         animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);
 
         //在玩家方向割草
-        ProcessCropWithEquippedItemInPlayerDirection(playerDirection,equippedItemDetails,gridPropertyDetails);
+        ProcessCropWithEquippedItemInPlayerDirection(playerDirection, equippedItemDetails, gridPropertyDetails);
 
         yield return useToolAnimationPause;
 
         PlayerInputIsDisabled = false;
-        playerToolUseDisabled= false;
+        playerToolUseDisabled = false;
     }
 
     private void CollectInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails, Vector3Int playerDirection)
     {
-        StartCoroutine(CollectInPlayerDirectionAtCursorRoutine(gridPropertyDetails,itemDetails, playerDirection));
-
+        StartCoroutine(CollectInPlayerDirectionAtCursorRoutine(gridPropertyDetails, itemDetails, playerDirection));
     }
 
-    private IEnumerator CollectInPlayerDirectionAtCursorRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemItemDetails, Vector3Int playerDirection)
+    private IEnumerator CollectInPlayerDirectionAtCursorRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemItemDetails,
+        Vector3Int playerDirection)
     {
         PlayerInputIsDisabled = true;
-        playerToolUseDisabled= true;
+        playerToolUseDisabled = true;
 
         ProcessCropWithEquippedItemInPlayerDirection(playerDirection, equippedItemItemDetails, gridPropertyDetails);
 
@@ -564,10 +585,8 @@ public class Player : SingletonMonobehaviour<Player>
         yield return afterPickAniamtionPause;
 
         PlayerInputIsDisabled = false;
-        playerToolUseDisabled= false;
-
+        playerToolUseDisabled = false;
     }
-
 
 
     private void ReapInPlayerDirectionAtCursor(ItemDetails itemDetails, Vector3Int playerDirection)
@@ -578,7 +597,7 @@ public class Player : SingletonMonobehaviour<Player>
     private IEnumerator ReapInPlayerDirectionAtCursorRoutine(ItemDetails itemDetails, Vector3Int playerDirection)
     {
         PlayerInputIsDisabled = true;
-        playerToolUseDisabled= true;
+        playerToolUseDisabled = true;
 
         //设置割草动画覆盖
         toolCharacterAttribute.partVariantType = PartVariantType.scythe;
@@ -592,8 +611,7 @@ public class Player : SingletonMonobehaviour<Player>
         yield return useToolAnimationPause;
 
         PlayerInputIsDisabled = false;
-        playerToolUseDisabled= false;
-
+        playerToolUseDisabled = false;
     }
 
     private void UseToolInPlayerDirection(ItemDetails equippedItemDetails, Vector3Int playerDirection)
@@ -603,28 +621,31 @@ public class Player : SingletonMonobehaviour<Player>
             switch (equippedItemDetails.itemType)
             {
                 case ItemType.Reaping_tool:
-                    if (playerDirection == Vector3Int.right )
+                    if (playerDirection == Vector3Int.right)
                     {
-                        isSwingingToolRight =true;
+                        isSwingingToolRight = true;
                     }
-                    else if (playerDirection == Vector3Int.left )
+                    else if (playerDirection == Vector3Int.left)
                     {
-                        isSwingingToolLeft=true;
+                        isSwingingToolLeft = true;
                     }
-                    else if (playerDirection == Vector3Int.up )
+                    else if (playerDirection == Vector3Int.up)
                     {
-                        isSwingingToolUp=true;
+                        isSwingingToolUp = true;
                     }
-                    else if (playerDirection == Vector3Int.down )
+                    else if (playerDirection == Vector3Int.down)
                     {
-                        isSwingingToolDown=true;
+                        isSwingingToolDown = true;
                     }
+
                     break;
             }
+
             //Define centre point of square which will be used for collision testing
             //定义将用于碰撞测试的正方形中心点
-            Vector2 point =new Vector2(GetPlayerCentrePosition().x + (playerDirection.x * (equippedItemDetails.itemUseRadius/2f)),GetPlayerCentrePosition().y +
-                playerDirection.y *(equippedItemDetails.itemUseRadius/2f));
+            Vector2 point = new Vector2(GetPlayerCentrePosition().x + (playerDirection.x * (equippedItemDetails.itemUseRadius / 2f)),
+                GetPlayerCentrePosition().y +
+                playerDirection.y * (equippedItemDetails.itemUseRadius / 2f));
 
             //Define size of the square which will be used for collision testing
             //定义将用于碰撞测试的正方形的大小
@@ -632,16 +653,16 @@ public class Player : SingletonMonobehaviour<Player>
 
             //Get Item components with 2D collider located in the square at the centre point defined (2d colliders tested limited to maxCollidersToTestPerReapSwing)
             //获得项目组件与2D对撞机位于广场上，在定义的中心点（2d对撞机测试仅限于最大碰撞器）
-            Item[] itemArray= HelperMethods.GetcomponentstBoxPositionNonAlloc<Item>(Settings.maxCollidersToTestPerReapSwing,point,size,0f);
+            Item[] itemArray = HelperMethods.GetcomponentstBoxPositionNonAlloc<Item>(Settings.maxCollidersToTestPerReapSwing, point, size, 0f);
 
             int reapableItemCount = 0;
 
 
             //Loop through all items retrieved
             //循环遍历检索到的所有项目
-            for (int i = itemArray.Length - 1; i >=0; i--)
+            for (int i = itemArray.Length - 1; i >= 0; i--)
             {
-                if (itemArray[i]!=null)
+                if (itemArray[i] != null)
                 {
                     //销毁被割的对象
                     if (InventoryManager.Instance.GetItemDetails(itemArray[i].ItemCode).itemType == ItemType.Reapable_scenary)
@@ -651,13 +672,13 @@ public class Player : SingletonMonobehaviour<Player>
                             itemArray[i].transform.position.y + Settings.gridCellSize / 2f, itemArray[i].transform.position.z);
 
                         //广播 收获时候触发的粒子效果
-                        EventHandler.CallHarvestActionEffectEvent(effectPosition,HarvestActionEffect.reaping);
+                        EventHandler.CallHarvestActionEffectEvent(effectPosition, HarvestActionEffect.reaping);
 
                         Destroy(itemArray[i].gameObject);
 
                         reapableItemCount++;
 
-                        if (reapableItemCount>=Settings.maxTargetComponentsToDestroyPerReapSwing)
+                        if (reapableItemCount >= Settings.maxTargetComponentsToDestroyPerReapSwing)
                             break;
                     }
                 }
@@ -677,7 +698,7 @@ public class Player : SingletonMonobehaviour<Player>
             cursorPosition.y < (playerPosition.y + cursor.ItemUseRadius / 2f)
             &&
             cursorPosition.y > (playerPosition.y - cursor.ItemUseRadius / 2f)
-            )
+        )
         {
             return Vector3Int.right;
         }
@@ -691,7 +712,7 @@ public class Player : SingletonMonobehaviour<Player>
         {
             return Vector3Int.left;
         }
-        else if (cursorPosition.y>playerPosition.y)
+        else if (cursorPosition.y > playerPosition.y)
         {
             return Vector3Int.up;
         }
@@ -823,7 +844,8 @@ public class Player : SingletonMonobehaviour<Player>
     /// Method processes crop with equipped item in player direction
     /// 一种在玩家方向处理装备物品的裁剪方法
     /// </summary>
-    private void ProcessCropWithEquippedItemInPlayerDirection(Vector3Int playerDirection, ItemDetails equippedItemItemDetails, GridPropertyDetails gridPropertyDetails)
+    private void ProcessCropWithEquippedItemInPlayerDirection(Vector3Int playerDirection, ItemDetails equippedItemItemDetails,
+        GridPropertyDetails gridPropertyDetails)
     {
         switch (equippedItemItemDetails.itemType)
         {
@@ -846,6 +868,7 @@ public class Player : SingletonMonobehaviour<Player>
                 {
                     isUsingToolDown = true;
                 }
+
                 break;
 
 
@@ -867,6 +890,7 @@ public class Player : SingletonMonobehaviour<Player>
                 {
                     isPickingDown = true;
                 }
+
                 break;
 
             default:
@@ -877,24 +901,21 @@ public class Player : SingletonMonobehaviour<Player>
         Crop crop = GridPropertiesManager.Instance.GetCropObjectAtGridLocation(gridPropertyDetails);
 
         //为作物执行流程工具操作
-        if (crop!=null)
+        if (crop != null)
         {
             switch (equippedItemItemDetails.itemType)
             {
                 case ItemType.Chopping_tool:
                 case ItemType.Breaking_tool:
-                    crop.ProcessToolAction(equippedItemItemDetails,isUsingToolRight,isUsingToolLeft,isUsingToolDown,isUsingToolUp);
+                    crop.ProcessToolAction(equippedItemItemDetails, isUsingToolRight, isUsingToolLeft, isUsingToolDown, isUsingToolUp);
                     break;
 
                 case ItemType.Collecting_tool:
-                    crop.ProcessToolAction(equippedItemItemDetails,isPickingRight,isPickingLeft,isPickingDown,isPickingUp);
+                    crop.ProcessToolAction(equippedItemItemDetails, isPickingRight, isPickingLeft, isPickingDown, isPickingUp);
                     break;
             }
         }
     }
-
-
-
 
 
     ///TODO 删除  测试脚本!!!!!
@@ -933,9 +954,6 @@ public class Player : SingletonMonobehaviour<Player>
                 tree.SetActive(true);
             }
         }*/
-
-
-
     }
 
 
@@ -1009,5 +1027,113 @@ public class Player : SingletonMonobehaviour<Player>
     {
         //3维坐标 玩家轴心在底部，需要在轴心+y偏移量 为了之后触发工具动画的正确在腰部
         return new Vector3(transform.position.x, transform.position.y + Settings.playerCentreYOffset, transform.position.z);
+    }
+
+    public void ISaveableRegister()
+    {
+        SaveLoadManager.Instance.iSaveableObjectList.Add(this);
+    }
+
+    public void ISaveableDeregister()
+    {
+        SaveLoadManager.Instance.iSaveableObjectList.Remove(this);
+    }
+
+    public GameObjectSave ISaveableSave()
+    {
+        //如果存在常驻场景 就移除它
+        GameObjectSave.sceneDate.Remove(Settings.PersistentScene);
+
+        //初始化变量
+        SceneSave sceneSave = new SceneSave();
+        sceneSave.vector3Dictionary = new Dictionary<string, Vector3Serializable>();
+        sceneSave.stringDictionary = new Dictionary<string, string>();
+        //存位置
+        Vector3Serializable vector3Serializable = new Vector3Serializable(transform.position.x, transform.position.y, transform.position.z);
+        sceneSave.vector3Dictionary.Add("playerPosition", vector3Serializable);
+        //存场景名
+        sceneSave.stringDictionary.Add("currentScene", SceneManager.GetActiveScene().name);
+        //TODO 玩家方向不对
+        //存玩家方向
+        sceneSave.stringDictionary.Add("playerDirection", playerDirection.ToString());
+        //打包成 上级游戏数据存
+        GameObjectSave.sceneDate.Add(Settings.PersistentScene, sceneSave);
+
+        return GameObjectSave;
+    }
+
+    public void ISaveableLoad(GameSave gameSave)
+    {
+        if (gameSave.gameObjectData.TryGetValue(ISaveableUniqueID, out GameObjectSave gameObjectSave))
+        {
+            if (gameObjectSave.sceneDate.TryGetValue(Settings.PersistentScene, out SceneSave sceneSave))
+            {
+                if (sceneSave.vector3Dictionary != null && sceneSave.vector3Dictionary.TryGetValue("playerPosition", out Vector3Serializable playerPosition))
+                {
+                    transform.position = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
+                }
+
+                if (sceneSave.stringDictionary != null)
+                {
+                    if (sceneSave.stringDictionary.TryGetValue("currentScene", out string currentScene))
+                    {
+                        SceneControllerManager.Instance.FadeAndLoadScene(currentScene, transform.position);
+                    }
+
+                    if (sceneSave.stringDictionary.TryGetValue("playerDirection", out string playerDir))
+                    {
+                        bool playerDirFound = Enum.TryParse<Direction>(playerDir, true, out Direction direction);
+
+                        if (playerDirFound)
+                        {
+                            playerDirection = direction;
+                            SetPlayerDirection(playerDirection);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void ISaveableStoreScene(string sceneName)
+    {
+        //Nothing required here since the player is on a persistent scene;
+    }
+
+    public void ISaveableRestoreScene(string sceneName)
+    {
+        //Nothing required here since the player is on a persistent scene;
+    }
+
+
+    private void SetPlayerDirection(Direction direction)
+    {
+        switch (playerDirection)
+        {
+            case Direction.up:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.none, false, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+                break;
+
+            case Direction.down:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.none, false, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case Direction.left:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.none, false, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+                break;
+            case Direction.right:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.none, false, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true);
+
+                break;
+
+            default:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.none, false, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false,true, false, false);
+
+                break;
+        }
     }
 }

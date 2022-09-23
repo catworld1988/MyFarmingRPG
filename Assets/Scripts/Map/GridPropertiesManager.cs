@@ -9,8 +9,11 @@ using UnityEngine.Tilemaps;
 public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManager>, ISaveable
 {
     //作物的变量
-    private Transform cropsParentTransform; //作物的父级
-    [SerializeField] public SO_CropDetailsList so_CropDetailsList = null; //作物的数据
+
+    //作物的父级
+    private Transform cropsParentTransform;
+    //作物的数据
+    [SerializeField] public SO_CropDetailsList so_CropDetailsList = null;
 
     //储存网格的变量
     private Tilemap groundDecoration1;
@@ -50,12 +53,14 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
         //获取唯一标识
         ISaveableUniqueID = GetComponent<GenerateGUID>().GUID;
-        GameObjectSave = new GameObjectSave(); //初始化 分配一块内存
+        //初始化 分配一块内存
+        GameObjectSave = new GameObjectSave();
     }
 
     private void OnEnable()
     {
-        ISaveableRegister(); //注册 加入保存数据列表
+        //注册 加入保存数据列表
+        ISaveableRegister();
         EventHandler.AfterSceneLoadEvent += AfterSceneLoaded;
 
         //游戏里经过一天
@@ -64,7 +69,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
     private void OnDisable()
     {
-        ISaveableDeregister(); //注册 加入恢复数据列表
+        //注册 加入恢复数据列表
+        ISaveableDeregister();
         EventHandler.AfterSceneLoadEvent -= AfterSceneLoaded;
 
         //游戏里经过一天
@@ -139,8 +145,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         //选择的基础瓦片
         Tile dugTile0 = SetDugTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY);
         groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0), dugTile0);
-
-        GridPropertyDetails adjacentGidGridPropertyDetails; //相邻瓦片属性详情
+        //相邻瓦片属性详情
+        GridPropertyDetails adjacentGidGridPropertyDetails;
 
         //-----------------------------Set 4 tiles if dug surrounding current tile up ,down， left ,right   now that this central tile has been dug
         //设置4个瓷砖.如果挖掘当前瓷砖 上，下，左，右。现在这个中心瓷砖已经挖好。
@@ -193,8 +199,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         //选择的基础瓦片
         Tile wateredTile0 = SetWateredTile(gridPropertyDetails.gridX, gridPropertyDetails.gridY);
         groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0), wateredTile0);
-
-        GridPropertyDetails adjacentGidGridPropertyDetails; //相邻瓦片属性详情
+        //相邻瓦片属性详情
+        GridPropertyDetails adjacentGidGridPropertyDetails;
 
         //-----------------------------Set 4 tiles if dug surrounding current tile up ,down， left ,right   now that this central tile has been dug
         //设置4个瓷砖.如果挖掘当前瓷砖 上，下，左，右。现在这个中心瓷砖已经挖好。
@@ -460,7 +466,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
     public void DisplayPlantedCrop(GridPropertyDetails gridPropertyDetails)
     {
-        if (gridPropertyDetails.seedItemCode > -1) //未种植
+        //未种植
+        if (gridPropertyDetails.seedItemCode > -1)
         {
             //获得作物的细节
             CropDetails cropDetails = so_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
@@ -472,8 +479,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
                 //在网格位置 实例化农作物预制体
                 int growthStages = cropDetails.growthDays.Length;
-
-                int currentGrowthStage = 0; //当前生长步骤
+                //当前生长步骤
+                int currentGrowthStage = 0;
                 //int daysCounter = cropDetails.totalGrowthDays; //总生长时间
 
                 //找出目前生长阶段
@@ -486,17 +493,17 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                     }
                     //daysCounter = daysCounter - cropDetails.growthDays[i];
                 }
-
-                cropPrefab = cropDetails.growthPrefab[currentGrowthStage]; //农作物阶段预制体
-
-                Sprite growthSprite = cropDetails.GrowthSprites[currentGrowthStage]; //农作物阶段精灵图
-
+                //农作物阶段预制体
+                cropPrefab = cropDetails.growthPrefab[currentGrowthStage];
+                //农作物阶段精灵图
+                Sprite growthSprite = cropDetails.GrowthSprites[currentGrowthStage];
+                //网格的世界坐标
                 Vector3 worldPosition =
-                    groundDecoration2.CellToWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0)); //网格的世界坐标
-
-                worldPosition = new Vector3(worldPosition.x + Settings.gridCellSize / 2, worldPosition.y, worldPosition.z); //网格的世界坐标修正
-
-                GameObject cropInstance = Instantiate(cropPrefab, worldPosition, Quaternion.identity); //实例化农作物
+                    groundDecoration2.CellToWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0));
+                //网格的世界坐标修正
+                worldPosition = new Vector3(worldPosition.x + Settings.gridCellSize / 2, worldPosition.y, worldPosition.z);
+                //实例化农作物
+                GameObject cropInstance = Instantiate(cropPrefab, worldPosition, Quaternion.identity);
 
                 //填充实例化的精灵 父级 网格位置
                 cropInstance.GetComponentInChildren<SpriteRenderer>().sprite = growthSprite;
@@ -622,7 +629,8 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
 
 
         //防风草的父级
-        if (GameObject.FindGameObjectWithTag(Tags.CropsParentTransform) != null) //有的场景是室内 没有父级对象
+        //有的场景是室内 没有父级对象
+        if (GameObject.FindGameObjectWithTag(Tags.CropsParentTransform) != null)
         {
             cropsParentTransform = GameObject.FindGameObjectWithTag(Tags.CropsParentTransform).transform;
         }
@@ -771,14 +779,15 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
             //检测网格属性细节字典是否存在
             if (sceneSave.gridPropertyDetailsDictionary != null)
             {
-                gridPropertyDictionary = sceneSave.gridPropertyDetailsDictionary; //导出数据
+                //导出数据
+                gridPropertyDictionary = sceneSave.gridPropertyDetailsDictionary;
             }
 
 
             //获取字典的bool 如果存在就创建
-            if (sceneSave.boolDictionary !=null && sceneSave.boolDictionary.TryGetValue("isFirstTimeSceneLoaded",out bool storedFirstTimeSceneLoaded))
+            if (sceneSave.boolDictionary !=null && sceneSave.boolDictionary.TryGetValue("isFirstTimeSceneLoaded",out bool storedIsFirstTimeSceneLoaded))
             {
-                isFirstTimeSceneLoaded = storedFirstTimeSceneLoaded;
+                isFirstTimeSceneLoaded = storedIsFirstTimeSceneLoaded;
             }
             //第一次进入场景 实例化农作物
             if (isFirstTimeSceneLoaded)
@@ -796,7 +805,7 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
             }
 
             //不是第一次加载了 关闭 更新下bool
-            if (isFirstTimeSceneLoaded== true)
+            if (isFirstTimeSceneLoaded == true)
             {
                 isFirstTimeSceneLoaded = false;
             }

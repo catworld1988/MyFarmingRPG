@@ -4,8 +4,10 @@ using UnityEngine;
 /// <summary>
 ///目录管理器 加载   SO_ItemList ScriptableObject所有物品细节的目录信息。
 /// </summary>
-public class InventoryManager : SingletonMonobehaviour<InventoryManager>
+public class InventoryManager : SingletonMonobehaviour<InventoryManager>,ISaveable
 {
+    private UIInventoryBar inventoryBar;
+
     private Dictionary<int, ItemDetails> itemDetailsDictionary;
 
     private int[] selectedInventoryItem; //被选择物体的库存的列表，数值是物体的编号
@@ -17,6 +19,11 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 
     //调用物品的数据表
     [SerializeField] private SO_ItemList itemList = null;
+
+    private string _iSaveableUniqueID;
+    public string ISaveableUniqueID { get=> _iSaveableUniqueID; set=>_iSaveableUniqueID=value; }
+    private GameObjectSave _gameObjectSave;
+    public GameObjectSave GameObjectSave { get=>_gameObjectSave; set=>_gameObjectSave=value; }
 
     protected override void Awake()
     {
@@ -36,8 +43,27 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         {
             selectedInventoryItem[i] = -1; //初始为没有选中任何一个项目
         }
+
+        //获得唯一标识和创建保存数据对象
+        ISaveableUniqueID = GetComponent<GenerateGUID>().GUID;
+
+        GameObjectSave = new GameObjectSave();
     }
 
+    private void OnEnable()
+    {
+        ISaveableRegister();
+    }
+
+    private void OnDisable()
+    {
+        ISaveableDeregister();
+    }
+
+    private void Start()
+    {
+        inventoryBar = FindObjectOfType<UIInventoryBar>();
+    }
 
     /// <summary>
     /// //创建 库存清单的方法
@@ -167,14 +193,37 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         //DebugPrintInventoryList(inventoryList);
     }
 
+    public void SwapInventoryItems(InventoryLocation inventoryLocation, int fromItem, int toItem)
+    {
+        //交换前的检测 防止列表溢出
+        if (fromItem < inventoryLists[(int)inventoryLocation].Count &&
+            toItem < inventoryLists[(int)inventoryLocation].Count && fromItem != toItem && fromItem >= 0 && toItem >= 0)
+        {
+            InventoryItem fromInventoryItem = inventoryLists[(int)inventoryLocation][fromItem];
+            InventoryItem toInventoryItem = inventoryLists[(int)inventoryLocation][toItem];
+
+            //交换物品
+            inventoryLists[(int)inventoryLocation][toItem] = fromInventoryItem;
+            inventoryLists[(int)inventoryLocation][fromItem] = toInventoryItem;
+
+            //更新 呼叫库存广播
+            EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
+        }
+    }
+
+    /// <summary>
+    /// 在库存位置 清除选择项
+    /// </summary>
+    public void ClearSelectedInventoryItem(InventoryLocation inventoryLocation)
+    {
+        selectedInventoryItem[(int)inventoryLocation] = -1;
+    }
+
     /// <summary>
     /// Find if an itemCode is already in the inventory.Returns the item position in the inventory list
     /// ,or -1 if the item is not in the inventory
     /// 用库存位置和物品itemCode在物品库存清单中查找该物品 找到返回物品清单列表索引
     /// </summary>
-    /// <param name="inventoryLocation"></param>
-    /// <param name="itemCode"></param>
-    /// <returns></returns>
     public int FindItemInInventory(InventoryLocation inventoryLocation, int itemCode)
     {
         //创建库存清单 并分配库存清单位置 玩家库存0 箱子库存1 道具库存2
@@ -196,8 +245,6 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     /// <summary>
     /// 尝试在物品字典中 用物品ID检索出物品其他详细信息
     /// </summary>
-    /// <param name="itemCode"></param>
-    /// <returns></returns>
     public ItemDetails GetItemDetails(int itemCode)
     {
         ItemDetails itemDetails;
@@ -282,19 +329,81 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         return itemTypeDescription;
     }
 
-    //打印物品库存清单
-    // private void DebugPrintInventoryList(List<InventoryItem> inventoryList)
-    // {
-    //     foreach (InventoryItem inventoryItem in inventoryList)
-    //     {
-    //         Debug.Log("Item Description:" +
-    //                   InventoryManager.Instance.GetItemDetails(inventoryItem.itemCode).itemDescription +
-    //                   "    Item Quantity:" + inventoryItem.itemQuantity);
-    //     }
-    //
-    //     Debug.Log("***************************************************************************");
-    // }
 
+
+
+    public void ISaveableRegister()
+    {
+        //玩家数据添加到游戏数据的列表
+        SaveLoadManager.Instance.iSaveableObjectList.Add(this);
+    }
+
+    public void ISaveableDeregister()
+    {
+        //在游戏数据的列表 移除玩家数据
+        SaveLoadManager.Instance.iSaveableObjectList.Remove(this);
+    }
+
+    ///保存玩家游戏库存数据 到GameObjectSave
+    public GameObjectSave ISaveableSave()
+    {
+        SceneSave sceneSave = new SceneSave();
+        //清除旧数据
+        GameObjectSave.sceneDate.Remove(Settings.PersistentScene);
+        //将库存列表数组存到持久场景里
+        sceneSave.listInvItemArray = inventoryLists;
+        //保存库存容量
+        sceneSave.intArrayDictionary = new Dictionary<string, int[]>();
+        sceneSave.intArrayDictionary.Add("inventoryListCapacityArray",inventoryListCapacityIntArray);
+        //保存到场景数据
+        GameObjectSave.sceneDate.Add(Settings.PersistentScene,sceneSave);
+
+        return GameObjectSave;
+
+    }
+
+    ///读取玩家游戏库存数据 到GameObjectSave
+    public void ISaveableLoad(GameSave gameSave)
+    {
+        if (gameSave.gameObjectData.TryGetValue(ISaveableUniqueID,out GameObjectSave gameObjectSave))
+        {
+            GameObjectSave = gameObjectSave;
+            if (gameObjectSave.sceneDate.TryGetValue(Settings.PersistentScene,out SceneSave sceneSave))
+            {
+                if (sceneSave.listInvItemArray!=null)
+                {
+                    inventoryLists = sceneSave.listInvItemArray;
+
+                    for (int i = 0; i < (int)InventoryLocation.count; i++)
+                    {
+                        EventHandler.CallInventoryUpdatedEvent((InventoryLocation)i,inventoryLists[i]);
+                    }
+
+                    //重置玩家
+                    Player.Instance.ClearCarriedItem();
+                    //清除高亮选中物品栏
+                    inventoryBar.ClearHighlightOnInventorySlots();
+                }
+
+                if (sceneSave.intArrayDictionary!=null && sceneSave.intArrayDictionary.TryGetValue("inventoryListCapacityArray",out int[]inventoryCapacityArray))
+                {
+                    inventoryListCapacityIntArray = inventoryCapacityArray;
+                }
+
+            }
+        }
+    }
+
+    public void ISaveableStoreScene(string sceneName)
+    {
+        //Nothing required her since the inventory manager is on a persistent scene;
+        //没有什么需要她，因为库存经理是在一个持久的场景
+    }
+
+    public void ISaveableRestoreScene(string sceneName)
+    {
+        //没有什么需要她，因为库存经理是在一个持久的场景
+    }
     public void RemoveItem(InventoryLocation inventoryLocation, int itemCode)
     {
         //在库存位置 创建物品列表
@@ -328,7 +437,6 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
             inventoryList.RemoveAt(position);
         }
     }
-
     /// <summary>
     /// 在选择列表 索引是库存位置 中设置物品的编号
     /// </summary>
@@ -337,29 +445,21 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         selectedInventoryItem[(int)inventoryLocation] = itemCode;
     }
 
-    /// <summary>
-    /// 在库存位置 清除选择项
-    /// </summary>
-    public void ClearSelectedInventoryItem(InventoryLocation inventoryLocation)
-    {
-        selectedInventoryItem[(int)inventoryLocation] = -1;
-    }
 
-    public void SwapInventoryItems(InventoryLocation inventoryLocation, int fromItem, int toItem)
-    {
-        //交换前的检测 防止列表溢出
-        if (fromItem < inventoryLists[(int)inventoryLocation].Count &&
-            toItem < inventoryLists[(int)inventoryLocation].Count && fromItem != toItem && fromItem >= 0 && toItem >= 0)
-        {
-            InventoryItem fromInventoryItem = inventoryLists[(int)inventoryLocation][fromItem];
-            InventoryItem toInventoryItem = inventoryLists[(int)inventoryLocation][toItem];
 
-            //交换物品
-            inventoryLists[(int)inventoryLocation][toItem] = fromInventoryItem;
-            inventoryLists[(int)inventoryLocation][fromItem] = toInventoryItem;
+    //打印物品库存清单
+    // private void DebugPrintInventoryList(List<InventoryItem> inventoryList)
+    // {
+    //     foreach (InventoryItem inventoryItem in inventoryList)
+    //     {
+    //         Debug.Log("Item Description:" +
+    //                   InventoryManager.Instance.GetItemDetails(inventoryItem.itemCode).itemDescription +
+    //                   "    Item Quantity:" + inventoryItem.itemQuantity);
+    //     }
+    //
+    //     Debug.Log("***************************************************************************");
+    // }
 
-            //更新 呼叫库存广播
-            EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
-        }
-    }
+
+
 }

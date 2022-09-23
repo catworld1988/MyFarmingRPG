@@ -15,7 +15,7 @@ public class SceneTeleport : MonoBehaviour
     {
         Player player = collision.GetComponent<Player>();
 
-        if (player!= null)
+        if (player!= null&& Input.GetKey(KeyCode.E))
         {
             //如果坐标是0，就计算玩家新的坐标位置 如果有设定的数值了，就用新的数值不获取
             float xPosition = Mathf.Approximately(scenePositionGoto.x, 0f) ? player.transform.position.x : scenePositionGoto.x;
