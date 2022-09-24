@@ -651,7 +651,7 @@ TextureImporter:
       213: 21300430
     second: farmerCharacter_215
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -711,6 +711,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -738,6 +739,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -5328,8 +5341,8 @@ TextureImporter:
       farmerCharacter_116: 21300232
       farmerCharacter_184: 21300368
       farmerCharacter_98: 21300196
-      farmerCharacter_153: 21300306
       farmerCharacter_188: 21300376
+      farmerCharacter_153: 21300306
       farmerCharacter_45: 21300090
       farmerCharacter_14: 21300028
       farmerCharacter_145: 21300290
@@ -5363,10 +5376,10 @@ TextureImporter:
       farmerCharacter_124: 21300248
       farmerCharacter_34: 21300068
       farmerCharacter_27: 21300054
+      farmerCharacter_191: 21300382
       farmerCharacter_73: 21300146
       farmerCharacter_163: 21300326
       farmerCharacter_174: 21300348
-      farmerCharacter_191: 21300382
       farmerCharacter_139: 21300278
       farmerCharacter_138: 21300276
       farmerCharacter_211: 21300422
@@ -5441,18 +5454,18 @@ TextureImporter:
       farmerCharacter_8: 21300016
       farmerCharacter_53: 21300106
       farmerCharacter_81: 21300162
-      farmerCharacter_117: 21300234
+      farmerCharacter_102: 21300204
       farmerCharacter_95: 21300190
+      farmerCharacter_117: 21300234
       farmerCharacter_51: 21300102
       farmerCharacter_84: 21300168
-      farmerCharacter_173: 21300346
+      farmerCharacter_175: 21300350
       farmerCharacter_41: 21300082
       farmerCharacter_168: 21300336
-      farmerCharacter_175: 21300350
-      farmerCharacter_86: 21300172
-      farmerCharacter_102: 21300204
-      farmerCharacter_80: 21300160
       farmerCharacter_206: 21300412
+      farmerCharacter_86: 21300172
+      farmerCharacter_173: 21300346
+      farmerCharacter_80: 21300160
       farmerCharacter_21: 21300042
       farmerCharacter_58: 21300116
       farmerCharacter_10: 21300020

@@ -5,7 +5,8 @@ using UnityEngine;
 public class AnimationOverrides : MonoBehaviour
 {
     [SerializeField] private GameObject character = null;
-    [SerializeField] private SO_AnimationType[] soAnimationTypeArray;    //关联ScriptableObject 数据
+    //关联ScriptableObject 数据
+    [SerializeField] private SO_AnimationType[] soAnimationTypeArray=null;
 
     //创建 动画类型字典 合成属性Key字典
     private Dictionary<AnimationClip, SO_AnimationType> animationTypeDictionaryByAnimation;
@@ -30,8 +31,7 @@ public class AnimationOverrides : MonoBehaviour
         foreach (SO_AnimationType item in soAnimationTypeArray)
         {
             //so动画类型数据的键值索引
-            string key = item.characterPart.ToString() + item.partVariantColour.ToString() + item.partVariantType.ToString() +
-                         item.animationName.ToString();
+            string key = item.characterPart.ToString() + item.partVariantColour.ToString() + item.partVariantType.ToString() + item.animationName.ToString();
             //添加字典
             animationTypeDictionaryByCompositeAttributeKey.Add(key, item);
         }
@@ -79,8 +79,7 @@ public class AnimationOverrides : MonoBehaviour
 
                 if (foundAnimation)
                 {
-                    string key = characterAttribute.characterPart.ToString() + characterAttribute.partVariantColour.ToString() +
-                                 characterAttribute.partVariantType.ToString() + so_AnimationType.animationName.ToString();
+                    string key = characterAttribute.characterPart.ToString() + characterAttribute.partVariantColour.ToString() + characterAttribute.partVariantType.ToString() + so_AnimationType.animationName.ToString();
 
                     //找到交换的动画
                     SO_AnimationType swapSO_AnimationType;

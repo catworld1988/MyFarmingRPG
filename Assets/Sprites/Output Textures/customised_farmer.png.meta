@@ -1515,7 +1515,7 @@ TextureImporter:
       213: 21301006
     second: customised_farmer_503
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1575,6 +1575,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1587,7 +1588,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 1
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
@@ -1599,7 +1600,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 1
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
@@ -1612,6 +1613,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -12237,24 +12250,24 @@ TextureImporter:
       customised_farmer_19: 21300038
       customised_farmer_454: 21300908
       customised_farmer_223: 21300446
-      customised_farmer_25: 21300050
       customised_farmer_317: 21300634
+      customised_farmer_343: 21300686
       customised_farmer_298: 21300596
+      customised_farmer_25: 21300050
       customised_farmer_342: 21300684
-      customised_farmer_453: 21300906
       customised_farmer_73: 21300146
       customised_farmer_66: 21300132
-      customised_farmer_361: 21300722
-      customised_farmer_483: 21300966
-      customised_farmer_343: 21300686
       customised_farmer_492: 21300984
+      customised_farmer_483: 21300966
+      customised_farmer_453: 21300906
+      customised_farmer_361: 21300722
       customised_farmer_219: 21300438
       customised_farmer_98: 21300196
-      customised_farmer_134: 21300268
       customised_farmer_199: 21300398
+      customised_farmer_394: 21300788
+      customised_farmer_134: 21300268
       customised_farmer_249: 21300498
       customised_farmer_356: 21300712
-      customised_farmer_394: 21300788
       customised_farmer_430: 21300860
       customised_farmer_475: 21300950
       customised_farmer_250: 21300500
@@ -12284,12 +12297,12 @@ TextureImporter:
       customised_farmer_145: 21300290
       customised_farmer_362: 21300724
       customised_farmer_11: 21300022
+      customised_farmer_395: 21300790
       customised_farmer_3: 21300006
-      customised_farmer_251: 21300502
       customised_farmer_41: 21300082
       customised_farmer_46: 21300092
       customised_farmer_100: 21300200
-      customised_farmer_395: 21300790
+      customised_farmer_251: 21300502
       customised_farmer_369: 21300738
       customised_farmer_479: 21300958
       customised_farmer_445: 21300890
@@ -12356,10 +12369,10 @@ TextureImporter:
       customised_farmer_254: 21300508
       customised_farmer_168: 21300336
       customised_farmer_63: 21300126
-      customised_farmer_148: 21300296
+      customised_farmer_340: 21300680
       customised_farmer_155: 21300310
       customised_farmer_392: 21300784
-      customised_farmer_340: 21300680
+      customised_farmer_148: 21300296
       customised_farmer_27: 21300054
       customised_farmer_263: 21300526
       customised_farmer_135: 21300270
@@ -12508,10 +12521,10 @@ TextureImporter:
       customised_farmer_473: 21300946
       customised_farmer_86: 21300172
       customised_farmer_159: 21300318
-      customised_farmer_218: 21300436
       customised_farmer_393: 21300786
-      customised_farmer_427: 21300854
+      customised_farmer_218: 21300436
       customised_farmer_51: 21300102
+      customised_farmer_427: 21300854
       customised_farmer_69: 21300138
       customised_farmer_20: 21300040
       customised_farmer_23: 21300046
@@ -12531,8 +12544,8 @@ TextureImporter:
       customised_farmer_82: 21300164
       customised_farmer_462: 21300924
       customised_farmer_424: 21300848
-      customised_farmer_468: 21300936
       customised_farmer_472: 21300944
+      customised_farmer_468: 21300936
       customised_farmer_418: 21300836
       customised_farmer_173: 21300346
       customised_farmer_399: 21300798
