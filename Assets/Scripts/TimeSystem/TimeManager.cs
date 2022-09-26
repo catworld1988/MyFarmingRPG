@@ -180,6 +180,12 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>,ISaveable
         }
     }
 
+    public TimeSpan GetGameTime()
+    {
+        TimeSpan gameTime = new TimeSpan(gameHour, gameMinute, gameSecond);
+        return gameTime;
+    }
+
     //TODO 删除
     /// <summary>
     /// 进阶 1分钟

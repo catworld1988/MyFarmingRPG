@@ -12,6 +12,7 @@ public static class Settings
 
     //瓦片地图            单元格为 1个单位
     public const float gridCellSize = 1f;
+    public const float gridCellDiagonalSize = 1.41f;  //diagonal distance between unity cell centres
     public static Vector2 cursorSize = Vector2.one;
 
     //
@@ -29,11 +30,20 @@ public static class Settings
     public static float afterLiftToolAniamtionPause = 0.4f;
     public static float afterPickAniamtionPause= 0.2f;
 
+    //NPC 移动
+    public static float pixelSize = 0.0625f;
+
 
     //Inventory
     public static int playerInitialInventoryCapacity = 24; //初始库存容量
     public static int playerMaximumInventoryCapacity = 48; //最大库存容量
 
+    //NPC 动画参数
+    public static int walkUp;
+    public static int walkDown;
+    public static int walkLeft;
+    public static int walkRight;
+    public static int eventAnimation;
 
     // Player Animation Parameters
 
@@ -90,6 +100,14 @@ public static class Settings
     //静态构造函数
     static Settings()
     {
+        //NPC动画参数
+        walkUp = Animator.StringToHash("walkUp");
+        walkDown = Animator.StringToHash("walkDown");
+        walkLeft = Animator.StringToHash("walkLeft");
+        walkRight = Animator.StringToHash("walkRight");
+        eventAnimation = Animator.StringToHash("eventAnimation");
+
+
         //player Animation Parameters
         xInput = Animator.StringToHash("xInput");
         yInput = Animator.StringToHash("yInput");

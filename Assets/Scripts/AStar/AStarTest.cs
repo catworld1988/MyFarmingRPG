@@ -1,15 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 
-[RequireComponent(typeof(AStar))]
+//[RequireComponent(typeof(AStar))]
 public class AStarTest : MonoBehaviour
 {
-    private AStar aStar;
+    /*private AStar aStar;
     [SerializeField] private Vector2Int startPosition;
     [SerializeField] private Vector2Int finishPosition;
     [SerializeField] private Tilemap tileMapToDisplayPathOn= null;
@@ -77,6 +76,32 @@ public class AStarTest : MonoBehaviour
                     npcMovementSteps.Clear();
                 }
             }
+        }
+    }*/
+
+    [SerializeField] private NPCPath npcPath = null;
+    [SerializeField] private bool moveNPC = false;
+    [SerializeField] private Vector2Int finishPosition;
+    [SerializeField] private AnimationClip idleDownAnimationClip = null;
+    [SerializeField] private AnimationClip eventAnimationClip = null;
+    private NPCMovement npcMovement;
+
+    private void Start()
+    {
+        npcMovement = npcPath.GetComponent<NPCMovement>();
+        npcMovement.npcFacingDirectionAtDestination = Direction.down;
+        npcMovement.npcTargetAnimationClip = idleDownAnimationClip;
+    }
+
+    private void Update()
+    {
+        if (moveNPC)
+        {
+            moveNPC = false;
+            NPCScheduleEvent npcScheduleEvent = new NPCScheduleEvent(0, 0, 0, 0, Weather.none, Season.none, SceneName.Scene1_Farm,
+                new GridCoordinate(finishPosition.x, finishPosition.y), eventAnimationClip);
+
+            npcPath.BuildPath(npcScheduleEvent);
         }
     }
 }

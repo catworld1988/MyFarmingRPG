@@ -111,6 +111,17 @@ public enum HarvestActionEffect
     reaping, //割草
     none
 }
+
+public enum Weather
+{
+    dry,
+    raining,
+    snowing,
+    none,
+    count
+}
+
+
 public enum Direction
 {
     up,
