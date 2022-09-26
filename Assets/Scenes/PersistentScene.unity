@@ -11028,7 +11028,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7774295, y: 1}
+    m_SensorSize: {x: 1.7783251, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -12326,7 +12326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcPath: {fileID: 1503129767}
   moveNPC: 0
-  finishPosition: {x: 0, y: 0}
+  finishPosition: {x: 14, y: 12}
   idleDownAnimationClip: {fileID: 7400000, guid: cb83867c6252b5c4a8e8758697474f88, type: 2}
   eventAnimationClip: {fileID: 7400000, guid: bc72b54e068840044a4b381c76eec014, type: 2}
 --- !u!114 &1777171535

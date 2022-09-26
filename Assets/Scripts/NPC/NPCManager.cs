@@ -42,7 +42,7 @@ public class NPCManager : SingletonMonobehaviour<NPCManager>
         {
             NPCMovement npcMovement = npc.GetComponent<NPCMovement>();
 
-            if (npcMovement.npcCurrentScene.ToString()== SceneManager.GetActiveScene().ToString())
+            if (npcMovement.npcCurrentScene.ToString()== SceneManager.GetActiveScene().name)
             {
                 npcMovement.SetNPCActiveInScene();
             }
