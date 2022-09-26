@@ -11040,7 +11040,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.7787234, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -12335,11 +12335,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d5954bc5292484fb00af8f4f7e015f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPosition: {x: 25, y: 5}
-  finishPosition: {x: -19, y: -4}
+  startPosition: {x: 27, y: 29}
+  finishPosition: {x: -19, y: 2}
   tileMapToDisplayPathOn: {fileID: 177257721}
   tileMapUseToDisplayPath: {fileID: 11400000, guid: 67ec2b987b95cd6469bfa79f01744412, type: 2}
-  displayStartAndFinsh: 0
+  displayStartAndFinsh: 1
   displayPath: 0
 --- !u!1001 &1790776850
 PrefabInstance:
