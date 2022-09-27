@@ -101,6 +101,17 @@ public class NPCMovement : MonoBehaviour
 
                     npcCurrentScene = npcMovementStep.sceneName;
 
+                    //If NPC is about the move to a new scene reset position to starting point in new scene and update the step times
+                    //如果NPC要移动到新场景，则将位置重置到新场景的起点，并更新步骤时间
+                    if (npcCurrentScene!=npcPreviousMovementStepScene)
+                    {
+                        npcCurrentGridPosition = (Vector3Int)npcMovementStep.gridCoordinate;
+                        npcNextGridPosition = npcCurrentGridPosition;
+                        transform.position = GetWorldPosition(npcCurrentGridPosition);
+                        npcPreviousMovementStepScene = npcCurrentScene;
+                        npcPath.UpdateTimeOnPath();
+                    }
+
                     //If NPC is in current scene then set NPC to active to make visible,pop the movement step off the stack and then call method to move NPC
                     //如果NPC在当前场景中，则将NPC设置为活动以使其可见，从堆栈中弹出移动步骤，然后调用方法来移动NPC
                     if (npcCurrentScene.ToString() == SceneManager.GetActiveScene().name)
@@ -114,6 +125,31 @@ public class NPCMovement : MonoBehaviour
                         TimeSpan npcMovementStepTime = new TimeSpan(npcMovementStep.hour, npcMovementStep.minute, npcMovementStep.second);
 
                         MoveToGridPosition(npcNextGridPosition, npcMovementStepTime, TimeManager.Instance.GetGameTime());
+                    }
+
+                    //else if NPC is not in current scene then set NPC to inactive to make invisible 否则，如果 NPC 不在当前场景中，则将 NPC 设置为非活动状态以使其不可见
+                    //once the movement step time is less than game time (in the past)then pop movement step off the stack and set NPC position to movement step position
+                    //一旦移动步骤时间小于游戏时间(在过去) ，则弹出移动步骤从堆栈中移出，并将 NPC 位置设置为移动步骤位置
+                    else
+                    {
+                        SetNPCInactiveInScene();
+
+                        npcCurrentGridPosition = (Vector3Int)npcMovementStep.gridCoordinate;
+                        npcNextGridPosition = npcCurrentGridPosition;
+                        transform.position = GetWorldPosition(npcCurrentGridPosition);
+
+                        TimeSpan npcMovementStepTime = new TimeSpan(npcMovementStep.hour, npcMovementStep.minute, npcMovementStep.second);
+
+                        TimeSpan gameTime = TimeManager.Instance.GetGameTime();
+
+                        if (npcMovementStepTime<gameTime)
+                        {
+                            npcMovementStep = npcPath.npcMovementStepStack.Pop();
+
+                            npcCurrentGridPosition = (Vector3Int)npcMovementStep.gridCoordinate;
+                            npcNextGridPosition = npcCurrentGridPosition;
+                            transform.position = GetWorldPosition(npcCurrentGridPosition);
+                        }
                     }
                 }
                 //否则，如果没有更多的NPC运动步骤

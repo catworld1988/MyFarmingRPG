@@ -13,6 +13,8 @@ public static class Settings
     //瓦片地图            单元格为 1个单位
     public const float gridCellSize = 1f;
     public const float gridCellDiagonalSize = 1.41f;  //diagonal distance between unity cell centres
+    public const int maxGridWidth = 999999; //npc跨越场景寻路使用
+    public const int maxGridHeight = 999999; //npc跨越场景寻路使用
     public static Vector2 cursorSize = Vector2.one;
 
     //
