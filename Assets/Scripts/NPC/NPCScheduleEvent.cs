@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// NPC时间表
+/// NPC时间表事件
 /// </summary>
 [System.Serializable]
 public class NPCScheduleEvent

@@ -114,7 +114,7 @@ public enum HarvestActionEffect
 
 public enum Weather
 {
-    dry,
+    dry, //干燥
     raining,
     snowing,
     none,
