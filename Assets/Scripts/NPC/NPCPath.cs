@@ -105,7 +105,7 @@ public class NPCPath : MonoBehaviour
     /// <summary>
     /// 使用预期的游戏时间更新路径移动步骤
     /// </summary>
-    private void UpdateTimesOnPath()
+    public void UpdateTimesOnPath()
     {
         //获得当前游戏时间 时间跨度
         TimeSpan currentGameTime = TimeManager.Instance.GetGameTime();
@@ -159,9 +159,5 @@ public class NPCPath : MonoBehaviour
         }
     }
 
-    public void UpdateTimeOnPath()
-    {
 
-
-    }
 }

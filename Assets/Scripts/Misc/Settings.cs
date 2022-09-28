@@ -23,7 +23,7 @@ public static class Settings
     //Player Movement
     //public const float runningSpeed = 5.333f;
     //TODO 测试使用 需要改回常量
-    public const float runningSpeed = 13f;
+    public const float runningSpeed = 5.333f;
     public const float walkingSpeed = 2.666f;
     public static float useToolAniamtionPause = 0.25f;
     public static float liftToolAniamtionPause= 0.4f;

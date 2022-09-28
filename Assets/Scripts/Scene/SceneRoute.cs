@@ -4,8 +4,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class SceneRoute
 {
-    public SceneName fromScenenName;
-    public SceneName toScenenName;
+    public SceneName fromSceneName;
+    public SceneName toSceneName;
     public List<ScenePath> scenePathList;
 
 }

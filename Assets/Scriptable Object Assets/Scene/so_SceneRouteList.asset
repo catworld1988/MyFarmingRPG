@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: so_SceneRouteList
   m_EditorClassIdentifier: 
   sceneRouteList:
-  - fromScenenName: 0
-    toScenenName: 1
+  - fromSceneName: 0
+    toSceneName: 1
     scenePathList:
     - sceneName: 0
       fromGridCell:
@@ -30,8 +30,8 @@ MonoBehaviour:
       toGridCell:
         x: 999999
         y: 999999
-  - fromScenenName: 1
-    toScenenName: 0
+  - fromSceneName: 1
+    toSceneName: 0
     scenePathList:
     - sceneName: 1
       fromGridCell:
@@ -47,8 +47,8 @@ MonoBehaviour:
       toGridCell:
         x: 999999
         y: 999999
-  - fromScenenName: 0
-    toScenenName: 2
+  - fromSceneName: 0
+    toSceneName: 2
     scenePathList:
     - sceneName: 0
       fromGridCell:
@@ -64,25 +64,25 @@ MonoBehaviour:
       toGridCell:
         x: 999999
         y: 999999
-  - fromScenenName: 2
-    toScenenName: 0
+  - fromSceneName: 2
+    toSceneName: 0
     scenePathList:
-    - sceneName: 0
+    - sceneName: 2
       fromGridCell:
         x: 999999
         y: 999999
       toGridCell:
         x: 0
         y: -4
-    - sceneName: 2
+    - sceneName: 0
       fromGridCell:
         x: 2
         y: 4
       toGridCell:
         x: 999999
         y: 999999
-  - fromScenenName: 2
-    toScenenName: 1
+  - fromSceneName: 2
+    toSceneName: 1
     scenePathList:
     - sceneName: 2
       fromGridCell:
@@ -100,13 +100,13 @@ MonoBehaviour:
         y: 999999
     - sceneName: 1
       fromGridCell:
-        x: 39
+        x: -39
         y: 5
       toGridCell:
         x: 999999
         y: 999999
-  - fromScenenName: 1
-    toScenenName: 2
+  - fromSceneName: 1
+    toSceneName: 2
     scenePathList:
     - sceneName: 1
       fromGridCell:

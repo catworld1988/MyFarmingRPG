@@ -28,13 +28,13 @@ public class NPCManager : SingletonMonobehaviour<NPCManager>
             foreach (SceneRoute so_sceneRoute in so_SceneRouteList.sceneRouteList)
             {
                 //检测相同重复路线
-                if (sceneRouteDictionary.ContainsKey(so_sceneRoute.fromScenenName.ToString() + so_sceneRoute.toScenenName.ToString()))
+                if (sceneRouteDictionary.ContainsKey(so_sceneRoute.fromSceneName.ToString() + so_sceneRoute.toSceneName.ToString()))
                 {
                     Debug.Log("** 检索到重复相同路线的键值冲突 ** 在scriptable object scene route list 中检查重复的路线");
                     continue;
                 }
                 //添加路线到字典
-                sceneRouteDictionary.Add(so_sceneRoute.fromScenenName.ToString() + so_sceneRoute.toScenenName.ToString(),so_sceneRoute);
+                sceneRouteDictionary.Add(so_sceneRoute.fromSceneName.ToString() + so_sceneRoute.toSceneName.ToString(),so_sceneRoute);
             }
         }
 

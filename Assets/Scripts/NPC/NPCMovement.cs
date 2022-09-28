@@ -109,7 +109,7 @@ public class NPCMovement : MonoBehaviour
                         npcNextGridPosition = npcCurrentGridPosition;
                         transform.position = GetWorldPosition(npcCurrentGridPosition);
                         npcPreviousMovementStepScene = npcCurrentScene;
-                        npcPath.UpdateTimeOnPath();
+                        npcPath.UpdateTimesOnPath();
                     }
 
                     //If NPC is in current scene then set NPC to active to make visible,pop the movement step off the stack and then call method to move NPC
@@ -285,7 +285,7 @@ public class NPCMovement : MonoBehaviour
     {
         npcPath.ClearPath();
         npcNextGridPosition= Vector3Int.zero;
-        npcNextWorldPosition = Vector3Int.zero;
+        npcNextWorldPosition = Vector3.zero;
         npcIsMoving = false;
 
         if (moveToGridPositionRoutine != null)
