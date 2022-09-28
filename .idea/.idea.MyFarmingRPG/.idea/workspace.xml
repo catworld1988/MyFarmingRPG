@@ -93,6 +93,10 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Scene/SceneRoute.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Scene/SceneTeleport.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Scene/SwitchConfinerBoundingShape.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Sounds/AudioManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Sounds/SO_SoundList.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Sounds/Sound.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Sounds/SoundItem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/TimeSystem/GameClock.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/TimeSystem/TimeManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Cursor.cs" root0="FORCE_HIGHLIGHTING" />
@@ -243,6 +247,7 @@
       <workItem from="1664281208177" duration="7940000" />
       <workItem from="1664339601907" duration="4756000" />
       <workItem from="1664345080423" duration="2057000" />
+      <workItem from="1664356580635" duration="6049000" />
     </task>
     <servers />
   </component>

@@ -95,7 +95,11 @@ public class MovementAnimationParameterControl : MonoBehaviour
     #endregion
 
 
+    /// <summary>
+    /// 脚步音频 在动画Animation中event标签调用这个函数触发
+    /// </summary>
     private void AnimationEventPlayFootstepSound()
     {
+        AudioManager.Instance.PlaySound(SoundName.effectFootstepHardGround);
     }
 }
