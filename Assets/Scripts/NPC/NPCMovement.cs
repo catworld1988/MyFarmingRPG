@@ -281,6 +281,32 @@ public class NPCMovement : MonoBehaviour
         return new Vector3(worldPosition.x + Settings.gridCellSize / 2f, worldPosition.y + Settings.gridCellSize / 2f, worldPosition.z);
     }
 
+    public void CancelNPCMovement()
+    {
+        npcPath.ClearPath();
+        npcNextGridPosition= Vector3Int.zero;
+        npcNextWorldPosition = Vector3Int.zero;
+        npcIsMoving = false;
+
+        if (moveToGridPositionRoutine != null)
+        {
+            StopCoroutine(moveToGridPositionRoutine);
+        }
+
+        //重置移动动画
+        ResetMoveAnimation();
+
+        //取消事件动画
+        ClearNPCEventAnimation();
+        npcTargetAnimationClip = null;
+
+        //重置闲置动画
+        ResetIdleAnimation();
+
+        //设置闲置动画
+        SetIdleAnimation();
+    }
+
     private void InitialiseNPC()
     {
         //在场景激活
