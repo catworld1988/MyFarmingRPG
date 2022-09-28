@@ -316,7 +316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySlotHighlight: {fileID: 444531104136371294}
-  InventorySlotImage: {fileID: 2301871230398912467}
+  inventorySlotImage: {fileID: 0}
   textMeshProUGUI: {fileID: 8225874884427693614}
   itemDetails:
     itemCode: 0
@@ -332,5 +332,9 @@ MonoBehaviour:
     canBeEaten: 0
     canBeCarried: 0
   itemQuantity: 0
+  draggedItem: {fileID: 0}
   inventoryBar: {fileID: 0}
   itemPrefab: {fileID: 4306104550669720563, guid: cc04af5025c7ae64aa480219dbe5274c, type: 3}
+  slotNumber: 0
+  inventoryTextBoxPrefab: {fileID: 0}
+  isSelected: 0

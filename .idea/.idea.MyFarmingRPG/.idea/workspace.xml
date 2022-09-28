@@ -131,6 +131,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/item/ObscuringItemFader.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/item/SO_ItemList.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/item/TriggerObscuringItemFaber.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.7/Editor/ShaderGenerator/ShaderGeneratorMenu.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/ExecuteEvents.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/UIBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Layout/AspectRatioFitter.cs" root0="SKIP_HIGHLIGHTING" />
@@ -262,7 +263,7 @@
       <workItem from="1664281208177" duration="7940000" />
       <workItem from="1664339601907" duration="4756000" />
       <workItem from="1664345080423" duration="2057000" />
-      <workItem from="1664356580635" duration="14292000" />
+      <workItem from="1664356580635" duration="15022000" />
     </task>
     <servers />
   </component>
