@@ -26,6 +26,9 @@ public class ItemPickUp : MonoBehaviour
             {
                 //呼叫库存管理 将物品添加到库存中（库存位置，物品，对象）
                 InventoryManager.Instance.AddItem(InventoryLocation.player,item,collision.gameObject);
+
+                //当玩家碰到 播放捡起来音效
+                AudioManager.Instance.PlaySound(SoundName.effectPickupSound);
             }
         }
     }

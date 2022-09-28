@@ -355,8 +355,8 @@ public class NPCMovement : MonoBehaviour
             //计算时间差，单位为秒
             float timeToMove = (float)(npcMovementStepTime.TotalSeconds - gameTime.TotalSeconds);
 
-            //npc计算速度
-            float npcCalculatedSpeed =Mathf.Max(npcMinSpeed,Vector3.Distance(transform.position, npcNextWorldPosition) / timeToMove / Settings.secondsPerGameSecond) ;
+            //npc计算速度 速度太低npc会跳跃所以选择最大速度
+            float npcCalculatedSpeed = Mathf.Max(npcMinSpeed,Vector3.Distance(transform.position, npcNextWorldPosition) / timeToMove / Settings.secondsPerGameSecond) ;
 
             //If speed is less than npc max speed then process,otherwise skip and move NPC immediately to position
             //如果速度小于NPC最大速度，则处理，否则跳过并立即将NPC移动到位置

@@ -20,6 +20,7 @@ public class CropDetails
     public bool isHarvestActionEffect = false;   //是否 标记  determine确定 是否有收获特效
     public bool spawnCropProducedAtPlayerPosition;  //是否 在玩家位置产生栽培
     public HarvestActionEffect harvestActionEffect;     //切割收获特效
+    public SoundName harvestSound;//收获的声音
 
     [ItemCodeDescription] public int[] harvestToolItemCode;     //可以收获该作物的物品编号的工具数组  如果没有装备工具 数组为0
     public int[] requiredHarvestAction;     //收获工具项目代码阵列中相应工具所需的收获动作

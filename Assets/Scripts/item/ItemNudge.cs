@@ -30,6 +30,13 @@ public class ItemNudge : MonoBehaviour
             {
                 StartCoroutine(RotateClock());
             }
+
+            //当玩家碰到 播放碰撞音效
+            if (col.gameObject.tag == "Player")
+            {
+                AudioManager.Instance.PlaySound(SoundName.effectRustle);
+            }
+
         }
     }
 
@@ -45,6 +52,12 @@ public class ItemNudge : MonoBehaviour
             {
                 StartCoroutine(RotateClock());
             }
+        }
+
+        //当玩家碰到 播放碰撞音效
+        if (col.gameObject.tag == "Player")
+        {
+            AudioManager.Instance.PlaySound(SoundName.effectRustle);
         }
     }
 

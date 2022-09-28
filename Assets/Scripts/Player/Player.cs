@@ -416,6 +416,9 @@ public class Player : SingletonMonobehaviour<Player>, ISaveable
 
             //从库存中移除 选择的物体
             EventHandler.CallRemoveSelectedItemFromInventoryEvent();
+
+            //当玩家碰到 播放碰撞音效
+            AudioManager.Instance.PlaySound(SoundName.effectPlantingSound);
         }
     }
 
@@ -514,6 +517,9 @@ public class Player : SingletonMonobehaviour<Player>, ISaveable
 
     private void BreakInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
     {
+        //敲击音效
+        AudioManager.Instance.PlaySound(SoundName.effectPixkaxe);
+
         //触发动画
         StartCoroutine(BreakInplayerDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
     }
@@ -542,6 +548,9 @@ public class Player : SingletonMonobehaviour<Player>, ISaveable
 
     private void ChopInplayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails, Vector3Int playerDirection)
     {
+        //砍树音效
+        AudioManager.Instance.PlaySound(SoundName.effectAxe);
+
         //触发动画
         StartCoroutine(ChopInplayerDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
     }
@@ -568,6 +577,9 @@ public class Player : SingletonMonobehaviour<Player>, ISaveable
 
     private void CollectInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails, Vector3Int playerDirection)
     {
+        //收集音效
+        AudioManager.Instance.PlaySound(SoundName.effectBasket);
+
         StartCoroutine(CollectInPlayerDirectionAtCursorRoutine(gridPropertyDetails, itemDetails, playerDirection));
     }
 
@@ -674,6 +686,9 @@ public class Player : SingletonMonobehaviour<Player>, ISaveable
                         //广播 收获时候触发的粒子效果
                         EventHandler.CallHarvestActionEffectEvent(effectPosition, HarvestActionEffect.reaping);
 
+                        //镰刀音效
+                        AudioManager.Instance.PlaySound(SoundName.effectScythe);
+
                         Destroy(itemArray[i].gameObject);
 
                         reapableItemCount++;
@@ -725,6 +740,10 @@ public class Player : SingletonMonobehaviour<Player>, ISaveable
 
     private void HoeGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
     {
+        //挖地音效
+        AudioManager.Instance.PlaySound(SoundName.effectHoe);
+
+        //触发挖地动画
         StartCoroutine(HoeGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
     }
 
@@ -782,6 +801,9 @@ public class Player : SingletonMonobehaviour<Player>, ISaveable
 
     private void WaterGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
     {
+        //浇水音效
+        AudioManager.Instance.PlaySound(SoundName.effectWateringCan);
+
         //触发 动画
         StartCoroutine(WaterGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
     }

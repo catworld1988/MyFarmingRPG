@@ -98,6 +98,13 @@ public class Crop : MonoBehaviour
             }
         }
 
+        //播放收获音效
+        if (cropDetails.harvestSound!=SoundName.none)
+        {
+            AudioManager.Instance.PlaySound(cropDetails.harvestSound);
+        }
+
+
         //从网格上删除农作物
         gridPropertyDetails.seedItemCode = -1;
         gridPropertyDetails.growthDays = -1;
