@@ -180,10 +180,21 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>,ISaveable
         }
     }
 
+    /// <summary>
+    /// 获得游戏 小时 分钟 秒
+    /// </summary>
     public TimeSpan GetGameTime()
     {
         TimeSpan gameTime = new TimeSpan(gameHour, gameMinute, gameSecond);
         return gameTime;
+    }
+
+    /// <summary>
+    /// 获得季节
+    /// </summary>
+    public Season GetSeason()
+    {
+        return gameSeason;
     }
 
     //TODO 删除
